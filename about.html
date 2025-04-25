@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>About - Elie Mpuhwezimana</title>
+  <meta name="description" content="Learn more about Elie Mpuhwezimana's diverse skills and professional journey">
+  
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #333;
+      color: #fff;
+    }
+    .btn-primary {
+      background-color: #ff0000;
+      color: #fff;
+    }
+    .btn-primary:hover {
+      background-color: #cc0000;
+    }
+    .btn-secondary {
+      border-color: #ff0000;
+      color: #ff0000;
+    }
+    .btn-secondary:hover {
+      background-color: rgba(255, 0, 0, 0.1);
+    }
+    .timeline-item::before {
+      content: '';
+      position: absolute;
+      left: -30px;
+      top: 0;
+      width: 20px;
+      height: 20px;
+      border-radius: 50%;
+      background-color: #ff0000;
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="bg-[#222] text-white p-4 sticky top-0 z-50">
+    <div class="container mx-auto flex justify-between items-center">
+      <a href="index.html" class="text-2xl font-bold">Elie Mpuhwezimana</a>
+      <nav class="hidden md:flex space-x-6">
+        <a href="index.html" class="hover:text-red-500">Home</a>
+        <a href="about.html" class="text-red-500">About</a>
+        <a href="portfolio.html" class="hover:text-red-500">Portfolio</a>
+        <a href="contact.html" class="hover:text-red-500">Contact</a>
+      </nav>
+      <button class="md:hidden text-white">
+        <i class="fas fa-bars text-xl"></i>
+      </button>
+    </div>
+  </header>
+
+  <!-- Hero Section -->
+  <section class="py-20 bg-[#222]">
+    <div class="container mx-auto px-6 text-center">
+      <h1 class="text-4xl md:text-5xl font-bold mb-4">About Me</h1>
+      <p class="text-xl text-gray-300 max-w-2xl mx-auto">A dynamic professional with diverse expertise across multiple disciplines</p>
+    </div>
+  </section>
+
+  <!-- Bio Section -->
+  <section class="py-20">
+    <div class="container mx-auto px-6">
+      <div class="flex flex-col md:flex-row items-center">
+        <div class="md:w-1/2 mb-10 md:mb-0">
+          <img src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg" alt="Elie Mpuhwezimana" class="rounded-lg shadow-xl w-full max-w-md">
+        </div>
+        <div class="md:w-1/2 md:pl-12">
+          <h2 class="text-3xl font-bold mb-6">Professional Profile</h2>
+          <p class="text-gray-300 mb-6">I am a multi-talented professional with expertise in graphic design, video and photo editing, athletics, tailoring, hospitality, and technical programming. My diverse skill set allows me to approach problems from multiple perspectives and deliver innovative solutions.</p>
+          <p class="text-gray-300 mb-8">Passionate about continuous learning and skill development, I thrive in environments that challenge me to grow both creatively and technically.</p>
+          <div class="flex space-x-4">
+            <a href="contact.html" class="btn-primary px-6 py-3 rounded-lg font-medium">Contact Me</a>
+            <a href="portfolio.html" class="btn-secondary border-2 px-6 py-3 rounded-lg font-medium">View Portfolio</a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Skills Section -->
+  <section class="py-20 bg-[#222]">
+    <div class="container mx-auto px-6">
+      <h2 class="text-3xl font-bold text-center mb-16">Skills & Expertise</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Design Skills -->
+        <div class="bg-[#333] rounded-lg p-6">
+          <div class="text-red-500 text-4xl mb-4">
+            <i class="fas fa-paint-brush"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-4">Design & Multimedia</h3>
+          <ul class="text-gray-300 space-y-2">
+            <li class="flex items-center">
+              <i class="fas fa-check-circle text-red-500 mr-2"></i>
+              Graphic Design (Advanced)
+            </li>
+            <li class="flex items-center">
+              <i class="fas fa-check-circle text-red-500 mr-2"></i>
+              Video & Photo Editing (Advanced)
+            </li>
+            <li class="flex items-center">
+              <i class="fas fa-check-circle text-red-500 mr-2"></i>
+              Logo & Brand Identity
+            </li>
+            <li class="flex items-center">
+              <i class="fas fa-check-circle text-red-500 mr-2"></i>
+              Figma Prototyping
+            </li>
+          </ul>
+        </div>
+        
+        <!-- Technical Skills -->
+        <div class="bg-[#333] rounded-lg p-6">
+          <div class="text-red-500 text-4xl mb-4">
+            <i class="fas fa-code"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-4">Technical Skills</h3>
+          <ul class="text-gray-300 space-y-2">
+            <li class="flex items-center">
+              <i class="fas fa-check-circle text-red-500 mr-2"></i>
+              Frontend: JavaScript, HTML, CSS
+            </li>
+            <li class="flex items-center">
+              <i class="fas fa-check-circle text-red-500 mr-2"></i>
+              Backend: PHP, MySQL, SQL
+            </li>
+            <li class="flex items-center">
+              <i class="fas fa-check-circle text-red-500 mr-2"></i>
+              Python, Java, C++
+            </li>
+            <li class="flex items-center">
+              <i class="fas fa-check-circle text-red-500 mr-2"></i>
+              Microsoft Suite (Advanced)
+            </li>
+          </ul>
+        </div>
+        
+        <!-- Other Skills -->
+        <div class="bg-[#333] rounded-lg p-6">
+          <div class="text-red-500 text-4xl mb-4">
+            <i class="fas fa-running"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-4">Other Expertise</h3>
+          <ul class="text-gray-300 space-y-2">
+            <li class="flex items-center">
+              <i class="fas fa-check-circle text-red-500 mr-2"></i>
+              Athletics (Advanced)
+            </li>
+            <li class="flex items-center">
+              <i class="fas fa-check-circle text-red-500 mr-2"></i>
+              Tailoring (Intermediate-Advanced)
+            </li>
+            <li class="flex items-center">
+              <i class="fas fa-check-circle text-red-500 mr-2"></i>
+              Hospitality (Intermediate-Advanced)
+            </li>
+            <li class="flex items-center">
+              <i class="fas fa-check-circle text-red-500 mr-2"></i>
+              55-60 WPM Typing Speed
+            </li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Experience Timeline -->
+  <section class="py-20">
+    <div class="container mx-auto px-6">
+      <h2 class="text-3xl font-bold text-center mb-16">Professional Journey</h2>
+      <div class="max-w-3xl mx-auto">
+        <!-- Design Experience -->
+        <div class="relative pl-10 mb-10">
+          <div class="bg-[#222] p-6 rounded-lg">
+            <h3 class="text-xl font-bold mb-2">Design & Multimedia</h3>
+            <p class="text-red-500 mb-2">Since 2021 - Present</p>
+            <p class="text-gray-300">Specializing in graphic design, video and photo editing. Created numerous logos, business cards, flyers, and other marketing materials for various clients.</p>
+          </div>
+        </div>
+        
+        <!-- Athletics Experience -->
+        <div class="relative pl-10 mb-10">
+          <div class="bg-[#222] p-6 rounded-lg">
+            <h3 class="text-xl font-bold mb-2">Athletics</h3>
+            <p class="text-red-500 mb-2">3 Years Experience</p>
+            <p class="text-gray-300">Competed in various athletic events, demonstrating discipline, perseverance, and competitive spirit.</p>
+          </div>
+        </div>
+        
+        <!-- Current Activities -->
+        <div class="relative pl-10">
+          <div class="bg-[#222] p-6 rounded-lg">
+            <h3 class="text-xl font-bold mb-2">Current Activities</h3>
+            <p class="text-red-500 mb-2">Ongoing</p>
+            <p class="text-gray-300 mb-4">Continuing to develop skills in tailoring, hospitality, and technical programming while maintaining active involvement in design and athletics.</p>
+            <ul class="text-gray-300 space-y-2">
+              <li class="flex items-start">
+                <i class="fas fa-circle text-xs text-red-500 mt-2 mr-2"></i>
+                <span>Couture & Tailoring (Intermediate-Advanced)</span>
+              </li>
+              <li class="flex items-start">
+                <i class="fas fa-circle text-xs text-red-500 mt-2 mr-2"></i>
+                <span>Hospitality (Intermediate-Advanced)</span>
+              </li>
+              <li class="flex items-start">
+                <i class="fas fa-circle text-xs text-red-500 mt-2 mr-2"></i>
+                <span>Technical Programming (Advanced)</span>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Call to Action -->
+  <section class="py-20 bg-[#222]">
+    <div class="container mx-auto px-6 text-center">
+      <h2 class="text-3xl font-bold mb-6">Ready to Work Together?</h2>
+      <p class="text-xl text-gray-300 max-w-2xl mx-auto mb-8">I'm available for freelance projects and collaborations. Let's discuss how I can contribute to your next project.</p>
+      <a href="contact.html" class="inline-block btn-primary px-8 py-3 rounded-lg font-bold text-lg">Get In Touch</a>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-[#111] text-white py-12">
+    <div class="container mx-auto px-6">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <!-- About Column -->
+        <div class="md:col-span-2">
+          <h3 class="text-xl font-bold mb-4 text-red-500">Elie Mpuhwezimana</h3>
+          <p class="mb-4">Multidisciplinary professional with diverse skills in design, programming, athletics, and more.</p>
+          <div class="flex space-x-4">
+            <a href="#" class="text-gray-400 hover:text-white transition">
+              <i class="fab fa-twitter text-xl"></i>
+            </a>
+            <a href="#" class="text-gray-400 hover:text-white transition">
+              <i class="fab fa-linkedin text-xl"></i>
+            </a>
+            <a href="#" class="text-gray-400 hover:text-white transition">
+              <i class="fab fa-github text-xl"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div>
+          <h3 class="text-xl font-bold mb-4 text-red-500">Quick Links</h3>
+          <ul class="space-y-2">
+            <li><a href="index.html" class="hover:text-red-500 transition">Home</a></li>
+            <li><a href="about.html" class="hover:text-red-500 transition">About</a></li>
+            <li><a href="portfolio.html" class="hover:text-red-500 transition">Portfolio</a></li>
+            <li><a href="contact.html" class="hover:text-red-500 transition">Contact</a></li>
+          </ul>
+        </div>
+
+        <!-- Contact Info -->
+        <div>
+          <h3 class="text-xl font-bold mb-4 text-red-500">Contact</h3>
+          <ul class="space-y-2">
+            <li class="flex items-center">
+              <i class="fas fa-envelope mr-2 text-red-500"></i>
+              elie@example.com
+            </li>
+            <li class="flex items-center">
+              <i class="fas fa-phone mr-2 text-red-500"></i>
+              +250 123 456 789
+            </li>
+            <li class="flex items-center">
+              <i class="fas fa-map-marker-alt mr-2 text-red-500"></i>
+              Rwanda
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Copyright -->
+      <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+        <p>&copy; 2024 Elie Mpuhwezimana. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Mobile Menu Script -->
+  <script>
+    const mobileMenuButton = document.querySelector('.md\\:hidden');
+    const mobileMenu = document.querySelector('nav');
+    
+    mobileMenuButton.addEventListener('click', function() {
+      mobileMenu.classList.toggle('hidden');
+      mobileMenu.classList.toggle('flex');
+      mobileMenu.classList.toggle('flex-col');
+      mobileMenu.classList.toggle('absolute');
+      mobileMenu.classList.toggle('top-16');
+      mobileMenu.classList.toggle('left-0');
+      mobileMenu.classList.toggle('right-0');
+      mobileMenu.classList.toggle('bg-[#222]');
+      mobileMenu.classList.toggle('p-4');
+      mobileMenu.classList.toggle('space-y-4');
+    });
+  </script>
+</body>
+</html>

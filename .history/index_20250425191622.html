@@ -1,0 +1,480 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Elie Mpuhwezimana - Professional Portfolio</title>
+  <meta name="description" content="Professional portfolio showcasing Elie's diverse skills in design, programming, athletics and more">
+  
+  <!-- Tailwind CSS via CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background-color: #333;
+      color: #fff;
+    }
+    .hero {
+      background: linear-gradient(135deg, #333 0%, #111 100%);
+    }
+    .skill-tag {
+      background-color: #ff0000;
+      color: #fff;
+    }
+    .btn-primary {
+      background-color: #ff0000;
+      color: #fff;
+    }
+    .btn-primary:hover {
+      background-color: #cc0000;
+    }
+    .btn-secondary {
+      border-color: #ff0000;
+      color: #ff0000;
+    }
+    .btn-secondary:hover {
+      background-color: rgba(255, 0, 0, 0.1);
+    }
+    /* Social Icons */
+    .social-icons {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+    .social-icon {
+      color: white;
+      background: rgba(0,0,0,0.5);
+      border-radius: 50%;
+      width: 2.5rem;
+      height: 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.25rem;
+      transition: all 0.2s ease;
+    }
+    .social-icon:hover {
+      color: #ef4444;
+      transform: scale(1.1);
+    }
+  </style>
+</head>
+<body>
+  
+  <!-- Hero Section -->
+  <section class="min-h-screen flex items-center">
+    <div class="container mx-auto px-6">
+      <div class="flex flex-col md:flex-row items-center">
+        <!-- Smartphone Design (Left Side) -->
+        <div class="md:w-1/2 mb-12 md:mb-0 flex justify-center">
+          <div class="relative w-64 h-[580px] bg-[#222] rounded-3xl shadow-2xl overflow-hidden border-8 border-[#111]">
+            <!-- Screen Content -->
+            <div class="h-full flex flex-col">
+              <!-- Status Bar -->
+              <div class="bg-[#111] p-2 flex justify-between items-center text-white text-xs">
+                <span>9:41</span>
+                <div class="flex space-x-2">
+                  <i class="fas fa-signal"></i>
+                  <i class="fas fa-wifi"></i>
+                  <i class="fas fa-battery-full"></i>
+                </div>
+              </div>
+              <style>
+                  .tochange{
+                    font-size: 11px;
+                  }
+              </style>
+              <!-- Profile Section -->
+              <div class="flex-1 flex flex-col items-center justify-center p-4 bg-[#222]">
+                <div class="relative w-32 h-32 mb-4">
+                  <img id="profileImage" src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg" 
+                       alt="Profile" 
+                       class="w-full h-full rounded-full object-cover border-4 border-red-500">
+                  <!-- Admin Edit Button -->
+                  <button id="editProfileBtn" class="absolute bottom-0 right-0 bg-red-500 text-white rounded-full w-8 h-8 flex items-center justify-center">
+                    <i class="fas fa-pencil-alt text-sm"></i>
+                  </button>
+                </div>
+                <h3 class="text-white font-bold text-xl mb-1">Elie Mpuhwezimana</h3>
+                <p class="text-red-500 text-sm mb-8">Multidisciplinary Professional</p> <br> <br> <br>
+                <!-- Social Icons with CSS classes -->
+                <div class="social-icons mt-4 mb-4" style="margin-bottom: -65px;">  <!-- Balanced spacing -->
+                  <a href="#" class="social-icon">
+                    <i class="fab fa-twitter"></i>
+                  </a>
+                  <a href="#" class="social-icon">
+                    <i class="fab fa-linkedin"></i>
+                  </a>
+                  <a href="#" class="social-icon">
+                    <i class="fab fa-github"></i>
+                  </a>
+                  <a href="#" class="social-icon">
+                    <i class="fab fa-instagram"></i>
+                  </a>
+                </div>
+              </div>
+              
+              <!-- Skills Navigation -->
+              <div class="bg-[#333] p-4">
+                <div class="grid grid-cols-4 gap-2">
+                  <a href="portfolio.html#documents" class="bg-[#444] rounded-lg p-2 flex flex-col items-center text-white text-xs">
+                    <i class="fas fa-trophy text-red-500 mb-1"></i>
+                   <div class="tochange">Awards</div>
+                  </a>
+                  <a href="portfolio.html#documents" class="bg-[#444] rounded-lg p-2 flex flex-col items-center text-white text-xs">
+                    <i class="fas fa-heart text-red-500 mb-1"></i>
+                    <div class="tochange">hobbies</div>
+                  </a>
+                  <a href="portfolio.html#documents" class="bg-[#444] rounded-lg p-2 flex flex-col items-center text-white text-xs">
+                    <i class="fas fa-running text-red-500 mb-1"></i>
+                    <div class="tochange">Talents</div>
+                  </a>
+                  <a href="portfolio.html#documents" class="bg-[#444] rounded-lg p-2 flex flex-col items-center text-white text-xs">
+                    <i class="fas fa-external-link-alt text-red-500 mb-1"></i>
+                    <div class="tochange"><span style="margin-left: 10px;">View</span> Portifolio</div>
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        
+        <!-- Content (Right Side) -->
+        <div class="md:w-1/2 md:pl-12 text-center md:text-left">
+          <h1 class="text-4xl md:text-5xl font-bold mb-4 text-white">Hi, I'm <span class="text-red-500">Elie Mpuhwezimana</span></h1>
+          <h2 class="text-xl md:text-2xl mb-8 text-white">Multidisciplinary Creative Professional</h2>
+          
+          <!-- Skills Tags -->
+          <div class="flex flex-wrap justify-center md:justify-start gap-2 mb-8">
+            <span class="skill-tag px-3 py-1 rounded-full text-sm">Graphic Design</span>
+            <span class="skill-tag px-3 py-1 rounded-full text-sm">Programming</span>
+            <span class="skill-tag px-3 py-1 rounded-full text-sm">Athletics</span>
+            <span class="skill-tag px-3 py-1 rounded-full text-sm">Tailoring</span>
+            <span class="skill-tag px-3 py-1 rounded-full text-sm">Hospitality</span>
+          </div>
+          
+          <!-- Explore Links -->
+          <div class="space-y-4">
+            <a href="portfolio.html" class="block btn-primary px-6 py-3 rounded-lg font-bold transition duration-300">
+              View My Portfolio
+            </a>
+            <a href="#about" class="block btn-secondary border-2 px-6 py-3 rounded-lg font-bold transition duration-300">
+              Learn About Me
+            </a>
+            <a href="contact.html" class="block bg-white text-[#333] px-6 py-3 rounded-lg font-bold hover:bg-gray-200 transition duration-300">
+              Get In Touch
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- About Section -->
+  <section id="about" class="py-20 bg-[#222]">
+    <div class="container mx-auto px-6">
+      <div class="flex flex-col md:flex-row items-center">
+        <div class="md:w-1/2 mb-10 md:mb-0">
+          <img src="https://images.pexels.com/photos/220453/pexels-photo-220453.jpeg" alt="Profile Photo" class="rounded-lg shadow-xl w-full max-w-md">
+        </div>
+        <div class="md:w-1/2 md:pl-12">
+          <h2 class="text-3xl font-bold mb-6 text-white">About Me</h2>
+          <p class="text-gray-300 mb-6">I'm a dynamic professional with expertise in graphic design, video and photo editing, athletics, tailoring, hospitality, and technical programming. Adept at leveraging creative and technical skills to deliver high-quality projects.</p>
+          <p class="text-gray-300 mb-8">Passionate about innovation, problem-solving, and continuous learning across multiple disciplines.</p>
+          <div class="flex space-x-4">
+            <a href="about.html" class="btn-primary px-6 py-3 rounded-lg font-medium transition duration-300">
+              Full Bio
+            </a>
+            <a href="contact.html" class="btn-secondary border-2 px-6 py-3 rounded-lg font-medium transition duration-300">
+              Contact Me
+            </a>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Skills Section -->
+  <section class="py-20 bg-[#333]">
+    <div class="container mx-auto px-6">
+      <h2 class="text-3xl font-bold text-center mb-16 text-white">My Skills</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Design Skills -->
+        <div class="bg-[#222] rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 p-6">
+          <div class="text-red-500 text-4xl mb-4">
+            <i class="fas fa-paint-brush"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-2 text-white">Design & Multimedia</h3>
+          <ul class="text-gray-300 space-y-2">
+            <li>Graphic Design (Advanced)</li>
+            <li>Video & Photo Editing (Advanced)</li>
+            <li>Figma Prototyping</li>
+          </ul>
+        </div>
+        
+        <!-- Technical Skills -->
+        <div class="bg-[#222] rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 p-6">
+          <div class="text-red-500 text-4xl mb-4">
+            <i class="fas fa-code"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-2 text-white">Technical Skills</h3>
+          <ul class="text-gray-300 space-y-2">
+            <li>JavaScript, HTML, CSS</li>
+            <li>PHP, MySQL, SQL</li>
+            <li>Python, Java, C++</li>
+            <li>Microsoft Suite (Advanced)</li>
+          </ul>
+        </div>
+        
+        <!-- Other Skills -->
+        <div class="bg-[#222] rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 p-6">
+          <div class="text-red-500 text-4xl mb-4">
+            <i class="fas fa-running"></i>
+          </div>
+          <h3 class="text-xl font-bold mb-2 text-white">Other Expertise</h3>
+          <ul class="text-gray-300 space-y-2">
+            <li>Athletics (Advanced)</li>
+            <li>Tailoring (Intermediate-Advanced)</li>
+            <li>Hospitality (Intermediate-Advanced)</li>
+            <li>55-60 WPM Typing Speed</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured Work Section -->
+  <section class="py-20 bg-[#222]">
+    <div class="container mx-auto px-6">
+      <h2 class="text-3xl font-bold text-center mb-16 text-white">Featured Work</h2>
+      <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+        <!-- Design Project -->
+        <div class="bg-[#333] rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300">
+          <img src="https://images.pexels.com/photos/1779487/pexels-photo-1779487.jpeg" alt="Design Project" class="w-full h-48 object-cover">
+          <div class="p-6">
+            <h3 class="text-xl font-bold mb-2 text-white">Graphic Design Portfolio</h3>
+            <p class="text-gray-300 mb-4">Collection of logos, business cards, and flyer designs.</p>
+            <a href="portfolio.html#design" class="text-red-500 font-medium hover:text-red-400">View Projects →</a>
+          </div>
+        </div>
+        
+        <!-- Programming Project -->
+        <div class="bg-[#333] rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300">
+          <img src="https://images.pexels.com/photos/1181244/pexels-photo-1181244.jpeg" alt="Programming Project" class="w-full h-48 object-cover">
+          <div class="p-6">
+            <h3 class="text-xl font-bold mb-2 text-white">Web Development</h3>
+            <p class="text-gray-300 mb-4">Custom websites and web applications.</p>
+            <a href="portfolio.html#programming" class="text-red-500 font-medium hover:text-red-400">View Projects →</a>
+          </div>
+        </div>
+        
+        <!-- Athletics Project -->
+        <div class="bg-[#333] rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300">
+          <img src="https://images.pexels.com/photos/3764007/pexels-photo-3764007.jpeg" alt="Athletics Project" class="w-full h-48 object-cover">
+          <div class="p-6">
+            <h3 class="text-xl font-bold mb-2 text-white">Athletics Achievements</h3>
+            <p class="text-gray-300 mb-4">Competitions and training highlights.</p>
+            <a href="portfolio.html#athletics" class="text-red-500 font-medium hover:text-red-400">View Highlights →</a>
+          </div>
+        </div>
+      </div>
+      <div class="text-center mt-12">
+        <a href="portfolio.html" class="inline-block btn-primary px-6 py-3 rounded-lg font-medium transition duration-300">
+          View All Projects
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer class="bg-[#111] text-white py-12">
+    <div class="container mx-auto px-6">
+      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
+        <!-- About Column -->
+        <div class="md:col-span-2">
+          <h3 class="text-xl font-bold mb-4 text-red-500">Elie Mpuhwezimana</h3>
+          <p class="mb-4">Multidisciplinary professional with diverse skills in design, programming, athletics, and more.</p>
+          <div class="flex space-x-4">
+            <a href="#" class="text-gray-400 hover:text-white transition">
+              <i class="fab fa-twitter text-xl"></i>
+            </a>
+            <a href="#" class="text-gray-400 hover:text-white transition">
+              <i class="fab fa-linkedin text-xl"></i>
+            </a>
+            <a href="#" class="text-gray-400 hover:text-white transition">
+              <i class="fab fa-github text-xl"></i>
+            </a>
+          </div>
+        </div>
+
+        <!-- Quick Links -->
+        <div>
+          <h3 class="text-xl font-bold mb-4 text-red-500">Quick Links</h3>
+          <ul class="space-y-2">
+            <li><a href="index.html" class="hover:text-red-500 transition">Home</a></li>
+            <li><a href="about.html" class="hover:text-red-500 transition">About</a></li>
+            <li><a href="portfolio.html" class="hover:text-red-500 transition">Portfolio</a></li>
+            <li><a href="contact.html" class="hover:text-red-500 transition">Contact</a></li>
+          </ul>
+        </div>
+
+        <!-- Contact Info -->
+        <div>
+          <h3 class="text-xl font-bold mb-4 text-red-500">Contact</h3>
+          <ul class="space-y-2">
+            <li class="flex items-center">
+              <i class="fas fa-envelope mr-2 text-red-500"></i>
+              elie@example.com
+            </li>
+            <li class="flex items-center">
+              <i class="fas fa-phone mr-2 text-red-500"></i>
+              +250 123 456 789
+            </li>
+            <li class="flex items-center">
+              <i class="fas fa-map-marker-alt mr-2 text-red-500"></i>
+              Rwanda
+            </li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- Copyright -->
+      <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
+        <p>&copy; 2024 Elie Mpuhwezimana. All rights reserved.</p>
+      </div>
+    </div>
+  </footer>
+
+  <!-- Admin Control Panel -->
+  <div id="adminPanel" class="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 hidden">
+    <div class="bg-[#222] rounded-lg p-6 w-full max-w-md">
+      <h3 class="text-xl font-bold mb-4 text-white">Admin Controls</h3>
+      
+      <!-- Password Verification -->
+      <div id="passwordVerify" class="mb-6">
+        <label class="block text-white mb-2">Enter Admin Password</label>
+        <input type="password" id="adminPassword" class="w-full px-4 py-2 bg-[#333] border border-[#444] text-white rounded-lg mb-4" placeholder="Enter Your Password">
+        <button id="verifyPassword" class="btn-primary px-4 py-2 rounded-lg w-full">Verify</button>
+      </div>
+      
+      <!-- Admin Actions (hidden until verified) -->
+      <div id="adminActions" class="hidden">
+        <!-- Profile Image Controls -->
+        <div class="mb-6 p-4 border border-[#333] rounded-lg">
+          <h4 class="font-bold mb-3 text-white">Profile Image</h4>
+          <div class="flex space-x-3">
+            <label class="flex-1">
+              <input type="file" id="newProfileImage" class="hidden" accept="image/*">
+              <div class="btn-primary text-center px-4 py-2 rounded-lg cursor-pointer">
+                <i class="fas fa-upload mr-2"></i>Upload New
+              </div>
+            </label>
+            <button id="deleteProfileImage" class="flex-1 bg-red-600 text-white px-4 py-2 rounded-lg hover:bg-red-700">
+              <i class="fas fa-trash mr-2"></i>Delete Current
+            </button>
+          </div>
+        </div>
+        
+        <!-- Password Change -->
+        <div class="p-4 border border-[#333] rounded-lg">
+          <h4 class="font-bold mb-3 text-white">Change Password</h4>
+          <div class="mb-4">
+            <label class="block text-white mb-1 text-sm">New Password</label>
+            <input type="password" id="newAdminPassword" class="w-full px-4 py-2 bg-[#333] border border-[#444] text-white rounded-lg">
+          </div>
+          <button id="changePassword" class="btn-primary px-4 py-2 rounded-lg w-full">
+            <i class="fas fa-key mr-2"></i>Update Password
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script>
+    // Smooth scrolling for anchor links
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+      anchor.addEventListener('click', function (e) {
+        e.preventDefault();
+        document.querySelector(this.getAttribute('href')).scrollIntoView({
+          behavior: 'smooth'
+        });
+      });
+    });
+
+    // Enhanced Admin Controls Functionality
+    // Load saved profile image on page load
+    const profileImage = document.getElementById('profileImage');
+    const savedImage = localStorage.getItem('profileImage');
+    if (savedImage) {
+      profileImage.src = savedImage;
+    }
+
+    document.getElementById('editProfileBtn').addEventListener('click', function() {
+      document.getElementById('adminPanel').classList.remove('hidden');
+      document.getElementById('passwordVerify').classList.remove('hidden');
+      document.getElementById('adminActions').classList.add('hidden');
+      document.getElementById('adminPassword').value = '';
+    });
+
+    document.getElementById('verifyPassword').addEventListener('click', function() {
+      if (document.getElementById('adminPassword').value === 'elie') {
+        document.getElementById('passwordVerify').classList.add('hidden');
+        document.getElementById('adminActions').classList.remove('hidden');
+      } else {
+        alert('Incorrect password. Please try again.');
+      }
+    });
+
+    document.getElementById('changePassword').addEventListener('click', function() {
+      const newPass = document.getElementById('newAdminPassword').value;
+      if (newPass) {
+        alert('Password changed successfully!');
+        document.getElementById('adminPanel').classList.add('hidden');
+      } else {
+        alert('Please enter a new password');
+      }
+    });
+
+    document.getElementById('deleteProfileImage').addEventListener('click', function() {
+      if (confirm('Are you sure you want to delete your profile image?')) {
+        const defaultImage = 'https://via.placeholder.com/150';
+        profileImage.src = defaultImage;
+        localStorage.setItem('profileImage', defaultImage);
+        alert('Profile image deleted!');
+        document.getElementById('adminPanel').classList.add('hidden');
+      }
+    });
+
+    document.getElementById('newProfileImage').addEventListener('change', function(e) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(e) {
+          const newImage = e.target.result;
+          profileImage.src = newImage;
+          localStorage.setItem('profileImage', newImage);
+          alert('Profile image updated!');
+          document.getElementById('adminPanel').classList.add('hidden');
+        };
+        reader.readAsDataURL(file);
+      }
+    });
+
+    // Close modal when clicking outside
+    document.getElementById('adminPanel').addEventListener('click', function(e) {
+      if (e.target === this) {
+        this.classList.add('hidden');
+      }
+    });
+  </script>
+</body>
+</html>
