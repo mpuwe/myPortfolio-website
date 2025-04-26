@@ -635,15 +635,15 @@
           <ul class="space-y-2">
             <li class="flex items-center">
               <i class="fas fa-envelope mr-2 text-red-500"></i>
-              mpuwezimanaelie@gmail.com
+              elie@example.com
             </li>
             <li class="flex items-center">
               <i class="fas fa-phone mr-2 text-red-500"></i>
-              +250 795176702
+              +250 123 456 789
             </li>
             <li class="flex items-center">
               <i class="fas fa-map-marker-alt mr-2 text-red-500"></i>
-              Kigali-Rwanda
+              Rwanda
             </li>
           </ul>
         </div>
@@ -828,83 +828,118 @@ document.getElementById('documentFilter').addEventListener('change', function() 
         };
         reader.readAsDataURL(imageFile);
     });
+// Document upload logic
+document.getElementById('uploadDocumentBtn').addEventListener('click', function() {
+    if (!isAdmin) return; // Ensure the user is an admin
 
-    // Document upload logic
-    document.getElementById('uploadDocumentBtn').addEventListener('click', function() {
-        if (!isAdmin) return; // Ensure the user is an admin
+    var type = document.getElementById('documentType').value;
+    var file = document.getElementById('documentFile').files[0];
+    var status = document.getElementById('documentUploadStatus');
 
-        var type = document.getElementById('documentType').value;
-        var file = document.getElementById('documentFile').files[0];
-        var status = document.getElementById('documentUploadStatus');
-
-        if (!file) {
-            status.textContent = 'Please select a file';
-            status.className = 'mt-2 text-sm text-red-500';
-            status.style.display = 'block';
-            return;
-        }
-
-        status.textContent = 'Uploading...';
-        status.className = 'mt-2 text-sm text-yellow-500';
+    if (!file) {
+        status.textContent = 'Please select a file';
+        status.className = 'mt-2 text-sm text-red-500';
         status.style.display = 'block';
-
-        var reader = new FileReader();
-        reader.onload = function() {
-            var name = document.getElementById('documentType')
-                .options[document.getElementById('documentType').selectedIndex].text;
-            var grid = document.getElementById('documentsGrid');
-            var icon = getDocumentIcon(type);
-
-            var item = document.createElement('div');
-            item.className = 'document-item bg-[#333] rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 h-full flex flex-col';
-            item.innerHTML = `
-                <div class="p-4 flex-1 flex flex-col items-center justify-center">
-                    <i class="fas ${icon} text-4xl text-red-500 mb-3"></i>
-                    <h3 class="text-lg font-bold mb-1 text-white text-center">${name}</h3>
-                    <p class="text-gray-300 text-sm text-center mb-3">${type.replace('-', ' ')}</p>
-                </div>
-                <div class="p-3 bg-[#444] flex justify-between items-center">
-                    <div class="flex gap-3">
-                        <a href="documents/${type}.pdf" class="text-blue-400 hover:text-blue-300 text-sm">
-                            <i class="fas fa-eye"></i> View
-                        </a>
-                        <a href="documents/${type}.pdf" download class="text-blue-400 hover:text-blue-300 text-sm">
-                            <i class="fas fa-download"></i> Download
-                        </a>
-                    </div>
-                    <button class="delete-doc text-red-500 hover:text-red-700 text-sm" 
-                        data-type="${type}" onclick="confirmDeleteDocument(this)">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </div>
-            `;
-
-            // Add new document at the top
-            grid.insertBefore(item, grid.firstChild);
-
-            // Reset the file input and show success message
-            document.getElementById('documentFile').value = '';
-            status.textContent = 'Document uploaded successfully!';
-            status.className = 'mt-2 text-sm text-green-500 font-bold';
-            status.style.display = 'block';
-        };
-
-        reader.onerror = function() {
-            status.textContent = 'Upload failed';
-            status.className = 'mt-2 text-sm text-red-500';
-        };
-
-        reader.readAsDataURL(file);
-            // Initialize the upload setup when the document is ready
-    if (document.readyState === 'complete') {
-        setupUpload();
-    } else {
-        window.addEventListener('load', setupUpload);
+        return;
     }
+
+    status.textContent = 'Uploading...';
+    status.className = 'mt-2 text-sm text-yellow-500';
+    status.style.display = 'block';
+
+    var reader = new FileReader();
+    reader.onload = function() {
+        var name = document.getElementById('documentType')
+            .options[document.getElementById('documentType').selectedIndex].text;
+        var grid = document.getElementById('documentsGrid');
+        var icon = getDocumentIcon(type);
+
+        var item = {
+            name: name,
+            type: type,
+            url: reader.result // Store the file data
+        };
+
+        // Save the document to local storage
+        saveDocumentToLocalStorage(item);
+
+        // Create document item element
+        var documentItem = createDocumentItem(item);
+        grid.insertBefore(documentItem, grid.firstChild);
+
+        // Reset the file input and show success message
+        document.getElementById('documentFile').value = '';
+        status.textContent = 'Document uploaded successfully!';
+        status.className = 'mt-2 text-sm text-green-500 font-bold';
+        status.style.display = 'block';
+    };
+
+    reader.onerror = function() {
+        status.textContent = 'Upload failed';
+        status.className = 'mt-2 text-sm text-red-500';
+    };
+
+    reader.readAsDataURL(file);
+});
+
+// Function to save document to local storage
+function saveDocumentToLocalStorage(item) {
+    let documents = JSON.parse(localStorage.getItem('documents')) || [];
+    documents.push(item);
+    localStorage.setItem('documents', JSON.stringify(documents));
+}
+
+// Function to create document item element
+function createDocumentItem(item) {
+    var grid = document.getElementById('documentsGrid');
+    var icon = getDocumentIcon(item.type);
+
+    var documentItem = document.createElement('div');
+    documentItem.className = 'document-item bg-[#333] rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 h-full flex flex-col';
+    documentItem.innerHTML = `
+        <div class="p-4 flex-1 flex flex-col items-center justify-center">
+            <i class="fas ${icon} text-4xl text-red-500 mb-3"></i>
+            <h3 class="text-lg font-bold mb-1 text-white text-center">${item.name}</h3>
+            <p class="text-gray-300 text-sm text-center mb-3">${item.type.replace('-', ' ')}</p>
+        </div>
+        <div class="p-3 bg-[#444] flex justify-between items-center">
+            <div class="flex gap-3">
+                <a href="${item.url}" class="text-blue-400 hover:text-blue-300 text-sm" target="_blank">
+                    <i class="fas fa-eye"></i> View
+                </a>
+                <a href="${item.url}" download class="text-blue-400 hover:text-blue-300 text-sm">
+                    <i class="fas fa-download"></i> Download
+                </a>
+            </div>
+            <button class="delete-doc text-red-500 hover:text-red-700 text-sm" 
+                data-type="${item.type}" onclick="confirmDeleteDocument(this)">
+                <i class="fas fa-trash"></i>
+            </button>
+        </div>
+    `;
+    return documentItem;
+}
+
+
+
+
+// Function to load documents from local storage on page load
+function loadDocumentsFromLocalStorage() {
+    let documents = JSON.parse(localStorage.getItem('documents')) || [];
+    documents.forEach(item => {
+        var documentItem = createDocumentItem(item);
+        document.getElementById('documentsGrid').appendChild(documentItem);
     });
+}
 
+// Initialize the upload setup when the document is ready
+if (document.readyState === 'complete') {
+    loadDocumentsFromLocalStorage(); // Load documents on page load
+} else {
+    window.addEventListener('load', loadDocumentsFromLocalStorage); // Load documents when the window loads
+}
 
-    // Delete confirmation modal
+// Done with all functionality    // Delete confirmation modal
     const deleteModal = document.createElement('div');
     deleteModal.id = 'deleteConfirmModal';
     deleteModal.className = 'hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
@@ -999,6 +1034,9 @@ document.getElementById('documentFilter').addEventListener('change', function() 
       return icons[docType] || 'fa-file';
     }
   </script>
+
+
+
 
 </body>
 </html>

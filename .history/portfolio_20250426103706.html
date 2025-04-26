@@ -540,7 +540,41 @@
           <input type="password" id="confirmPassword" class="w-full px-4 py-2 bg-[#444] text-white rounded-lg" placeholder="Confirm password">
           <input type="button" value="Update" onclick="updatePassword()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg mt-2">
         </div>
-        
+        <script>// Initial admin password
+let ADMIN_PSSWORD = "admin123"; // Use let to allow updates
+let isAdmini = false;
+
+// Function to update the admin password
+function updatePassword() {
+    const newPassword = document.getElementById('newPassword').value;
+    const confirmPassword = document.getElementById('confirmPassword').value;
+
+    // Check if the new password and confirm password match and are not empty
+    if (newPassword === confirmPassword && newPassword !== "") {
+        ADMIN_PSSWORD = newPassword; // Update the password
+        alert('Password updated successfully!'); // Notify the user
+        document.getElementById('newPassword').value = ''; // Clear the input field
+        document.getElementById('confirmPassword').value = ''; // Clear the input field
+    } else {
+        alert('Passwords do not match or are empty.'); // Notify the user of the error
+    }
+}
+
+// Function to log in as admin
+function login() {
+    const password = document.getElementById('adminPassword').value;
+    if (password === ADMIN_PASSWORD) {
+        isAdmin = true;
+        alert('Login successful!'); // Notify the user
+        // Here you can show admin actions or redirect to admin panel
+    } else {
+        alert('Incorrect password'); // Notify the user of the error
+    }
+}
+
+// Example usage
+document.getElementById('loginBtn').addEventListener('click', login);
+document.getElementById('updatePasswordBtn').addEventListener('click', updatePassword);</script>
         <div class="flex flex-col md:flex-row gap-4">
           <!-- Project Upload Section -->
           <div class="w-full md:w-1/2 p-4 border border-[#444] rounded-lg">
@@ -998,7 +1032,15 @@ document.getElementById('documentFilter').addEventListener('change', function() 
       };
       return icons[docType] || 'fa-file';
     }
-  </script>
 
+
+
+    
+  </script>
+  
+
+
+
+  
 </body>
 </html>

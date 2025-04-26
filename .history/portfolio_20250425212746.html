@@ -635,15 +635,15 @@
           <ul class="space-y-2">
             <li class="flex items-center">
               <i class="fas fa-envelope mr-2 text-red-500"></i>
-              mpuwezimanaelie@gmail.com
+              elie@example.com
             </li>
             <li class="flex items-center">
               <i class="fas fa-phone mr-2 text-red-500"></i>
-              +250 795176702
+              +250 123 456 789
             </li>
             <li class="flex items-center">
               <i class="fas fa-map-marker-alt mr-2 text-red-500"></i>
-              Kigali-Rwanda
+              Rwanda
             </li>
           </ul>
         </div>
@@ -655,59 +655,57 @@
       </div>
     </div>
   </footer>
-
-  <!-- Scripts -->
-  <script>
+<!-- Scripts -->
+<script>
     // Initialize portfolio items (data attributes already set in HTML)
-    
+
     // Filter items based on active filters
     function filterItems() {
-      const activeCategory = document.querySelector('.skill-filter.btn-primary')?.dataset.category || 'all';
-      const docType = document.getElementById('documentFilter').value;
-      
-      // Filter projects
-      document.querySelectorAll('.portfolio-item').forEach(item => {
-        const categoryMatch = activeCategory === 'all' || item.dataset.category === activeCategory;
-        const docTypeMatch = !docType || item.dataset.doctype === docType;
-        item.style.display = (categoryMatch && docTypeMatch) ? 'flex' : 'none';
-      });
-      
-      // Filter documents
-      document.querySelectorAll('.document-item').forEach(item => {
-        const docTypeMatch = !docType || item.dataset.doctype === docType;
-        item.style.display = docTypeMatch ? 'flex' : 'none';
-      });
+        const activeCategory = document.querySelector('.skill-filter.btn-primary')?.dataset.category || 'all';
+        const docType = document.getElementById('documentFilter').value;
+
+        // Filter projects
+        document.querySelectorAll('.portfolio-item').forEach(item => {
+            const categoryMatch = activeCategory === 'all' || item.dataset.category === activeCategory;
+            const docTypeMatch = !docType || item.dataset.doctype === docType;
+            item.style.display = (categoryMatch && docTypeMatch) ? 'flex' : 'none';
+        });
+
+        // Filter documents
+        document.querySelectorAll('.document-item').forEach(item => {
+            const docTypeMatch = !docType || item.dataset.doctype === docType;
+            item.style.display = docTypeMatch ? 'flex' : 'none';
+        });
     }
 
     // Skill filtering
     document.querySelectorAll('.skill-filter').forEach(button => {
-      button.addEventListener('click', function() {
-        // Update active button styling
-        document.querySelectorAll('.skill-filter').forEach(btn => {
-          btn.classList.toggle('btn-primary', btn === this);
-          btn.classList.toggle('btn-secondary', btn !== this);
+        button.addEventListener('click', function() {
+            // Update active button styling
+            document.querySelectorAll('.skill-filter').forEach(btn => {
+                btn.classList.toggle('btn-primary', btn === this);
+                btn.classList.toggle('btn-secondary', btn !== this);
+            });
+            filterItems();
         });
-        filterItems();
-      });
     });
 
     // Document dropdown navigation
-// Document dropdown navigation
-document.getElementById('documentFilter').addEventListener('change', function() {
-  const docType = this.value;
-  if (docType) {
-    const docElement = document.querySelector(`.document-item[data-doctype="${docType}"]`);
-    if (docElement) {
-      docElement.scrollIntoView({ behavior: 'smooth' });
-      docElement.classList.add('ring-2', 'ring-red-500');
-      setTimeout(() => docElement.classList.remove('ring-2', 'ring-red-500'), 2000);
-    }
-  }
-});
+    document.getElementById('documentFilter').addEventListener('change', function() {
+        const docType = this.value;
+        if (docType) {
+            const docElement = document.querySelector(`.document-item[data-doctype="${docType}"]`);
+            if (docElement) {
+                docElement.scrollIntoView({ behavior: 'smooth' });
+                docElement.classList.add('ring-2', 'ring-red-500');
+                setTimeout(() => docElement.classList.remove('ring-2', 'ring-red-500'), 2000);
+            }
+        }
+    });
 
     // Initialize with all items visible
     document.querySelectorAll('.portfolio-item').forEach(item => {
-      item.style.display = 'flex';
+        item.style.display = 'flex';
     });
 
     // Set 'All Skills' as active by default
@@ -716,23 +714,20 @@ document.getElementById('documentFilter').addEventListener('change', function() 
     // Mobile menu toggle
     const mobileMenuButton = document.querySelector('.md\\:hidden');
     const mobileMenu = document.querySelector('nav');
-    
-    mobileMenuButton.addEventListener('click', function() {
-      mobileMenu.classList.toggle('hidden');
-      mobileMenu.classList.toggle('flex');
-      mobileMenu.classList.toggle('flex-col');
-      mobileMenu.classList.toggle('absolute');
-      mobileMenu.classList.toggle('top-16');
-      mobileMenu.classList.toggle('left-0');
-      mobileMenu.classList.toggle('right-0');
-      mobileMenu.classList.toggle('bg-[#222]');
-      mobileMenu.classList.toggle('p-4');
-      mobileMenu.classList.toggle('space-y-4');
-    });
-  </script>
 
-  <!-- Admin Script -->
- <script>
+    mobileMenuButton.addEventListener('click', function() {
+        mobileMenu.classList.toggle('hidden');
+        mobileMenu.classList.toggle('flex');
+        mobileMenu.classList.toggle('flex-col');
+        mobileMenu.classList.toggle('absolute');
+        mobileMenu.classList.toggle('top-16');
+        mobileMenu.classList.toggle('left-0');
+        mobileMenu.classList.toggle('right-0');
+        mobileMenu.classList.toggle('bg-[#222]');
+        mobileMenu.classList.toggle('p-4');
+        mobileMenu.classList.toggle('space-y-4');
+    });
+
     // Admin password (in real app, this should be server-side)
     const ADMIN_PASSWORD = "admin123";
     let isAdmin = false;
@@ -844,43 +839,38 @@ document.getElementById('documentFilter').addEventListener('change', function() 
             return;
         }
 
+        // Show uploading status immediately
         status.textContent = 'Uploading...';
         status.className = 'mt-2 text-sm text-yellow-500';
         status.style.display = 'block';
 
         var reader = new FileReader();
+
+        // Debugging: Check if the reader starts reading the file
+        reader.onloadstart = function() {
+            console.log("Upload started...");
+        };
+
         reader.onload = function() {
+            console.log("Upload complete!");
+
             var name = document.getElementById('documentType')
                 .options[document.getElementById('documentType').selectedIndex].text;
             var grid = document.getElementById('documentsGrid');
             var icon = getDocumentIcon(type);
 
-            var item = document.createElement('div');
-            item.className = 'document-item bg-[#333] rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 h-full flex flex-col';
-            item.innerHTML = `
-                <div class="p-4 flex-1 flex flex-col items-center justify-center">
-                    <i class="fas ${icon} text-4xl text-red-500 mb-3"></i>
-                    <h3 class="text-lg font-bold mb-1 text-white text-center">${name}</h3>
-                    <p class="text-gray-300 text-sm text-center mb-3">${type.replace('-', ' ')}</p>
-                </div>
-                <div class="p-3 bg-[#444] flex justify-between items-center">
-                    <div class="flex gap-3">
-                        <a href="documents/${type}.pdf" class="text-blue-400 hover:text-blue-300 text-sm">
-                            <i class="fas fa-eye"></i> View
-                        </a>
-                        <a href="documents/${type}.pdf" download class="text-blue-400 hover:text-blue-300 text-sm">
-                            <i class="fas fa-download"></i> Download
-                        </a>
-                    </div>
-                    <button class="delete-doc text-red-500 hover:text-red-700 text-sm" 
-                        data-type="${type}" onclick="confirmDeleteDocument(this)">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </div>
-            `;
+            var item = {
+                name: name,
+                type: type,
+                url: reader.result // Store the file data
+            };
 
-            // Add new document at the top
-            grid.insertBefore(item, grid.firstChild);
+            // Save the document to local storage
+            saveDocumentToLocalStorage(item);
+
+            // Create document item element
+            var documentItem = createDocumentItem(item);
+            grid.insertBefore(documentItem, grid.firstChild);
 
             // Reset the file input and show success message
             document.getElementById('documentFile').value = '';
@@ -890,21 +880,71 @@ document.getElementById('documentFilter').addEventListener('change', function() 
         };
 
         reader.onerror = function() {
+            // Debugging: Log the error
+            console.error("Upload failed:", reader.error);
             status.textContent = 'Upload failed';
             status.className = 'mt-2 text-sm text-red-500';
         };
 
+        // Read the file
         reader.readAsDataURL(file);
-            // Initialize the upload setup when the document is ready
-    if (document.readyState === 'complete') {
-        setupUpload();
-    } else {
-        window.addEventListener('load', setupUpload);
-    }
     });
 
+    // Function to save document to local storage
+    function saveDocumentToLocalStorage(item) {
+        let documents = JSON.parse(localStorage.getItem('documents')) || [];
+        documents.push(item);
+        localStorage.setItem('documents', JSON.stringify(documents));
+    }
 
-    // Delete confirmation modal
+    // Function to create document item element
+    function createDocumentItem(item) {
+        var grid = document.getElementById('documentsGrid');
+        var icon = getDocumentIcon(item.type);
+
+        var documentItem = document.createElement('div');
+        documentItem.className = 'document-item bg-[#333] rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 h-full flex flex-col';
+        documentItem.innerHTML = `
+            <div class="p-4 flex-1 flex flex-col items-center justify-center">
+                <i class="fas ${icon} text-4xl text-red-500 mb-3"></i>
+                <h3 class="text-lg font-bold mb-1 text-white text-center">${item.name}</h3>
+                <p class="text-gray-300 text-sm text-center mb-3">${item.type.replace('-', ' ')}</p>
+            </div>
+            <div class="p-3 bg-[#444] flex justify-between items-center">
+                <div class="flex gap-3">
+                    <a href="${item.url}" class="text-blue-400 hover:text-blue-300 text-sm" target="_blank">
+                        <i class="fas fa-eye"></i> View
+                    </a>
+                    <a href="${item.url}" download class="text-blue-400 hover:text-blue-300 text-sm">
+                        <i class="fas fa-download"></i> Download
+                    </a>
+                </div>
+                <button class="delete-doc text-red-500 hover:text-red-700 text-sm" 
+                    data-type="${item.type}" onclick="confirmDeleteDocument(this)">
+                    <i class="fas fa-trash"></i>
+                </button>
+            </div>
+        `;
+        return documentItem;
+    }
+
+    // Function to load documents from local storage on page load
+    function loadDocumentsFromLocalStorage() {
+        let documents = JSON.parse(localStorage.getItem('documents')) || [];
+        documents.forEach(item => {
+            var documentItem = createDocumentItem(item);
+            document.getElementById('documentsGrid').appendChild(documentItem);
+        });
+    }
+
+    // Initialize the upload setup when the document is ready
+    if (document.readyState === 'complete') {
+        loadDocumentsFromLocalStorage(); // Load documents on page load
+    } else {
+        window.addEventListener('load', loadDocumentsFromLocalStorage); // Load documents when the window loads
+    }
+
+    // Done with all functionality    // Delete confirmation modal
     const deleteModal = document.createElement('div');
     deleteModal.id = 'deleteConfirmModal';
     deleteModal.className = 'hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
@@ -929,76 +969,41 @@ document.getElementById('documentFilter').addEventListener('change', function() 
     `;
     document.body.appendChild(deleteModal);
 
-    let currentItemToDelete = null;
-    let currentItemType = null;
-
-    // Show delete confirmation
     function confirmDeleteDocument(button) {
-      currentItemToDelete = button.closest('.document-item, .portfolio-item');
-      deleteModal.classList.remove('hidden');
-      document.getElementById('deletePassword').focus();
-    }
-
-    // Handle delete confirmation
-    document.addEventListener('click', function(e) {
-      if (e.target.id === 'confirmDeleteBtn') {
-        const password = document.getElementById('deletePassword').value;
-        const errorElement = document.getElementById('passwordError');
+        deleteModal.classList.remove('hidden');
+        const confirmDeleteBtn = document.getElementById('confirmDeleteBtn');
+        const cancelDeleteBtn = document.getElementById('cancelDeleteBtn');
+        const passwordField = document.getElementById('deletePassword');
+        const passwordError = document.getElementById('passwordError');
+        const docType = button.dataset.type;
         
-        if (password === ADMIN_PASSWORD) {
-          if (currentItemToDelete) {
-            // Remove item from DOM
-            currentItemToDelete.remove();
-            
-            // Update localStorage for projects
-            if (currentItemToDelete.classList.contains('portfolio-item')) {
-              saveProjects();
-            }
-            
-            // Show success message
-            const status = document.createElement('div');
-            status.className = 'fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg';
-            status.textContent = 'Item permanently deleted';
-            document.body.appendChild(status);
-            setTimeout(() => status.remove(), 3000);
+        cancelDeleteBtn.addEventListener('click', () => {
+          deleteModal.classList.add('hidden');
+        });
+
+        confirmDeleteBtn.addEventListener('click', () => {
+          const password = passwordField.value;
+          if (password === ADMIN_PASSWORD) {
+            // Delete logic for document
+            let documents = JSON.parse(localStorage.getItem('documents')) || [];
+            documents = documents.filter(doc => doc.type !== docType);
+            localStorage.setItem('documents', JSON.stringify(documents));
+
+            document.querySelectorAll('.document-item').forEach(item => {
+              if (item.dataset.doctype === docType) {
+                item.remove();
+              }
+            });
+
+            deleteModal.classList.add('hidden');
+          } else {
+            passwordError.classList.remove('hidden');
           }
-        } else {
-          // Show password error
-          errorElement.classList.remove('hidden');
-          document.getElementById('deletePassword').focus();
-          return;
-        }
-        
-        // Clear and hide modal
-        deleteModal.classList.add('hidden');
-        document.getElementById('deletePassword').value = '';
-        errorElement.classList.add('hidden');
-        
-      } else if (e.target.id === 'cancelDeleteBtn' || e.target === deleteModal) {
-        // Cancel deletion
-        deleteModal.classList.add('hidden');
-        document.getElementById('deletePassword').value = '';
-        document.getElementById('passwordError').classList.add('hidden');
-      }
-    });
-
-    // Get appropriate icon for document type
-    function getDocumentIcon(docType) {
-      const icons = {
-        'personal-statement': 'fa-file-alt',
-        'resume': 'fa-file-contract',
-        'additional-essay': 'fa-file-signature',
-        'cover-letter': 'fa-envelope-open-text',
-        'recommendation': 'fa-user-tie',
-        'report-card': 'fa-file-certificate',
-        's4-report': 'fa-file-export',
-        's5-report': 'fa-file-export',
-        's6-report': 'fa-file-export',
-        'exam-cert': 'fa-award'
-      };
-      return icons[docType] || 'fa-file';
+        });
     }
-  </script>
+</script>
+
+
 
 </body>
 </html>

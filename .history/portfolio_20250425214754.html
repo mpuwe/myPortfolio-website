@@ -635,15 +635,15 @@
           <ul class="space-y-2">
             <li class="flex items-center">
               <i class="fas fa-envelope mr-2 text-red-500"></i>
-              mpuwezimanaelie@gmail.com
+              elie@example.com
             </li>
             <li class="flex items-center">
               <i class="fas fa-phone mr-2 text-red-500"></i>
-              +250 795176702
+              +250 123 456 789
             </li>
             <li class="flex items-center">
               <i class="fas fa-map-marker-alt mr-2 text-red-500"></i>
-              Kigali-Rwanda
+              Rwanda
             </li>
           </ul>
         </div>
@@ -999,6 +999,218 @@ document.getElementById('documentFilter').addEventListener('change', function() 
       return icons[docType] || 'fa-file';
     }
   </script>
+  <script>
+    // On page load, load projects and documents from localStorage if available
+    window.addEventListener('load', function() {
+        // Load saved documents from localStorage
+        const savedDocuments = JSON.parse(localStorage.getItem('documents')) || [];
+        
+        savedDocuments.forEach(doc => {
+            const item = document.createElement('div');
+            item.className = 'document-item bg-[#333] rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 h-full flex flex-col';
+            item.innerHTML = `
+                <div class="p-4 flex-1 flex flex-col items-center justify-center">
+                    <i class="fas ${doc.icon} text-4xl text-red-500 mb-3"></i>
+                    <h3 class="text-lg font-bold mb-1 text-white text-center">${doc.name}</h3>
+                    <p class="text-gray-300 text-sm text-center mb-3">${doc.type.replace('-', ' ')}</p>
+                </div>
+                <div class="p-3 bg-[#444] flex justify-between items-center">
+                    <div class="flex gap-3">
+                        <a href="${doc.fileUrl}" class="text-blue-400 hover:text-blue-300 text-sm">
+                            <i class="fas fa-eye"></i> View
+                        </a>
+                        <a href="${doc.fileUrl}" download class="text-blue-400 hover:text-blue-300 text-sm">
+                            <i class="fas fa-download"></i> Download
+                        </a>
+                    </div>
+                    <button class="delete-doc text-red-500 hover:text-red-700 text-sm" 
+                        data-type="${doc.type}" onclick="confirmDeleteDocument(this)">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            `;
+            const grid = document.getElementById('documentsGrid');
+            grid.appendChild(item);
+        });
+
+        // Load saved projects from localStorage
+        const savedProjects = JSON.parse(localStorage.getItem('projects')) || [];
+        
+        savedProjects.forEach(project => {
+            const newProject = document.createElement('div');
+            newProject.className = 'portfolio-item bg-[#222] rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 h-full flex flex-col relative';
+            newProject.dataset.category = project.category;
+
+            newProject.innerHTML = `
+                <img src="${project.imageUrl}" alt="${project.title}" class="w-full h-48 object-cover">
+                <div class="p-6 flex-1 flex flex-col">
+                    <button class="delete-doc absolute top-2 right-2 text-red-500 hover:text-red-700 text-lg bg-black bg-opacity-50 rounded-full w-8 h-8 flex items-center justify-center" 
+                        onclick="confirmDeleteDocument(this)">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                    <h3 class="text-xl font-bold mb-2 text-white">${project.title}</h3>
+                    <p class="text-gray-300 mb-4 flex-1">${project.description}</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-red-500">${project.category}</span>
+                    </div>
+                </div>
+            `;
+
+            const portfolioGrid = document.getElementById('portfolioGrid');
+            portfolioGrid.appendChild(newProject);
+        });
+    });
+
+    // Handle Document Upload
+    document.getElementById('uploadDocumentBtn').addEventListener('click', function() {
+        if (!isAdmin) return; // Ensure the user is an admin
+
+        var type = document.getElementById('documentType').value;
+        var file = document.getElementById('documentFile').files[0];
+        var status = document.getElementById('documentUploadStatus');
+
+        if (!file) {
+            status.textContent = 'Please select a file';
+            status.className = 'mt-2 text-sm text-red-500';
+            status.style.display = 'block';
+            return;
+        }
+
+        status.textContent = 'Uploading...';
+        status.className = 'mt-2 text-sm text-yellow-500';
+        status.style.display = 'block';
+
+        var reader = new FileReader();
+        reader.onload = function() {
+            var name = document.getElementById('documentType')
+                .options[document.getElementById('documentType').selectedIndex].text;
+            var icon = getDocumentIcon(type);
+
+            var item = document.createElement('div');
+            item.className = 'document-item bg-[#333] rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 h-full flex flex-col';
+            item.innerHTML = `
+                <div class="p-4 flex-1 flex flex-col items-center justify-center">
+                    <i class="fas ${icon} text-4xl text-red-500 mb-3"></i>
+                    <h3 class="text-lg font-bold mb-1 text-white text-center">${name}</h3>
+                    <p class="text-gray-300 text-sm text-center mb-3">${type.replace('-', ' ')}</p>
+                </div>
+                <div class="p-3 bg-[#444] flex justify-between items-center">
+                    <div class="flex gap-3">
+                        <a href="${e.target.result}" class="text-blue-400 hover:text-blue-300 text-sm">
+                            <i class="fas fa-eye"></i> View
+                        </a>
+                        <a href="${e.target.result}" download class="text-blue-400 hover:text-blue-300 text-sm">
+                            <i class="fas fa-download"></i> Download
+                        </a>
+                    </div>
+                    <button class="delete-doc text-red-500 hover:text-red-700 text-sm" 
+                        data-type="${type}" onclick="confirmDeleteDocument(this)">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                </div>
+            `;
+
+            // Add new document to the list
+            const grid = document.getElementById('documentsGrid');
+            grid.insertBefore(item, grid.firstChild);
+
+            // Save document to localStorage
+            const documents = JSON.parse(localStorage.getItem('documents')) || [];
+            documents.push({
+                type: type,
+                name: name,
+                icon: icon,
+                fileUrl: e.target.result // Store the file URL (base64 string)
+            });
+            localStorage.setItem('documents', JSON.stringify(documents));
+
+            // Reset file input and show success message
+            document.getElementById('documentFile').value = '';
+            status.textContent = 'Document uploaded successfully!';
+            status.className = 'mt-2 text-sm text-green-500 font-bold';
+            status.style.display = 'block';
+        };
+
+        reader.onerror = function() {
+            status.textContent = 'Upload failed';
+            status.className = 'mt-2 text-sm text-red-500';
+        };
+
+        reader.readAsDataURL(file);
+    });
+
+    // Handle Project Upload
+    document.getElementById('uploadProjectBtn').addEventListener('click', function() {
+        if (!isAdmin) return;
+
+        const category = document.getElementById('projectCategory').value;
+        const title = document.getElementById('projectTitle').value;
+        const desc = document.getElementById('projectDesc').value;
+        const imageFile = document.getElementById('projectImage').files[0];
+
+        if (!title || !desc || !imageFile) {
+            alert('Please fill all fields');
+            return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = function(e) {
+            const portfolioGrid = document.getElementById('portfolioGrid');
+            const newProject = document.createElement('div');
+            newProject.className = 'portfolio-item bg-[#222] rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 h-full flex flex-col relative';
+            newProject.dataset.category = category;
+
+            newProject.innerHTML = `
+                <img src="${e.target.result}" alt="${title}" class="w-full h-48 object-cover">
+                <div class="p-6 flex-1 flex flex-col">
+                    <button class="delete-doc absolute top-2 right-2 text-red-500 hover:text-red-700 text-lg bg-black bg-opacity-50 rounded-full w-8 h-8 flex items-center justify-center" 
+                        onclick="confirmDeleteDocument(this)">
+                        <i class="fas fa-trash"></i>
+                    </button>
+                    <h3 class="text-xl font-bold mb-2 text-white">${title}</h3>
+                    <p class="text-gray-300 mb-4 flex-1">${desc}</p>
+                    <div class="flex justify-between items-center">
+                        <span class="text-sm text-red-500">${category}</span>
+                    </div>
+                </div>
+            `;
+
+            // Add new project to the list
+            portfolioGrid.insertBefore(newProject, portfolioGrid.firstChild);
+
+            // Save project to localStorage
+            const projects = JSON.parse(localStorage.getItem('projects')) || [];
+            projects.push({
+                title: title,
+                description: desc,
+                category: category,
+                imageUrl: e.target.result // Store the image URL (base64 string)
+            });
+            localStorage.setItem('projects', JSON.stringify(projects));
+
+            // Reset form
+            document.getElementById('projectTitle').value = '';
+            document.getElementById('projectDesc').value = '';
+            document.getElementById('projectImage').value = '';
+            document.getElementById('projectUploadStatus').textContent = 'Project uploaded successfully!';
+            document.getElementById('projectUploadStatus').className = 'mt-2 text-sm text-green-500';
+            document.getElementById('projectUploadStatus').style.display = 'block';
+        };
+        reader.readAsDataURL(imageFile);
+    });
+
+    // Function to get appropriate icon for document type
+    function getDocumentIcon(docType) {
+        const icons = {
+            'personal-statement': 'fa-file-alt',
+            'resume': 'fa-file-contract',
+            'additional-essay': 'fa-file-signature',
+            'cover-letter': 'fa-envelope-open-text',
+            'recommendation': 'fa-user-circle'
+        };
+        return icons[docType] || 'fa-file';
+    }
+</script>
 
 </body>
 </html>

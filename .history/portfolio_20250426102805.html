@@ -999,6 +999,72 @@ document.getElementById('documentFilter').addEventListener('change', function() 
       return icons[docType] || 'fa-file';
     }
   </script>
+  
+
+<script>
+    // Admin password (in real app, this should be server-side)
+    let ADMIN_PASSWORD = "admin123"; // Changed to let for mutability
+    let isAdmin = false;
+
+    // DOM elements
+    const adminBtn = document.getElementById('adminBtn');
+    const adminModal = document.getElementById('adminModal');
+    const loginForm = document.getElementById('loginForm');
+    const adminActions = document.getElementById('adminActions');
+    const loginBtn = document.getElementById('loginBtn');
+    const logoutBtn = document.getElementById('logoutBtn');
+
+    // Close modal when clicking outside
+    adminModal.addEventListener('click', (e) => {
+        if (e.target === adminModal) {
+            adminModal.classList.add('hidden');
+        }
+    });
+
+    // Toggle admin modal
+    adminBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        adminModal.classList.toggle('hidden');
+    });
+
+    // Login functionality
+    loginBtn.addEventListener('click', () => {
+        const password = document.getElementById('adminPassword').value;
+        if (password === ADMIN_PASSWORD) {
+            isAdmin = true;
+            loginForm.classList.add('hidden');
+            adminActions.classList.remove('hidden');
+        } else {
+            alert('Incorrect password');
+        }
+    });
+
+    // Logout functionality
+    logoutBtn.addEventListener('click', () => {
+        isAdmin = false;
+        adminActions.classList.add('hidden');
+        loginForm.classList.remove('hidden');
+        document.getElementById('adminPassword').value = '';
+    });
+
+    // Update password function
+    function updatePassword() {
+        const newPassword = document.getElementById('newPassword').value;
+        const confirmPassword = document.getElementById('confirmPassword').value;
+
+        if (newPassword === confirmPassword && newPassword !== "") {
+            ADMIN_PASSWORD = newPassword; // Update the password
+            alert('Password updated successfully!');
+            document.getElementById('newPassword').value = '';
+            document.getElementById('confirmPassword').value = '';
+        } else {
+            alert('Passwords do not match or are empty.');
+        }
+    }
+
+    // The rest of your existing code...
+</script>
+
 
 </body>
 </html>

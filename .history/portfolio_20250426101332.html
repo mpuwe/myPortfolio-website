@@ -999,6 +999,42 @@ document.getElementById('documentFilter').addEventListener('change', function() 
       return icons[docType] || 'fa-file';
     }
   </script>
+  <script>
+  function updatePassword() {
+    const newPassword = document.getElementById("newPassword").value;
+    const confirmPassword = document.getElementById("confirmPassword").value;
+
+    if (newPassword !== confirmPassword) {
+      alert("Passwords do not match.");
+      return;
+    }
+
+    if (newPassword.length < 6) {
+      alert("Password should be at least 6 characters long.");
+      return;
+    }
+
+    // Send the new password to the server (assuming you have a backend route for this)
+    fetch('/api/update-password', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify({ password: newPassword })
+    })
+    .then(response => {
+      if (response.ok) {
+        alert("Password updated successfully.");
+      } else {
+        alert("Failed to update password.");
+      }
+    })
+    .catch(error => {
+      console.error('Error:', error);
+      alert("An error occurred.");
+    });
+  }
+</script>
 
 </body>
 </html>
