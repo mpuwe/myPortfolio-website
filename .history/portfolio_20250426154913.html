@@ -536,9 +536,9 @@
       <div id="adminActions" class="hidden">
         <div class="mb-4">
           <label class="block text-gray-300 mb-2">Change Password</label>
-<input type="password" id="newPassword" class="w-full px-4 py-2 bg-[#444] text-white rounded-lg mb-2" placeholder="New password">
-<input type="password" id="confirmPassword" class="w-full px-4 py-2 bg-[#444] text-white rounded-lg" placeholder="Confirm password">
-<input type="button" value="Update" onclick="updatePassword()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg mt-2">
+          <input type="password" id="newPassword" class="w-full px-4 py-2 bg-[#444] text-white rounded-lg mb-2" placeholder="New password">
+          <input type="password" id="confirmPassword" class="w-full px-4 py-2 bg-[#444] text-white rounded-lg" placeholder="Confirm password">
+          <input type="button" value="Update" onclick="updatePassword()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg mt-2">
         </div>
         
         <div class="flex flex-col md:flex-row gap-4">
@@ -998,38 +998,7 @@ document.getElementById('documentFilter').addEventListener('change', function() 
       };
       return icons[docType] || 'fa-file';
     }
-
-
-
-
-function updatePassword() {
-   const newPassword = document.getElementById('newPassword').value;
-   const confirmPassword = document.getElementById('confirmPassword').value;
-   
-   // Check if passwords match
-   if (newPassword !== confirmPassword) {
-       alert('Passwords do not match!');
-       return;
-   }
-
-   // Check if the new password is valid (e.g., length)
-   if (newPassword.length < 6) {
-       alert('Password must be at least 6 characters long.');
-       return;
-   }
-
-   // Update the password in the session (just for this demo, in real app, use server-side storage)
-   ADMIN_PASSWORD = newPassword;  // Update the admin password to the new one
-
-   // Notify the user that the password was updated successfully
-   alert('Password updated successfully!');
-   
-   // Optionally, reset form fields after update
-   document.getElementById('newPassword').value = '';
-   document.getElementById('confirmPassword').value = '';
-}
-
   </script>
-  
+
 </body>
 </html>

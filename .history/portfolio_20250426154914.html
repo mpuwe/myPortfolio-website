@@ -998,34 +998,7 @@ document.getElementById('documentFilter').addEventListener('change', function() 
       };
       return icons[docType] || 'fa-file';
     }
-
-
-
-
-    function updatePassword() {
-   const newPassword = document.getElementById('newPassword').value;
-   const confirmPassword = document.getElementById('confirmPassword').value;
-   
-   if (newPassword !== confirmPassword) {
-       alert('Passwords do not match!');
-       return;
-   }
-
-   if (newPassword.length < 6) {
-       alert('Password must be at least 6 characters long.');
-       return;
-   }
-
-   // In a real application, you should update the password on the server or in localStorage
-   ADMIN_PASSWORD = newPassword;  // Only update in the session (for this demo)
-
-   alert('Password updated successfully!');
-   // Optionally hide the change password form after success
-   document.getElementById('newPassword').value = '';
-   document.getElementById('confirmPassword').value = '';
-}
-
   </script>
-  
+
 </body>
 </html>
