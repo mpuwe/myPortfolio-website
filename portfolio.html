@@ -1,25 +1,34 @@
-<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Portfolio - Elie Mpuhwezimana</title>
-  <meta name="description" content="View Elie Mpuhwezimana's portfolio of design, programming, and athletic projects">
-  
+  <meta name="description" content="View Elie Mpuhwezimana's portfolio of design, programming, and athletic projects" />
+
   <!-- Tailwind CSS via CDN -->
   <script src="https://cdn.tailwindcss.com"></script>
-  
+
   <!-- Font Awesome for icons -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
-  
+  <link
+    rel="stylesheet"
+    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
+  />
+
   <!-- Google Fonts -->
-  <link href="https://fonts.googleapis.com/css2?family=Popsins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
-  
+  <link
+    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+    rel="stylesheet"
+  />
+
   <style>
     body {
-      font-family: 'Poppins', sans-serif;
+      font-family: "Poppins", sans-serif;
       background-color: #333;
       color: #fff;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
     }
     .btn-primary {
       background-color: #ff0000;
@@ -43,15 +52,15 @@
     .portfolio-item {
       transition: all 0.3s ease;
     }
-      .portfolio-item img {
-    width: 100%;
-  }
+    .portfolio-item img {
+      width: 100%;
+    }
 
     /* Project delete buttons */
     .portfolio-item .delete-doc {
       display: flex !important;
       z-index: 10;
-      background-color: rgba(0,0,0,0.7);
+      background-color: rgba(0, 0, 0, 0.7);
       border-radius: 50%;
       width: 32px;
       height: 32px;
@@ -59,21 +68,60 @@
       justify-content: center;
       transition: all 0.2s ease;
     }
-    
+
     .portfolio-item .delete-doc:hover {
-      background-color: rgba(0,0,0,0.9);
+      background-color: rgba(0, 0, 0, 0.9);
       transform: scale(1.1);
     }
-    
+
     .portfolio-item .delete-doc i {
       font-size: 1rem;
+    }
+
+    /* Live Demo / View button container */
+    .portfolio-item .action-button {
+      position: absolute;
+      bottom: 8px;
+      right: 8px;
+      background-color: rgba(255, 0, 0, 0.85);
+      color: white;
+      font-weight: 600;
+      font-size: 0.875rem;
+      padding: 0.25rem 0.75rem;
+      border-radius: 0.375rem;
+      cursor: pointer;
+      transition: background-color 0.2s ease;
+      z-index: 10;
+      user-select: none;
+      text-decoration: none;
+      display: flex;
+      align-items: center;
+      gap: 0.25rem;
+      white-space: nowrap;
+    }
+    .portfolio-item .action-button:hover {
+      background-color: #cc0000;
+    }
+
+    /* Responsive container max width */
+    .container {
+      max-width: 1280px;
+      margin-left: auto;
+      margin-right: auto;
+      padding-left: 1.5rem;
+      padding-right: 1.5rem;
+    }
+
+    /* Footer pushed to bottom */
+    footer {
+      flex-shrink: 0;
     }
   </style>
 </head>
 <body>
   <!-- Header -->
   <header class="bg-[#222] text-white p-4 sticky top-0 z-50">
-    <div class="container mx-auto flex justify-between items-center">
+    <div class="container flex justify-between items-center">
       <a href="index.html" class="text-2xl font-bold">Elie Mpuhwezimana</a>
       <nav class="hidden md:flex space-x-6">
         <a href="index.html" class="hover:text-red-500">Home</a>
@@ -81,7 +129,7 @@
         <a href="portfolio.html" class="text-red-500">Portfolio</a>
         <a href="contact.html" class="hover:text-red-500">Contact</a>
       </nav>
-      <button class="md:hidden text-white">
+      <button class="md:hidden text-white" aria-label="Toggle menu">
         <i class="fas fa-bars text-xl"></i>
       </button>
     </div>
@@ -89,23 +137,65 @@
 
   <!-- Portfolio Filter Section -->
   <section class="py-10 bg-[#222]">
-    <div class="container mx-auto px-6 text-center">
+    <div class="container text-center">
       <h1 class="text-4xl md:text-5xl font-bold mb-4">My Portfolio</h1>
-      <p class="text-xl text-gray-300 max-w-2xl mx-auto mb-8">A showcase of my diverse work across multiple disciplines</p>
+      <p class="text-xl text-gray-300 max-w-2xl mx-auto mb-8">
+        A showcase of my diverse work across multiple disciplines
+      </p>
 
       <!-- Skill Filter Buttons -->
       <div class="flex flex-wrap justify-center gap-2 mb-6">
-        <button class="skill-filter btn-primary px-4 py-2 rounded-lg" data-category="all">All Skills</button>
-        <button class="skill-filter btn-secondary px-4 py-2 rounded-lg" data-category="design">Graphic Design</button>
-        <button class="skill-filter btn-secondary px-4 py-2 rounded-lg" data-category="programming">Programming</button>
-        <button class="skill-filter btn-secondary px-4 py-2 rounded-lg" data-category="athletics">Athletics</button>
-        <button class="skill-filter btn-secondary px-4 py-2 rounded-lg" data-category="tailoring">Tailoring</button>
-        <button class="skill-filter btn-secondary px-4 py-2 rounded-lg" data-category="hospitality">Hospitality</button>
+        <button
+          class="skill-filter btn-primary px-4 py-2 rounded-lg"
+          data-category="all"
+          type="button"
+        >
+          All Skills
+        </button>
+        <button
+          class="skill-filter btn-secondary px-4 py-2 rounded-lg"
+          data-category="design"
+          type="button"
+        >
+          Graphic Design
+        </button>
+        <button
+          class="skill-filter btn-secondary px-4 py-2 rounded-lg"
+          data-category="programming"
+          type="button"
+        >
+          Programming
+        </button>
+        <button
+          class="skill-filter btn-secondary px-4 py-2 rounded-lg"
+          data-category="athletics"
+          type="button"
+        >
+          Athletics
+        </button>
+        <button
+          class="skill-filter btn-secondary px-4 py-2 rounded-lg"
+          data-category="tailoring"
+          type="button"
+        >
+          Tailoring
+        </button>
+        <button
+          class="skill-filter btn-secondary px-4 py-2 rounded-lg"
+          data-category="hospitality"
+          type="button"
+        >
+          Hospitality
+        </button>
       </div>
 
       <!-- Document Type Dropdown -->
-      <div class="mb-8">
-        <select id="documentFilter" class="bg-[#333] text-white px-4 py-2 rounded-lg border border-[#444] w-full max-w-md">
+      <div class="mb-8 max-w-md mx-auto">
+        <select
+          id="documentFilter"
+          class="bg-[#333] text-white px-4 py-2 rounded-lg border border-[#444] w-full"
+          aria-label="Filter documents by type"
+        >
           <option value="">Select Document Type</option>
           <option value="personal-statement">Personal Statement</option>
           <option value="additional-essay">Additional Essay</option>
@@ -123,151 +213,18 @@
   </section>
 
   <!-- Main Content Grid -->
-  <section class="py-10 pb-20">
-    <div class="container mx-auto px-6">
+  <section class="py-10 pb-20 flex-grow">
+    <div class="container">
       <div class="flex flex-col lg:flex-row gap-8">
         <!-- Projects Column (Left) -->
         <div class="w-full">
           <h2 class="text-3xl font-bold mb-8 text-white">My Projects</h2>
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="portfolioGrid">
-        <!-- Graphic Design Projects -->
-        <div class="portfolio-item bg-[#222] rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 h-full flex flex-col relative" data-category="design" data-doctype="personal-statement">
-          <img src="https://images.unsplash.com/photo-1547658719-da2b51169166" alt="Design Project" class="w-full h-48 object-cover">
-          <div class="p-6 flex-1 flex flex-col">
-            <button class="delete-doc absolute top-2 right-2 text-red-500 hover:text-red-700 text-lg bg-black bg-opacity-50 rounded-full w-8 h-8 flex items-center justify-center" 
-              data-type="design-project" onclick="confirmDeleteDocument(this)">
-              <i class="fas fa-trash"></i>
-            </button>
-            <h3 class="text-xl font-bold mb-2 text-white">Brand Identity Design</h3>
-            <p class="text-gray-300 mb-4 flex-1">Complete brand identity package for a tech startup.</p>
-            <div class="flex justify-between items-center">
-              <span class="text-sm text-red-500">Design</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="portfolio-item bg-[#222] rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 h-full flex flex-col relative" data-category="design" data-doctype="resume">
-          <img src="https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e" alt="Design Project" class="w-full h-48 object-cover">
-          <div class="p-6 flex-1 flex flex-col">
-            <button class="delete-doc absolute top-2 right-2 text-red-500 hover:text-red-700 text-lg bg-black bg-opacity-50 rounded-full w-8 h-8 flex items-center justify-center" 
-              data-type="design-project" onclick="confirmDeleteDocument(this)">
-              <i class="fas fa-trash"></i>
-            </button>
-            <h3 class="text-xl font-bold mb-2 text-white">Marketing Materials</h3>
-            <p class="text-gray-300 mb-4 flex-1">Brochures and flyers for a local business.</p>
-            <div class="flex justify-between items-center">
-              <span class="text-sm text-red-500">Design</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Programming Projects -->
-        <div class="portfolio-item bg-[#222] rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 h-full flex flex-col relative" data-category="programming" data-doctype="additional-essay">
-          <img src="https://images.unsplash.com/photo-1555066931-4365d14bab8c" alt="Programming Project" class="w-full h-48 object-cover">
-          <div class="p-6 flex-1 flex flex-col">
-            <button class="delete-doc absolute top-2 right-2 text-red-500 hover:text-red-700 text-lg bg-black bg-opacity-50 rounded-full w-8 h-8 flex items-center justify-center" 
-              data-type="programming-project" onclick="confirmDeleteDocument(this)">
-              <i class="fas fa-trash"></i>
-            </button>
-            <h3 class="text-xl font-bold mb-2 text-white">E-commerce Platform</h3>
-            <p class="text-gray-300 mb-4 flex-1">Full-stack development of an online store.</p>
-            <div class="flex justify-between items-center">
-              <span class="text-sm text-red-500">Programming</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="portfolio-item bg-[#222] rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 h-full flex flex-col relative" data-category="programming" data-doctype="cover-letter">
-          <img src="https://images.unsplash.com/photo-1542903660-eedba2cda473" alt="Programming Project" class="w-full h-48 object-cover">
-          <div class="p-6 flex-1 flex flex-col">
-            <button class="delete-doc absolute top-2 right-2 text-red-500 hover:text-red-700 text-lg bg-black bg-opacity-50 rounded-full w-8 h-8 flex items-center justify-center" 
-              data-type="programming-project" onclick="confirmDeleteDocument(this)">
-              <i class="fas fa-trash"></i>
-            </button>
-            <h3 class="text-xl font-bold mb-2 text-white">Mobile App Development</h3>
-            <p class="text-gray-300 mb-4 flex-1">Cross-platform mobile application for task management.</p>
-            <div class="flex justify-between items-center">
-              <span class="text-sm text-red-500">Programming</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Athletics Projects -->
-        <div class="portfolio-item bg-[#222] rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 h-full flex flex-col relative" data-category="athletics" data-doctype="report-card">
-          <img src="https://images.unsplash.com/photo-1547347298-4074fc3086f0" alt="Athletics Project" class="w-full h-48 object-cover">
-          <div class="p-6 flex-1 flex flex-col">
-            <button class="delete-doc absolute top-2 right-2 text-red-500 hover:text-red-700 text-lg bg-black bg-opacity-50 rounded-full w-8 h-8 flex items-center justify-center" 
-              data-type="athletics-project" onclick="confirmDeleteDocument(this)">
-              <i class="fas fa-trash"></i>
-            </button>
-            <h3 class="text-xl font-bold mb-2 text-white">Track Competitions</h3>
-            <p class="text-gray-300 mb-4 flex-1">Participation in regional and national track events.</p>
-            <div class="flex justify-between items-center">
-              <span class="text-sm text-red-500">Athletics</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Tailoring Projects -->
-        <div class="portfolio-item bg-[#222] rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 h-full flex flex-col relative" data-category="tailoring" data-doctype="recommendation">
-          <img src="https://images.unsplash.com/photo-1598703104867-5d84c5d5f3e9" alt="Tailoring Project" class="w-full h-48 object-cover">
-          <div class="p-6 flex-1 flex flex-col">
-            <button class="delete-doc absolute top-2 right-2 text-red-500 hover:text-red-700 text-lg bg-black bg-opacity-50 rounded-full w-8 h-8 flex items-center justify-center" 
-              data-type="tailoring-project" onclick="confirmDeleteDocument(this)">
-              <i class="fas fa-trash"></i>
-            </button>
-            <h3 class="text-xl font-bold mb-2 text-white">Custom Clothing Designs</h3>
-            <p class="text-gray-300 mb-4 flex-1">Handmade traditional and modern clothing designs.</p>
-            <div class="flex justify-between items-center">
-              <span class="text-sm text-red-500">Tailoring</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Hospitality Project -->
-        <div class="portfolio-item bg-[#222] rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 h-full flex flex-col relative" data-category="hospitality" data-doctype="s4-report">
-          <img src="https://images.unsplash.com/photo-1555396273-367ea4eb4db5" alt="Hospitality Project" class="w-full h-48 object-cover">
-          <div class="p-6 flex-1 flex flex-col">
-            <button class="delete-doc absolute top-2 right-2 text-red-500 hover:text-red-700 text-lg bg-black bg-opacity-50 rounded-full w-8 h-8 flex items-center justify-center" 
-              data-type="hospitality-project" onclick="confirmDeleteDocument(this)">
-              <i class="fas fa-trash"></i>
-            </button>
-            <h3 class="text-xl font-bold mb-2 text-white">Hotel Management</h3>
-            <p class="text-gray-300 mb-4 flex-1">Guest service training and management experience.</p>
-            <div class="flex justify-between items-center">
-              <span class="text-sm text-red-500">Hospitality</span>
-            </div>
-          </div>
-        </div>
-
-        <!-- Additional Document Samples -->
-        <div class="portfolio-item bg-[#222] rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 h-full flex flex-col relative" data-category="programming" data-doctype="exam-cert">
-          <img src="https://images.unsplash.com/photo-1563986768609-322da13575f3" alt="Programming Certificate" class="w-full h-48 object-cover">
-          <div class="p-6 flex-1 flex flex-col">
-            <button class="delete-doc absolute top-2 right-2 text-red-500 hover:text-red-700 text-lg bg-black bg-opacity-50 rounded-full w-8 h-8 flex items-center justify-center" 
-              data-type="programming-project" onclick="confirmDeleteDocument(this)">
-              <i class="fas fa-trash"></i>
-            </button>
-            <h3 class="text-xl font-bold mb-2 text-white">Programming Certification</h3>
-            <p class="text-gray-300 mb-4 flex-1">Official certification for web development skills.</p>
-            <div class="flex justify-between items-center">
-              <span class="text-sm text-red-500">Programming</span>
-            </div>
-          </div>
-        </div>
-
-        <div class="portfolio-item bg-[#222] rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 h-full flex flex-col relative" data-category="athletics" data-doctype="s5-report">
-          <img src="https://images.unsplash.com/photo-1543357480-c60d400e7ef6" alt="Athletics Report" class="w-full h-48 object-cover">
-          <div class="p-6 flex-1 flex flex-col">
-            <button class="delete-doc absolute top-2 right-2 text-red-500 hover:text-red-700 text-lg bg-black bg-opacity-50 rounded-full w-8 h-8 flex items-center justify-center" 
-              data-type="athletics-project" onclick="confirmDeleteDocument(this)">
-              <i class="fas fa-trash"></i>
-            </button>
-            <h3 class="text-xl font-bold mb-2 text-white">Athletic Performance</h3>
-            <p class="text-gray-300 mb-4 flex-1">Track and field performance evaluation.</p>
-            <div class="flex justify-between items-center">
-              <span class="text-sm text-red-500">Athletics</span>
-            </div>
+          <div
+            class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8"
+            id="portfolioGrid"
+            aria-live="polite"
+          >
+            <!-- Existing projects will be loaded here by JS -->
           </div>
         </div>
       </div>
@@ -276,298 +233,147 @@
 
   <!-- Documents Section -->
   <section class="py-10 pb-20 bg-[#222]">
-    <div class="container mx-auto px-6">
+    <div class="container">
       <h2 class="text-3xl font-bold mb-8 text-white text-center">My Documents</h2>
-      
-      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8" id="documentsGrid">
-        <!-- Personal Statement -->
-        <div class="document-item bg-[#333] rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 h-full flex flex-col">
-          <div class="p-4 flex-1 flex flex-col items-center justify-center">
-            <i class="fas fa-file-alt text-4xl text-red-500 mb-3"></i>
-            <h3 class="text-lg font-bold mb-1 text-white text-center">Personal Statement</h3>
-            <p class="text-gray-300 text-sm text-center mb-3">My academic and professional aspirations</p>
-          </div>
-          <div class="p-3 bg-[#444] flex justify-between items-center">
-            <div class="flex gap-3">
-              <a href="documents/personal.pdf" class="text-blue-400 hover:text-blue-300 text-sm">
-                <i class="fas fa-eye"></i> View
-              </a>
-              <a href="documents/personal.pdf" download class="text-blue-400 hover:text-blue-300 text-sm">
-                <i class="fas fa-download"></i> Download
-              </a>
-            </div>
-            <button class="delete-doc text-red-500 hover:text-red-700 text-sm" 
-              data-doctype="personal-statement" onclick="confirmDeleteDocument(this)">
-              <i class="fas fa-trash"></i>
-            </button>
-          </div>
-        </div>
 
-        <!-- Resume -->
-<div class="document-item bg-[#333] rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 h-full flex flex-col" data-doctype="resume">
-          <div class="p-4 flex-1 flex flex-col items-center justify-center">
-            <i class="fas fa-file-contract text-4xl text-red-500 mb-3"></i>
-            <h3 class="text-lg font-bold mb-1 text-white text-center">Resume</h3>
-            <p class="text-gray-300 text-sm text-center mb-3">Professional experience and skills</p>
-          </div>
-          <div class="p-3 bg-[#444] flex justify-between items-center">
-            <div class="flex gap-3">
-              <a href="documents/resume.pdf" class="text-blue-400 hover:text-blue-300 text-sm">
-                <i class="fas fa-eye"></i> View
-              </a>
-              <a href="documents/resume.pdf" download class="text-blue-400 hover:text-blue-300 text-sm">
-                <i class="fas fa-download"></i> Download
-              </a>
-            </div>
-            <button class="delete-doc text-red-500 hover:text-red-700 text-sm" 
-              data-type="resume" onclick="confirmDeleteDocument(this)">
-              <i class="fas fa-trash"></i>
-            </button>
-          </div>
-        </div>
-
-        <!-- Additional Essay -->
-<div class="document-item bg-[#333] rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 h-full flex flex-col" data-doctype="additional-essay">
-          <div class="p-4 flex-1 flex flex-col items-center justify-center">
-            <i class="fas fa-file-signature text-4xl text-red-500 mb-3"></i>
-            <h3 class="text-lg font-bold mb-1 text-white text-center">Additional Essay</h3>
-            <p class="text-gray-300 text-sm text-center mb-3">Supplementary academic writing</p>
-          </div>
-          <div class="p-3 bg-[#444] flex justify-between items-center">
-            <div class="flex gap-3">
-              <a href="documents/additional.pdf" class="text-blue-400 hover:text-blue-300 text-sm">
-                <i class="fas fa-eye"></i> View
-              </a>
-              <a href="documents/additional.pdf" download class="text-blue-400 hover:text-blue-300 text-sm">
-                <i class="fas fa-download"></i> Download
-              </a>
-            </div>
-            <button class="delete-doc text-red-500 hover:text-red-700 text-sm" 
-              data-type="additional-essay" onclick="confirmDeleteDocument(this)">
-              <i class="fas fa-trash"></i>
-            </button>
-          </div>
-        </div>
-
-        <!-- Cover Letter -->
-<div class="document-item bg-[#333] rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 h-full flex flex-col" data-doctype="cover-letter">
-          <div class="p-4 flex-1 flex flex-col items-center justify-center">
-            <i class="fas fa-envelope-open-text text-4xl text-red-500 mb-3"></i>
-            <h3 class="text-lg font-bold mb-1 text-white text-center">Cover Letter</h3>
-            <p class="text-gray-300 text-sm text-center mb-3">Professional introduction letter</p>
-          </div>
-          <div class="p-3 bg-[#444] flex justify-between items-center">
-            <div class="flex gap-3">
-              <a href="documents/coverletter.pdf" class="text-blue-400 hover:text-blue-300 text-sm">
-                <i class="fas fa-eye"></i> View
-              </a>
-              <a href="documents/coverletter.pdf" download class="text-blue-400 hover:text-blue-300 text-sm">
-                <i class="fas fa-download"></i> Download
-              </a>
-            </div>
-            <button class="delete-doc text-red-500 hover:text-red-700 text-sm" 
-              data-type="cover-letter" onclick="confirmDeleteDocument(this)">
-              <i class="fas fa-trash"></i>
-            </button>
-          </div>
-        </div>
-
-        <!-- Recommendation -->
-<div class="document-item bg-[#333] rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 h-full flex flex-col" data-doctype="recommendation">
-          <div class="p-4 flex-1 flex flex-col items-center justify-center">
-            <i class="fas fa-user-tie text-4xl text-red-500 mb-3"></i>
-            <h3 class="text-lg font-bold mb-1 text-white text-center">Recommendation</h3>
-            <p class="text-gray-300 text-sm text-center mb-3">College counselor recommendation</p>
-          </div>
-          <div class="p-3 bg-[#444] flex justify-between items-center">
-            <div class="flex gap-3">
-              <a href="documents/recommendation.pdf" class="text-blue-400 hover:text-blue-300 text-sm">
-                <i class="fas fa-eye"></i> View
-              </a>
-              <a href="documents/recommendation.pdf" download class="text-blue-400 hover:text-blue-300 text-sm">
-                <i class="fas fa-download"></i> Download
-              </a>
-            </div>
-            <button class="delete-doc text-red-500 hover:text-red-700 text-sm" 
-              data-type="recommendation" onclick="confirmDeleteDocument(this)">
-              <i class="fas fa-trash"></i>
-            </button>
-          </div>
-        </div>
-
-        <!-- Report Card -->
-<div class="document-item bg-[#333] rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 h-full flex flex-col" data-doctype="report-card">
-          <div class="p-4 flex-1 flex flex-col items-center justify-center">
-            <i class="fas fa-file-certificate text-4xl text-red-500 mb-3"></i>
-            <h3 class="text-lg font-bold mb-1 text-white text-center">Report Card</h3>
-            <p class="text-gray-300 text-sm text-center mb-3">Academic performance records</p>
-          </div>
-          <div class="p-3 bg-[#444] flex justify-between items-center">
-            <div class="flex gap-3">
-              <a href="documents/report-card.pdf" class="text-blue-400 hover:text-blue-300 text-sm">
-                <i class="fas fa-eye"></i> View
-              </a>
-              <a href="documents/report-card.pdf" download class="text-blue-400 hover:text-blue-300 text-sm">
-                <i class="fas fa-download"></i> Download
-              </a>
-            </div>
-            <button class="delete-doc text-red-500 hover:text-red-700 text-sm" 
-              data-type="report-card" onclick="confirmDeleteDocument(this)">
-              <i class="fas fa-trash"></i>
-            </button>
-          </div>
-        </div>
-
-        <!-- S4 Report Card -->
-<div class="document-item bg-[#333] rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 h-full flex flex-col" data-doctype="s4-report">
-          <div class="p-4 flex-1 flex flex-col items-center justify-center">
-            <i class="fas fa-file-export text-4xl text-red-500 mb-3"></i>
-            <h3 class="text-lg font-bold mb-1 text-white text-center">S4 Report</h3>
-            <p class="text-gray-300 text-sm text-center mb-3">Secondary 4 academic records</p>
-          </div>
-          <div class="p-3 bg-[#444] flex justify-between items-center">
-            <div class="flex gap-3">
-              <a href="documents/s4.pdf" class="text-blue-400 hover:text-blue-300 text-sm">
-                <i class="fas fa-eye"></i> View
-              </a>
-              <a href="documents/s4.pdf" download class="text-blue-400 hover:text-blue-300 text-sm">
-                <i class="fas fa-download"></i> Download
-              </a>
-            </div>
-            <button class="delete-doc text-red-500 hover:text-red-700 text-sm" 
-              data-type="s4-report" onclick="confirmDeleteDocument(this)">
-              <i class="fas fa-trash"></i>
-            </button>
-          </div>
-        </div>
-
-        <!-- S5 Report Card -->
-<div class="document-item bg-[#333] rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 h-full flex flex-col" data-doctype="s5-report">
-          <div class="p-4 flex-1 flex flex-col items-center justify-center">
-            <i class="fas fa-file-export text-4xl text-red-500 mb-3"></i>
-            <h3 class="text-lg font-bold mb-1 text-white text-center">S5 Report</h3>
-            <p class="text-gray-300 text-sm text-center mb-3">Secondary 5 academic records</p>
-          </div>
-          <div class="p-3 bg-[#444] flex justify-between items-center">
-            <div class="flex gap-3">
-              <a href="documents/s5-report.pdf" class="text-blue-400 hover:text-blue-300 text-sm">
-                <i class="fas fa-eye"></i> View
-              </a>
-              <a href="documents/s5-report.pdf" download class="text-blue-400 hover:text-blue-300 text-sm">
-                <i class="fas fa-download"></i> Download
-              </a>
-            </div>
-            <button class="delete-doc text-red-500 hover:text-red-700 text-sm" 
-              data-type="s5-report" onclick="confirmDeleteDocument(this)">
-              <i class="fas fa-trash"></i>
-            </button>
-          </div>
-        </div>
-
-        <!-- S6 Report Card -->
-<div class="document-item bg-[#333] rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 h-full flex flex-col" data-doctype="s6-report">
-          <div class="p-4 flex-1 flex flex-col items-center justify-center">
-            <i class="fas fa-file-export text-4xl text-red-500 mb-3"></i>
-            <h3 class="text-lg font-bold mb-1 text-white text-center">S6 Report</h3>
-            <p class="text-gray-300 text-sm text-center mb-3">Secondary 6 academic records</p>
-          </div>
-          <div class="p-3 bg-[#444] flex justify-between items-center">
-            <div class="flex gap-3">
-              <a href="documents/s6.pdf" class="text-blue-400 hover:text-blue-300 text-sm">
-                <i class="fas fa-eye"></i> View
-              </a>
-              <a href="documents/s6.pdf" download class="text-blue-400 hover:text-blue-300 text-sm">
-                <i class="fas fa-download"></i> Download
-              </a>
-            </div>
-            <button class="delete-doc text-red-500 hover:text-red-700 text-sm" 
-              data-type="s6-report" onclick="confirmDeleteDocument(this)">
-              <i class="fas fa-trash"></i>
-            </button>
-          </div>
-        </div>
-
-        <!-- National Exam Certificate -->
-<div class="document-item bg-[#333] rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 h-full flex flex-col" data-doctype="exam-cert">
-          <div class="p-4 flex-1 flex flex-col items-center justify-center">
-            <i class="fas fa-award text-4xl text-red-500 mb-3"></i>
-            <h3 class="text-lg font-bold mb-1 text-white text-center">National Exam</h3>
-            <p class="text-gray-300 text-sm text-center mb-3">Official exam certification</p>
-          </div>
-          <div class="p-3 bg-[#444] flex justify-between items-center">
-            <div class="flex gap-3">
-              <a href="documents/natinal.pdf" class="text-blue-400 hover:text-blue-300 text-sm">
-                <i class="fas fa-eye"></i> View
-              </a>
-              <a href="documents/natinal.pdf" download class="text-blue-400 hover:text-blue-300 text-sm">
-                <i class="fas fa-download"></i> Download
-              </a>
-            </div>
-            <button class="delete-doc text-red-500 hover:text-red-700 text-sm" 
-              data-type="exam-cert" onclick="confirmDeleteDocument(this)">
-              <i class="fas fa-trash"></i>
-            </button>
-          </div>
-        </div>
+      <div
+        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8"
+        id="documentsGrid"
+        aria-live="polite"
+      >
+        <!-- Existing documents will be loaded here by JS -->
       </div>
     </div>
   </section>
 
   <!-- Admin Button -->
-  <button id="adminBtn" class="fixed bottom-6 right-6 bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50">
+  <button
+    id="adminBtn"
+    class="fixed bottom-6 right-6 bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50"
+    aria-label="Open admin upload panel"
+  >
     Upload
   </button>
 
   <!-- Admin Modal -->
-  <div id="adminModal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50">
-    <div class="bg-[#333] rounded-lg p-6 max-w-[600px]">
-      <h3 class="text-2xl font-bold mb-6 text-white">Admin Panel</h3>
-      
+  <div
+    id="adminModal"
+    class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
+    role="dialog"
+    aria-modal="true"
+    aria-labelledby="adminPanelTitle"
+  >
+    <div class="bg-[#333] rounded-lg p-6 max-w-[600px] w-full mx-4">
+      <h3 id="adminPanelTitle" class="text-2xl font-bold mb-6 text-white">
+        Admin Panel
+      </h3>
+
       <div id="loginForm" style="width:max-content">
         <div class="mb-4">
-          <label class="block text-gray-300 mb-2">Admin Password</label>
-          <input type="password" id="adminPassword" class="w-full px-4 py-2 bg-[#444] text-white rounded-lg">
+          <label class="block text-gray-300 mb-2" for="adminPassword"
+            >Admin Password</label
+          >
+          <input
+            type="password"
+            id="adminPassword"
+            class="w-full px-4 py-2 bg-[#444] text-white rounded-lg"
+          />
         </div>
-        <button id="loginBtn" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg">
+        <button
+          id="loginBtn"
+          class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg"
+          type="button"
+        >
           Login
         </button>
       </div>
 
       <div id="adminActions" class="hidden">
         <div class="mb-4">
-          <label class="block text-gray-300 mb-2">Change Password</label>
-          <input type="password" id="newPassword" class="w-full px-4 py-2 bg-[#444] text-white rounded-lg mb-2" placeholder="New password">
-          <input type="password" id="confirmPassword" class="w-full px-4 py-2 bg-[#444] text-white rounded-lg" placeholder="Confirm password">
-          <input type="button" value="Update" onclick="updatePassword()" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg mt-2">
+          <label class="block text-gray-300 mb-2" for="newPassword"
+            >Change Password</label
+          >
+          <input
+            type="password"
+            id="newPassword"
+            class="w-full px-4 py-2 bg-[#444] text-white rounded-lg mb-2"
+            placeholder="New password"
+          />
+          <input
+            type="password"
+            id="confirmPassword"
+            class="w-full px-4 py-2 bg-[#444] text-white rounded-lg"
+            placeholder="Confirm password"
+          />
+          <input
+            type="button"
+            value="Update"
+            onclick="updatePassword()"
+            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg mt-2"
+          />
         </div>
-        
+
         <div class="flex flex-col md:flex-row gap-4">
           <!-- Project Upload Section -->
           <div class="w-full md:w-1/2 p-4 border border-[#444] rounded-lg">
             <h4 class="text-lg font-bold mb-3 text-white">Upload Project</h4>
             <div class="mb-4">
-              <select id="projectCategory" class="w-full px-4 py-2 bg-[#444] text-white">
+              <label for="projectCategory" class="sr-only">Project Category</label>
+              <select
+                id="projectCategory"
+                class="w-full px-4 py-2 bg-[#444] text-white rounded-lg"
+              >
                 <option value="design">Graphic Design</option>
                 <option value="programming">Programming</option>
                 <option value="athletics">Athletics</option>
                 <option value="tailoring">Tailoring</option>
                 <option value="hospitality">Hospitality</option>
               </select>
-              <input type="file" id="projectImage" accept="image/*" class="w-full mb-2">
-              <input type="text" id="projectTitle" placeholder="Project Title" class="w-full px-4 py-2 bg-[#444] text-white rounded-lg mb-2">
-              <textarea id="projectDesc" placeholder="Project Description" class="w-full px-4 py-2 bg-[#444] text-white rounded-lg"></textarea>
+              <label for="projectImage" class="sr-only">Project Image</label>
+              <input
+                type="file"
+                id="projectImage"
+                accept="image/*"
+                class="w-full mb-2"
+              />
+              <label for="projectTitle" class="sr-only">Project Title</label>
+              <input
+                type="text"
+                id="projectTitle"
+                placeholder="Project Title"
+                class="w-full px-4 py-2 bg-[#444] text-white rounded-lg mb-2"
+              />
+              <label for="projectDesc" class="sr-only">Project Description</label>
+              <textarea
+                id="projectDesc"
+                placeholder="Project Description"
+                class="w-full px-4 py-2 bg-[#444] text-white rounded-lg"
+              ></textarea>
             </div>
-            <button id="uploadProjectBtn" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg">
+            <button
+              id="uploadProjectBtn"
+              class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg"
+              type="button"
+            >
               Upload Project
             </button>
-            <div id="projectUploadStatus" class="mt-2 text-sm hidden"></div>
+            <div
+              id="projectUploadStatus"
+              class="mt-2 text-sm hidden"
+              role="alert"
+              aria-live="assertive"
+            ></div>
           </div>
 
           <!-- Document Upload Section -->
           <div class="w-full md:w-1/2 p-4 border border-[#444] rounded-lg">
             <h4 class="text-lg font-bold mb-3 text-white">Upload Document</h4>
             <div class="mb-4">
-              <select id="documentType" class="w-full px-4 py-2 bg-[#444] text-white rounded-lg mb-2">
+              <label for="documentType" class="sr-only">Document Type</label>
+              <select
+                id="documentType"
+                class="w-full px-4 py-2 bg-[#444] text-white rounded-lg mb-2"
+              >
                 <option value="personal-statement">Personal Statement</option>
                 <option value="resume">Resume</option>
                 <option value="additional-essay">Additional Essay</option>
@@ -579,17 +385,36 @@
                 <option value="s6-report">S6 Report</option>
                 <option value="exam-cert">Exam Certificate</option>
               </select>
-              <input type="file" id="documentFile" accept=".pdf,.doc,.docx" class="w-full mb-2">
+              <label for="documentFile" class="sr-only">Document File</label>
+              <input
+                type="file"
+                id="documentFile"
+                accept=".pdf,.doc,.docx"
+                class="w-full mb-2"
+              />
             </div>
-            <button id="uploadDocumentBtn" class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg">
+            <button
+              id="uploadDocumentBtn"
+              class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg"
+              type="button"
+            >
               Upload Document
             </button>
-            <div id="documentUploadStatus" class="mt-2 text-sm hidden"></div>
+            <div
+              id="documentUploadStatus"
+              class="mt-2 text-sm hidden"
+              role="alert"
+              aria-live="assertive"
+            ></div>
           </div>
         </div>
 
-        <div class="flex space-x-2">
-          <button id="logoutBtn" class="w-full bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg">
+        <div class="flex space-x-2 mt-4">
+          <button
+            id="logoutBtn"
+            class="w-full bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg"
+            type="button"
+          >
             Logout
           </button>
         </div>
@@ -598,13 +423,18 @@
   </div>
 
   <!-- Footer -->
-  <footer class="bg-[#111] text-white py-12">
-    <div class="container mx-auto px-6">
+  <footer class="bg-[#111] text-white py-12 mt-auto">
+    <div class="container">
       <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
         <!-- About Column -->
         <div class="md:col-span-2">
-          <h3 class="text-xl font-bold mb-4 text-red-500">Elie Mpuhwezimana</h3>
-          <p class="mb-4">Multidisciplinary professional with diverse skills in design, programming, athletics, and more.</p>
+          <h3 class="text-xl font-bold mb-4 text-red-500">
+            Elie Mpuhwezimana
+          </h3>
+          <p class="mb-4">
+            Multidisciplinary professional with diverse skills in design,
+            programming, athletics, and more.
+          </p>
           <div class="flex space-x-4">
             <a href="#" class="text-gray-400 hover:text-white transition">
               <i class="fab fa-twitter text-xl"></i>
@@ -622,10 +452,24 @@
         <div>
           <h3 class="text-xl font-bold mb-4 text-red-500">Quick Links</h3>
           <ul class="space-y-2">
-            <li><a href="index.html" class="hover:text-red-500 transition">Home</a></li>
-            <li><a href="about.html" class="hover:text-red-500 transition">About</a></li>
-            <li><a href="portfolio.html" class="hover:text-red-500 transition">Portfolio</a></li>
-            <li><a href="contact.html" class="hover:text-red-500 transition">Contact</a></li>
+            <li>
+              <a href="index.html" class="hover:text-red-500 transition">Home</a>
+            </li>
+            <li>
+              <a href="about.html" class="hover:text-red-500 transition"
+                >About</a
+              >
+            </li>
+            <li>
+              <a href="portfolio.html" class="hover:text-red-500 transition"
+                >Portfolio</a
+              >
+            </li>
+            <li>
+              <a href="contact.html" class="hover:text-red-500 transition"
+                >Contact</a
+              >
+            </li>
           </ul>
         </div>
 
@@ -638,12 +482,10 @@
               mpuwezimanaelie@gmail.com
             </li>
             <li class="flex items-center">
-              <i class="fas fa-phone mr-2 text-red-500"></i>
-              +250 795176702
+              <i class="fas fa-phone mr-2 text-red-500"></i>+250 795176702
             </li>
             <li class="flex items-center">
-              <i class="fas fa-map-marker-alt mr-2 text-red-500"></i>
-              Kigali-Rwanda
+              <i class="fas fa-map-marker-alt mr-2 text-red-500"></i>Kigali-Rwanda
             </li>
           </ul>
         </div>
@@ -658,263 +500,514 @@
 
   <!-- Scripts -->
   <script>
-    // Initialize portfolio items (data attributes already set in HTML)
-    
-    // Filter items based on active filters
-    function filterItems() {
-      const activeCategory = document.querySelector('.skill-filter.btn-primary')?.dataset.category || 'all';
-      const docType = document.getElementById('documentFilter').value;
-      
-      // Filter projects
-      document.querySelectorAll('.portfolio-item').forEach(item => {
-        const categoryMatch = activeCategory === 'all' || item.dataset.category === activeCategory;
-        const docTypeMatch = !docType || item.dataset.doctype === docType;
-        item.style.display = (categoryMatch && docTypeMatch) ? 'flex' : 'none';
-      });
-      
-      // Filter documents
-      document.querySelectorAll('.document-item').forEach(item => {
-        const docTypeMatch = !docType || item.dataset.doctype === docType;
-        item.style.display = docTypeMatch ? 'flex' : 'none';
-      });
-    }
+    // LocalStorage keys
+    const LS_PROJECTS_KEY = "eliePortfolioProjects";
+    const LS_DOCUMENTS_KEY = "eliePortfolioDocuments";
 
-    // Skill filtering
-    document.querySelectorAll('.skill-filter').forEach(button => {
-      button.addEventListener('click', function() {
-        // Update active button styling
-        document.querySelectorAll('.skill-filter').forEach(btn => {
-          btn.classList.toggle('btn-primary', btn === this);
-          btn.classList.toggle('btn-secondary', btn !== this);
-        });
-        filterItems();
-      });
-    });
-
-    // Document dropdown navigation
-// Document dropdown navigation
-document.getElementById('documentFilter').addEventListener('change', function() {
-  const docType = this.value;
-  if (docType) {
-    const docElement = document.querySelector(`.document-item[data-doctype="${docType}"]`);
-    if (docElement) {
-      docElement.scrollIntoView({ behavior: 'smooth' });
-      docElement.classList.add('ring-2', 'ring-red-500');
-      setTimeout(() => docElement.classList.remove('ring-2', 'ring-red-500'), 2000);
-    }
-  }
-});
-
-    // Initialize with all items visible
-    document.querySelectorAll('.portfolio-item').forEach(item => {
-      item.style.display = 'flex';
-    });
-
-    // Set 'All Skills' as active by default
-    document.querySelector('.skill-filter[data-category="all"]').classList.add('btn-primary');
-
-    // Mobile menu toggle
-    const mobileMenuButton = document.querySelector('.md\\:hidden');
-    const mobileMenu = document.querySelector('nav');
-    
-    mobileMenuButton.addEventListener('click', function() {
-      mobileMenu.classList.toggle('hidden');
-      mobileMenu.classList.toggle('flex');
-      mobileMenu.classList.toggle('flex-col');
-      mobileMenu.classList.toggle('absolute');
-      mobileMenu.classList.toggle('top-16');
-      mobileMenu.classList.toggle('left-0');
-      mobileMenu.classList.toggle('right-0');
-      mobileMenu.classList.toggle('bg-[#222]');
-      mobileMenu.classList.toggle('p-4');
-      mobileMenu.classList.toggle('space-y-4');
-    });
-  </script>
-
-  <!-- Admin Script -->
- <script>
     // Admin password (in real app, this should be server-side)
-    const ADMIN_PASSWORD = "admin123";
+    let ADMIN_PASSWORD = "admin123";
     let isAdmin = false;
 
     // DOM elements
-    const adminBtn = document.getElementById('adminBtn');
-    const adminModal = document.getElementById('adminModal');
-    const loginForm = document.getElementById('loginForm');
-    const adminActions = document.getElementById('adminActions');
-    const loginBtn = document.getElementById('loginBtn');
-    const logoutBtn = document.getElementById('logoutBtn');
+    const adminBtn = document.getElementById("adminBtn");
+    const adminModal = document.getElementById("adminModal");
+    const loginForm = document.getElementById("loginForm");
+    const adminActions = document.getElementById("adminActions");
+    const loginBtn = document.getElementById("loginBtn");
+    const logoutBtn = document.getElementById("logoutBtn");
+    const portfolioGrid = document.getElementById("portfolioGrid");
+    const documentsGrid = document.getElementById("documentsGrid");
+    const projectUploadStatus = document.getElementById("projectUploadStatus");
+    const documentUploadStatus = document.getElementById("documentUploadStatus");
 
     // Close modal when clicking outside
-    adminModal.addEventListener('click', (e) => {
-        if (e.target === adminModal) {
-            adminModal.classList.add('hidden');
-        }
+    adminModal.addEventListener("click", (e) => {
+      if (e.target === adminModal) {
+        adminModal.classList.add("hidden");
+      }
     });
 
     // Toggle admin modal
-    adminBtn.addEventListener('click', (e) => {
-        e.stopPropagation();
-        adminModal.classList.toggle('hidden');
+    adminBtn.addEventListener("click", (e) => {
+      e.stopPropagation();
+      adminModal.classList.toggle("hidden");
     });
 
     // Login functionality
-    loginBtn.addEventListener('click', () => {
-        const password = document.getElementById('adminPassword').value;
-        if (password === ADMIN_PASSWORD) {
-            isAdmin = true;
-            loginForm.classList.add('hidden');
-            adminActions.classList.remove('hidden');
-        } else {
-            alert('Incorrect password');
-        }
+    loginBtn.addEventListener("click", () => {
+      const password = document.getElementById("adminPassword").value;
+      if (password === ADMIN_PASSWORD) {
+        isAdmin = true;
+        loginForm.classList.add("hidden");
+        adminActions.classList.remove("hidden");
+        document.getElementById("adminPassword").value = "";
+      } else {
+        alert("Incorrect password");
+      }
     });
 
     // Logout functionality
-    logoutBtn.addEventListener('click', () => {
-        isAdmin = false;
-        adminActions.classList.add('hidden');
-        loginForm.classList.remove('hidden');
-        document.getElementById('adminPassword').value = '';
+    logoutBtn.addEventListener("click", () => {
+      isAdmin = false;
+      adminActions.classList.add("hidden");
+      loginForm.classList.remove("hidden");
+      document.getElementById("adminPassword").value = "";
     });
 
+    // Update password function
+    function updatePassword() {
+      if (!isAdmin) return;
+      const newPass = document.getElementById("newPassword").value;
+      const confirmPass = document.getElementById("confirmPassword").value;
+      if (!newPass || !confirmPass) {
+        alert("Please fill both password fields");
+        return;
+      }
+      if (newPass !== confirmPass) {
+        alert("Passwords do not match");
+        return;
+      }
+      ADMIN_PASSWORD = newPass;
+      alert("Password updated successfully");
+      document.getElementById("newPassword").value = "";
+      document.getElementById("confirmPassword").value = "";
+    }
+
+    // Save projects to localStorage
+    function saveProjects(projects) {
+      localStorage.setItem(LS_PROJECTS_KEY, JSON.stringify(projects));
+    }
+
+    // Save documents to localStorage
+    function saveDocuments(documents) {
+      localStorage.setItem(LS_DOCUMENTS_KEY, JSON.stringify(documents));
+    }
+
+    // Load projects from localStorage
+    function loadProjects() {
+      const projectsJSON = localStorage.getItem(LS_PROJECTS_KEY);
+      if (!projectsJSON) return [];
+      try {
+        return JSON.parse(projectsJSON);
+      } catch {
+        return [];
+      }
+    }
+
+    // Load documents from localStorage
+    function loadDocuments() {
+      const documentsJSON = localStorage.getItem(LS_DOCUMENTS_KEY);
+      if (!documentsJSON) return [];
+      try {
+        return JSON.parse(documentsJSON);
+      } catch {
+        return [];
+      }
+    }
+
+    // Render projects to DOM
+    function renderProjects() {
+      portfolioGrid.innerHTML = "";
+      const projects = loadProjects();
+
+      // Add initial hardcoded projects if none saved yet
+      if (projects.length === 0) {
+        const initialProjects = [
+          {
+            id: generateId(),
+            category: "design",
+            doctype: "personal-statement",
+            title: "Brand Identity Design",
+            desc: "Complete brand identity package for a tech startup.",
+            image:
+              "https://images.unsplash.com/photo-1547658719-da2b51169166?auto=format&fit=crop&w=800&q=80",
+            alt: "Brand Identity Design project showing a modern tech startup logo and branding materials on a desk",
+          },
+          {
+            id: generateId(),
+            category: "design",
+            doctype: "resume",
+            title: "Marketing Materials",
+            desc: "Brochures and flyers for a local business.",
+            image:
+              "https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?auto=format&fit=crop&w=800&q=80",
+            alt: "Marketing Materials project showing colorful brochures and flyers spread on a table",
+          },
+          {
+            id: generateId(),
+            category: "programming",
+            doctype: "additional-essay",
+            title: "E-commerce Platform",
+            desc: "Full-stack development of an online store.",
+            image:
+              "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80",
+            alt: "E-commerce Platform project showing a laptop screen with online store interface",
+          },
+          {
+            id: generateId(),
+            category: "programming",
+            doctype: "cover-letter",
+            title: "Mobile App Development",
+            desc: "Cross-platform mobile application for task management.",
+            image:
+              "https://images.unsplash.com/photo-1542903660-eedba2cda473?auto=format&fit=crop&w=800&q=80",
+            alt: "Mobile App Development project showing a smartphone with task management app interface",
+          },
+          {
+            id: generateId(),
+            category: "athletics",
+            doctype: "report-card",
+            title: "Track Competitions",
+            desc: "Participation in regional and national track events.",
+            image:
+              "https://images.unsplash.com/photo-1547347298-4074fc3086f0?auto=format&fit=crop&w=800&q=80",
+            alt: "Track Competitions project showing an athlete running on a track during a race",
+          },
+          {
+            id: generateId(),
+            category: "tailoring",
+            doctype: "recommendation",
+            title: "Custom Clothing Designs",
+            desc: "Handmade traditional and modern clothing designs.",
+            image:
+              "https://images.unsplash.com/photo-1598703104867-5d84c5d5f3e9?auto=format&fit=crop&w=800&q=80",
+            alt: "Custom Clothing Designs project showing handmade traditional and modern clothing on mannequins",
+          },
+          {
+            id: generateId(),
+            category: "hospitality",
+            doctype: "s4-report",
+            title: "Hotel Management",
+            desc: "Guest service training and management experience.",
+            image:
+              "https://images.unsplash.com/photo-1555396273-367ea4eb4db5?auto=format&fit=crop&w=800&q=80",
+            alt: "Hotel Management project showing hotel lobby with reception desk and guests",
+          },
+          {
+            id: generateId(),
+            category: "programming",
+            doctype: "exam-cert",
+            title: "Programming Certification",
+            desc: "Official certification for web development skills.",
+            image:
+              "https://images.unsplash.com/photo-1563986768609-322da13575f3?auto=format&fit=crop&w=800&q=80",
+            alt: "Programming Certification project showing a certificate with web development skills",
+          },
+          {
+            id: generateId(),
+            category: "athletics",
+            doctype: "s5-report",
+            title: "Athletic Performance",
+            desc: "Track and field performance evaluation.",
+            image:
+              "https://images.unsplash.com/photo-1543357480-c60d400e7ef6?auto=format&fit=crop&w=800&q=80",
+            alt: "Athletic Performance project showing an athlete mid-jump during a track and field event",
+          },
+        ];
+        saveProjects(initialProjects);
+        return renderProjects();
+      }
+
+      projects.forEach((project) => {
+        const isProgramming = project.category === "programming";
+        const projectDiv = document.createElement("div");
+        projectDiv.className =
+          "portfolio-item bg-[#222] rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 h-full flex flex-col relative";
+        projectDiv.dataset.category = project.category;
+        projectDiv.dataset.doctype = project.doctype || "";
+
+        projectDiv.innerHTML = `
+          <img src="${project.image}" alt="${project.alt || project.title}" class="w-full h-48 object-cover" />
+          <div class="p-6 flex-1 flex flex-col">
+            <button class="delete-doc absolute top-2 right-2 text-red-500 hover:text-red-700 text-lg bg-black bg-opacity-50 rounded-full w-8 h-8 flex items-center justify-center" 
+              onclick="confirmDeleteDocument(this)" data-id="${project.id}">
+              <i class="fas fa-trash"></i>
+            </button>
+            <h3 class="text-xl font-bold mb-2 text-white">${project.title}</h3>
+            <p class="text-gray-300 mb-4 flex-1">${project.desc}</p>
+            <div class="flex justify-between items-center">
+              <span class="text-sm text-red-500">${capitalizeFirstLetter(
+                project.category
+              )}</span>
+            </div>
+          </div>
+          <a href="#" class="action-button" aria-label="${
+            isProgramming ? "Live demo" : "View"
+          } of ${project.title} project">${isProgramming ? "Live Demo" : "View"} ${
+          isProgramming
+            ? '<i class="fas fa-play-circle"></i>'
+            : '<i class="fas fa-eye"></i>'
+        }</a>
+        `;
+
+        portfolioGrid.appendChild(projectDiv);
+      });
+    }
+
+    // Render documents to DOM
+    function renderDocuments() {
+      documentsGrid.innerHTML = "";
+      const documents = loadDocuments();
+
+      // Add initial hardcoded documents if none saved yet
+      if (documents.length === 0) {
+        const initialDocuments = [
+          {
+            id: generateId(),
+            doctype: "personal-statement",
+            title: "Personal Statement",
+            desc: "My academic and professional aspirations",
+            icon: "fa-file-alt",
+            file: "documents/personal.pdf",
+          },
+          {
+            id: generateId(),
+            doctype: "resume",
+            title: "Resume",
+            desc: "Professional experience and skills",
+            icon: "fa-file-contract",
+            file: "documents/resume.pdf",
+          },
+          {
+            id: generateId(),
+            doctype: "additional-essay",
+            title: "Additional Essay",
+            desc: "Supplementary academic writing",
+            icon: "fa-file-signature",
+            file: "documents/additional.pdf",
+          },
+          {
+            id: generateId(),
+            doctype: "cover-letter",
+            title: "Cover Letter",
+            desc: "Professional introduction letter",
+            icon: "fa-envelope-open-text",
+            file: "documents/coverletter.pdf",
+          },
+          {
+            id: generateId(),
+            doctype: "recommendation",
+            title: "Recommendation",
+            desc: "College counselor recommendation",
+            icon: "fa-user-tie",
+            file: "documents/recommendation.pdf",
+          },
+          {
+            id: generateId(),
+            doctype: "report-card",
+            title: "Report Card",
+            desc: "Academic performance records",
+            icon: "fa-file-certificate",
+            file: "documents/report-card.pdf",
+          },
+          {
+            id: generateId(),
+            doctype: "s4-report",
+            title: "S4 Report",
+            desc: "Secondary 4 academic records",
+            icon: "fa-file-export",
+            file: "documents/s4.pdf",
+          },
+          {
+            id: generateId(),
+            doctype: "s5-report",
+            title: "S5 Report",
+            desc: "Secondary 5 academic records",
+            icon: "fa-file-export",
+            file: "documents/s5-report.pdf",
+          },
+          {
+            id: generateId(),
+            doctype: "s6-report",
+            title: "S6 Report",
+            desc: "Secondary 6 academic records",
+            icon: "fa-file-export",
+            file: "documents/s6.pdf",
+          },
+          {
+            id: generateId(),
+            doctype: "exam-cert",
+            title: "National Exam",
+            desc: "Official exam certification",
+            icon: "fa-award",
+            file: "documents/natinal.pdf",
+          },
+        ];
+        saveDocuments(initialDocuments);
+        return renderDocuments();
+      }
+
+      documents.forEach((doc) => {
+        const docDiv = document.createElement("div");
+        docDiv.className =
+          "document-item bg-[#333] rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 h-full flex flex-col";
+        docDiv.dataset.doctype = doc.doctype;
+        docDiv.dataset.id = doc.id;
+
+        docDiv.innerHTML = `
+          <div class="p-4 flex-1 flex flex-col items-center justify-center">
+            <i class="fas ${doc.icon} text-4xl text-red-500 mb-3"></i>
+            <h3 class="text-lg font-bold mb-1 text-white text-center">${doc.title}</h3>
+            <p class="text-gray-300 text-sm text-center mb-3">${doc.desc}</p>
+          </div>
+          <div class="p-3 bg-[#444] flex justify-between items-center">
+            <div class="flex gap-3">
+              <a href="${doc.file}" class="text-blue-400 hover:text-blue-300 text-sm" target="_blank" rel="noopener noreferrer">
+                <i class="fas fa-eye"></i> View
+              </a>
+              <a href="${doc.file}" download class="text-blue-400 hover:text-blue-300 text-sm">
+                <i class="fas fa-download"></i> Download
+              </a>
+            </div>
+            <button class="delete-doc text-red-500 hover:text-red-700 text-sm" data-id="${doc.id}" onclick="confirmDeleteDocument(this)">
+              <i class="fas fa-trash"></i>
+            </button>
+          </div>
+        `;
+
+        documentsGrid.appendChild(docDiv);
+      });
+    }
+
+    // Capitalize first letter helper
+    function capitalizeFirstLetter(string) {
+      return string.charAt(0).toUpperCase() + string.slice(1);
+    }
+
+    // Generate unique ID for items
+    function generateId() {
+      return (
+        Date.now().toString(36) +
+        Math.random().toString(36).substr(2, 5)
+      ).toUpperCase();
+    }
+
     // Upload new project
-    document.getElementById('uploadProjectBtn').addEventListener('click', () => {
+    document
+      .getElementById("uploadProjectBtn")
+      .addEventListener("click", () => {
         if (!isAdmin) return;
 
-        const category = document.getElementById('projectCategory').value;
-        const title = document.getElementById('projectTitle').value;
-        const desc = document.getElementById('projectDesc').value;
-        const imageFile = document.getElementById('projectImage').files[0];
+        const category = document.getElementById("projectCategory").value;
+        const title = document.getElementById("projectTitle").value.trim();
+        const desc = document.getElementById("projectDesc").value.trim();
+        const imageFile = document.getElementById("projectImage").files[0];
 
         if (!title || !desc || !imageFile) {
-            alert('Please fill all fields');
-            return;
+          alert("Please fill all fields");
+          return;
         }
 
         const reader = new FileReader();
-        reader.onload = function(e) {
-            const portfolioGrid = document.getElementById('portfolioGrid');
-            const newProject = document.createElement('div');
-            newProject.className = 'portfolio-item bg-[#222] rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 h-full flex flex-col relative';
-            newProject.dataset.category = category;
+        reader.onload = function (e) {
+          const projects = loadProjects();
 
-            newProject.innerHTML = `
-                <img src="${e.target.result}" alt="${title}" class="w-full h-48 object-cover">
-                <div class="p-6 flex-1 flex flex-col">
-                    <button class="delete-doc absolute top-2 right-2 text-red-500 hover:text-red-700 text-lg bg-black bg-opacity-50 rounded-full w-8 h-8 flex items-center justify-center" 
-                        onclick="confirmDeleteDocument(this)">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                    <h3 class="text-xl font-bold mb-2 text-white">${title}</h3>
-                    <p class="text-gray-300 mb-4 flex-1">${desc}</p>
-                    <div class="flex justify-between items-center">
-                        <span class="text-sm text-red-500">${document.getElementById('projectCategory').options[document.getElementById('projectCategory').selectedIndex].text}</span>
-                    </div>
-                </div>
-            `;
+          const newProject = {
+            id: generateId(),
+            category,
+            doctype: "",
+            title,
+            desc,
+            image: e.target.result,
+            alt: `${title} project image showing ${title}`,
+          };
 
-            // Add new project at the top
-            portfolioGrid.insertBefore(newProject, portfolioGrid.firstChild);
+          projects.unshift(newProject);
+          saveProjects(projects);
+          renderProjects();
 
-            // Reset form
-            document.getElementById('projectTitle').value = '';
-            document.getElementById('projectDesc').value = '';
-            document.getElementById('projectImage').value = '';
+          // Reset form
+          document.getElementById("projectTitle").value = "";
+          document.getElementById("projectDesc").value = "";
+          document.getElementById("projectImage").value = "";
 
-            document.getElementById('projectUploadStatus').textContent = 'Project uploaded successfully!';
-            document.getElementById('projectUploadStatus').className = 'mt-2 text-sm text-green- 500';
-            document.getElementById('projectUploadStatus').style.display = 'block';
+          projectUploadStatus.textContent = "Project uploaded successfully!";
+          projectUploadStatus.className = "mt-2 text-sm text-green-500 font-bold";
+          projectUploadStatus.style.display = "block";
+          setTimeout(() => {
+            projectUploadStatus.style.display = "none";
+          }, 4000);
         };
         reader.readAsDataURL(imageFile);
-    });
+      });
 
     // Document upload logic
-    document.getElementById('uploadDocumentBtn').addEventListener('click', function() {
+    document
+      .getElementById("uploadDocumentBtn")
+      .addEventListener("click", function () {
         if (!isAdmin) return; // Ensure the user is an admin
 
-        var type = document.getElementById('documentType').value;
-        var file = document.getElementById('documentFile').files[0];
-        var status = document.getElementById('documentUploadStatus');
+        var type = document.getElementById("documentType").value;
+        var file = document.getElementById("documentFile").files[0];
+        var status = document.getElementById("documentUploadStatus");
 
         if (!file) {
-            status.textContent = 'Please select a file';
-            status.className = 'mt-2 text-sm text-red-500';
-            status.style.display = 'block';
-            return;
+          status.textContent = "Please select a file";
+          status.className = "mt-2 text-sm text-red-500";
+          status.style.display = "block";
+          return;
         }
 
-        status.textContent = 'Uploading...';
-        status.className = 'mt-2 text-sm text-yellow-500';
-        status.style.display = 'block';
+        status.textContent = "Uploading...";
+        status.className = "mt-2 text-sm text-yellow-500";
+        status.style.display = "block";
 
         var reader = new FileReader();
-        reader.onload = function() {
-            var name = document.getElementById('documentType')
-                .options[document.getElementById('documentType').selectedIndex].text;
-            var grid = document.getElementById('documentsGrid');
-            var icon = getDocumentIcon(type);
+        reader.onload = function () {
+          var name = document.getElementById("documentType").options[
+            document.getElementById("documentType").selectedIndex
+          ].text;
+          var icon = getDocumentIcon(type);
 
-            var item = document.createElement('div');
-            item.className = 'document-item bg-[#333] rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 h-full flex flex-col';
-            item.innerHTML = `
-                <div class="p-4 flex-1 flex flex-col items-center justify-center">
-                    <i class="fas ${icon} text-4xl text-red-500 mb-3"></i>
-                    <h3 class="text-lg font-bold mb-1 text-white text-center">${name}</h3>
-                    <p class="text-gray-300 text-sm text-center mb-3">${type.replace('-', ' ')}</p>
-                </div>
-                <div class="p-3 bg-[#444] flex justify-between items-center">
-                    <div class="flex gap-3">
-                        <a href="documents/${type}.pdf" class="text-blue-400 hover:text-blue-300 text-sm">
-                            <i class="fas fa-eye"></i> View
-                        </a>
-                        <a href="documents/${type}.pdf" download class="text-blue-400 hover:text-blue-300 text-sm">
-                            <i class="fas fa-download"></i> Download
-                        </a>
-                    </div>
-                    <button class="delete-doc text-red-500 hover:text-red-700 text-sm" 
-                        data-type="${type}" onclick="confirmDeleteDocument(this)">
-                        <i class="fas fa-trash"></i>
-                    </button>
-                </div>
-            `;
+          const documents = loadDocuments();
 
-            // Add new document at the top
-            grid.insertBefore(item, grid.firstChild);
+          // Create a fake file URL using base64 for viewing (simulate)
+          // But since we can't save files, we will keep the file name as is for demo
+          // In real app, files would be uploaded to server and URLs updated accordingly
+          const fileName = `documents/${type}.pdf`;
 
-            // Reset the file input and show success message
-            document.getElementById('documentFile').value = '';
-            status.textContent = 'Document uploaded successfully!';
-            status.className = 'mt-2 text-sm text-green-500 font-bold';
-            status.style.display = 'block';
+          const newDoc = {
+            id: generateId(),
+            doctype: type,
+            title: name,
+            desc: type.replace("-", " "),
+            icon,
+            file: fileName,
+          };
+
+          documents.unshift(newDoc);
+          saveDocuments(documents);
+          renderDocuments();
+
+          // Reset the file input and show success message
+          document.getElementById("documentFile").value = "";
+          status.textContent = "Document uploaded successfully!";
+          status.className = "mt-2 text-sm text-green-500 font-bold";
+          setTimeout(() => {
+            status.style.display = "none";
+          }, 4000);
         };
 
-        reader.onerror = function() {
-            status.textContent = 'Upload failed';
-            status.className = 'mt-2 text-sm text-red-500';
+        reader.onerror = function () {
+          status.textContent = "Upload failed";
+          status.className = "mt-2 text-sm text-red-500";
         };
 
         reader.readAsDataURL(file);
-            // Initialize the upload setup when the document is ready
-    if (document.readyState === 'complete') {
-        setupUpload();
-    } else {
-        window.addEventListener('load', setupUpload);
-    }
-    });
-
+      });
 
     // Delete confirmation modal
-    const deleteModal = document.createElement('div');
-    deleteModal.id = 'deleteConfirmModal';
-    deleteModal.className = 'hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50';
+    const deleteModal = document.createElement("div");
+    deleteModal.id = "deleteConfirmModal";
+    deleteModal.className =
+      "hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50";
     deleteModal.innerHTML = `
       <div class="bg-[#333] rounded-lg p-6 max-w-md w-full mx-4">
         <h3 class="text-xl font-bold mb-4 text-white">Confirm Delete</h3>
         <p class="text-gray-300 mb-4">Are you sure you want to permanently delete this item?</p>
         <div class="mb-4">
           <label class="block text-gray-300 mb-2">Admin Password Required</label>
-          <input type="password" id="deletePassword" class="w-full px-4 py-2 bg-[#444] text-white rounded-lg mb-2" placeholder="Enter admin password">
+          <input type="password" id="deletePassword" class="w-full px-4 py-2 bg-[#444] text-white rounded-lg mb-2" placeholder="Enter admin password" />
           <p id="passwordError" class="text-red-500 text-sm hidden">Incorrect password</p>
         </div>
         <div class="flex gap-2">
@@ -930,75 +1023,167 @@ document.getElementById('documentFilter').addEventListener('change', function() 
     document.body.appendChild(deleteModal);
 
     let currentItemToDelete = null;
-    let currentItemType = null;
 
     // Show delete confirmation
     function confirmDeleteDocument(button) {
-      currentItemToDelete = button.closest('.document-item, .portfolio-item');
-      deleteModal.classList.remove('hidden');
-      document.getElementById('deletePassword').focus();
+      currentItemToDelete = button.closest(".document-item, .portfolio-item");
+      deleteModal.classList.remove("hidden");
+      document.getElementById("deletePassword").focus();
     }
 
     // Handle delete confirmation
-    document.addEventListener('click', function(e) {
-      if (e.target.id === 'confirmDeleteBtn') {
-        const password = document.getElementById('deletePassword').value;
-        const errorElement = document.getElementById('passwordError');
-        
+    document.addEventListener("click", function (e) {
+      if (e.target.id === "confirmDeleteBtn") {
+        const password = document.getElementById("deletePassword").value;
+        const errorElement = document.getElementById("passwordError");
+
         if (password === ADMIN_PASSWORD) {
           if (currentItemToDelete) {
             // Remove item from DOM
-            currentItemToDelete.remove();
-            
-            // Update localStorage for projects
-            if (currentItemToDelete.classList.contains('portfolio-item')) {
-              saveProjects();
+            const id = currentItemToDelete.dataset.id;
+            const isProject = currentItemToDelete.classList.contains("portfolio-item");
+            const isDocument = currentItemToDelete.classList.contains("document-item");
+
+            if (isProject) {
+              let projects = loadProjects();
+              projects = projects.filter((p) => p.id !== id);
+              saveProjects(projects);
+              renderProjects();
+            } else if (isDocument) {
+              let documents = loadDocuments();
+              documents = documents.filter((d) => d.id !== id);
+              saveDocuments(documents);
+              renderDocuments();
+            } else {
+              // fallback remove from DOM
+              currentItemToDelete.remove();
             }
-            
+
             // Show success message
-            const status = document.createElement('div');
-            status.className = 'fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg';
-            status.textContent = 'Item permanently deleted';
+            const status = document.createElement("div");
+            status.className =
+              "fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg";
+            status.textContent = "Item permanently deleted";
             document.body.appendChild(status);
             setTimeout(() => status.remove(), 3000);
           }
         } else {
           // Show password error
-          errorElement.classList.remove('hidden');
-          document.getElementById('deletePassword').focus();
+          errorElement.classList.remove("hidden");
+          document.getElementById("deletePassword").focus();
           return;
         }
-        
+
         // Clear and hide modal
-        deleteModal.classList.add('hidden');
-        document.getElementById('deletePassword').value = '';
-        errorElement.classList.add('hidden');
-        
-      } else if (e.target.id === 'cancelDeleteBtn' || e.target === deleteModal) {
+        deleteModal.classList.add("hidden");
+        document.getElementById("deletePassword").value = "";
+        errorElement.classList.add("hidden");
+      } else if (
+        e.target.id === "cancelDeleteBtn" ||
+        e.target === deleteModal
+      ) {
         // Cancel deletion
-        deleteModal.classList.add('hidden');
-        document.getElementById('deletePassword').value = '';
-        document.getElementById('passwordError').classList.add('hidden');
+        deleteModal.classList.add("hidden");
+        document.getElementById("deletePassword").value = "";
+        document.getElementById("passwordError").classList.add("hidden");
       }
     });
 
     // Get appropriate icon for document type
     function getDocumentIcon(docType) {
       const icons = {
-        'personal-statement': 'fa-file-alt',
-        'resume': 'fa-file-contract',
-        'additional-essay': 'fa-file-signature',
-        'cover-letter': 'fa-envelope-open-text',
-        'recommendation': 'fa-user-tie',
-        'report-card': 'fa-file-certificate',
-        's4-report': 'fa-file-export',
-        's5-report': 'fa-file-export',
-        's6-report': 'fa-file-export',
-        'exam-cert': 'fa-award'
+        "personal-statement": "fa-file-alt",
+        resume: "fa-file-contract",
+        "additional-essay": "fa-file-signature",
+        "cover-letter": "fa-envelope-open-text",
+        recommendation: "fa-user-tie",
+        "report-card": "fa-file-certificate",
+        "s4-report": "fa-file-export",
+        "s5-report": "fa-file-export",
+        "s6-report": "fa-file-export",
+        "exam-cert": "fa-award",
       };
-      return icons[docType] || 'fa-file';
+      return icons[docType] || "fa-file";
     }
-  </script>
 
+    // Filter items based on active filters
+    function filterItems() {
+      const activeCategory =
+        document.querySelector(".skill-filter.btn-primary")?.dataset.category ||
+        "all";
+      const docType = document.getElementById("documentFilter").value;
+
+      // Filter projects
+      document.querySelectorAll(".portfolio-item").forEach((item) => {
+        const categoryMatch =
+          activeCategory === "all" || item.dataset.category === activeCategory;
+        const docTypeMatch = !docType || item.dataset.doctype === docType;
+        item.style.display = categoryMatch && docTypeMatch ? "flex" : "none";
+      });
+
+      // Filter documents
+      document.querySelectorAll(".document-item").forEach((item) => {
+        const docTypeMatch = !docType || item.dataset.doctype === docType;
+        item.style.display = docTypeMatch ? "flex" : "none";
+      });
+    }
+
+    // Skill filtering
+    document.querySelectorAll(".skill-filter").forEach((button) => {
+      button.addEventListener("click", function () {
+        // Update active button styling
+        document.querySelectorAll(".skill-filter").forEach((btn) => {
+          btn.classList.toggle("btn-primary", btn === this);
+          btn.classList.toggle("btn-secondary", btn !== this);
+        });
+        filterItems();
+      });
+    });
+
+    // Document dropdown navigation
+    document
+      .getElementById("documentFilter")
+      .addEventListener("change", function () {
+        const docType = this.value;
+        if (docType) {
+          const docElement = document.querySelector(
+            `.document-item[data-doctype="${docType}"]`
+          );
+          if (docElement) {
+            docElement.scrollIntoView({ behavior: "smooth" });
+            docElement.classList.add("ring-2", "ring-red-500");
+            setTimeout(() => {
+              docElement.classList.remove("ring-2", "ring-red-500");
+            }, 2000);
+          }
+        }
+      });
+
+    // Mobile menu toggle
+    const mobileMenuButton = document.querySelector(".md\\:hidden");
+    const mobileMenu = document.querySelector("nav");
+
+    mobileMenuButton.addEventListener("click", function () {
+      mobileMenu.classList.toggle("hidden");
+      mobileMenu.classList.toggle("flex");
+      mobileMenu.classList.toggle("flex-col");
+      mobileMenu.classList.toggle("absolute");
+      mobileMenu.classList.toggle("top-16");
+      mobileMenu.classList.toggle("left-0");
+      mobileMenu.classList.toggle("right-0");
+      mobileMenu.classList.toggle("bg-[#222]");
+      mobileMenu.classList.toggle("p-4");
+      mobileMenu.classList.toggle("space-y-4");
+    });
+
+    // Initial rendering of projects and documents
+    renderProjects();
+    renderDocuments();
+
+    // Set 'All Skills' as active by default
+    document
+      .querySelector('.skill-filter[data-category="all"]')
+      .classList.add("btn-primary");
+  </script>
 </body>
 </html>
