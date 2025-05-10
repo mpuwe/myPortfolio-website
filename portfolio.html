@@ -224,7 +224,6 @@
             id="portfolioGrid"
             aria-live="polite"
           >
-            <!-- Existing projects will be loaded here by JS -->
           </div>
         </div>
       </div>
@@ -241,7 +240,6 @@
         id="documentsGrid"
         aria-live="polite"
       >
-        <!-- Existing documents will be loaded here by JS -->
       </div>
     </div>
   </section>
@@ -844,6 +842,23 @@
         docDiv.dataset.doctype = doc.doctype;
         docDiv.dataset.id = doc.id;
 
+        // Fix for uploaded documents: use base64 data URL if file is base64, else use file path
+        // Check if file string starts with "data:" (base64), else use as is
+        let fileHref = doc.file;
+        let downloadHref = doc.file;
+        if (doc.file.startsWith("data:")) {
+          // For base64 data, use as is
+          fileHref = doc.file;
+          downloadHref = doc.file;
+        } else {
+          // For uploaded docs, the file path is fake (e.g. documents/type.pdf), so we cannot open it.
+          // Instead, if the doc has a base64 property, use that.
+          if (doc.base64) {
+            fileHref = doc.base64;
+            downloadHref = doc.base64;
+          }
+        }
+
         docDiv.innerHTML = `
           <div class="p-4 flex-1 flex flex-col items-center justify-center">
             <i class="fas ${doc.icon} text-4xl text-red-500 mb-3"></i>
@@ -852,10 +867,10 @@
           </div>
           <div class="p-3 bg-[#444] flex justify-between items-center">
             <div class="flex gap-3">
-              <a href="${doc.file}" class="text-blue-400 hover:text-blue-300 text-sm" target="_blank" rel="noopener noreferrer">
+              <a href="${fileHref}" class="text-blue-400 hover:text-blue-300 text-sm" target="_blank" rel="noopener noreferrer">
                 <i class="fas fa-eye"></i> View
               </a>
-              <a href="${doc.file}" download class="text-blue-400 hover:text-blue-300 text-sm">
+              <a href="${downloadHref}" download class="text-blue-400 hover:text-blue-300 text-sm">
                 <i class="fas fa-download"></i> Download
               </a>
             </div>
@@ -953,7 +968,7 @@
         status.style.display = "block";
 
         var reader = new FileReader();
-        reader.onload = function () {
+        reader.onload = function (e) {
           var name = document.getElementById("documentType").options[
             document.getElementById("documentType").selectedIndex
           ].text;
@@ -961,18 +976,15 @@
 
           const documents = loadDocuments();
 
-          // Create a fake file URL using base64 for viewing (simulate)
-          // But since we can't save files, we will keep the file name as is for demo
-          // In real app, files would be uploaded to server and URLs updated accordingly
-          const fileName = `documents/${type}.pdf`;
-
+          // Store the base64 data URL in the document object for viewing/downloading
           const newDoc = {
             id: generateId(),
             doctype: type,
             title: name,
             desc: type.replace("-", " "),
             icon,
-            file: fileName,
+            file: e.target.result, // Use base64 data URL for href and download
+            base64: e.target.result,
           };
 
           documents.unshift(newDoc);
