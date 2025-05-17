@@ -67,6 +67,10 @@
       align-items: center;
       justify-content: center;
       transition: all 0.2s ease;
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      cursor: pointer;
     }
 
     .portfolio-item .delete-doc:hover {
@@ -115,6 +119,45 @@
     /* Footer pushed to bottom */
     footer {
       flex-shrink: 0;
+    }
+
+    /* Document item styles */
+    .document-item {
+      background-color: #333;
+      border-radius: 0.5rem;
+      overflow: hidden;
+      box-shadow: 0 4px 6px rgba(0,0,0,0.3);
+      transition: box-shadow 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+      position: relative;
+    }
+    .document-item:hover {
+      box-shadow: 0 6px 12px rgba(0,0,0,0.5);
+    }
+    .document-item .delete-doc {
+      position: absolute;
+      top: 8px;
+      right: 8px;
+      cursor: pointer;
+      z-index: 10;
+      background-color: rgba(0,0,0,0.7);
+      border-radius: 50%;
+      width: 28px;
+      height: 28px;
+      display: flex !important;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+    }
+    .document-item .delete-doc:hover {
+      background-color: rgba(0,0,0,0.9);
+      transform: scale(1.1);
+    }
+    .document-item .delete-doc i {
+      font-size: 1rem;
+      color: #ff0000;
     }
   </style>
 </head>
@@ -261,7 +304,7 @@
     aria-modal="true"
     aria-labelledby="adminPanelTitle"
   >
-    <div class="bg-[#333] rounded-lg p-6 max-w-[600px] w-full mx-4">
+    <div class="bg-[#333] rounded-lg p-6 max-w-[600px] w-full mx-4 max-h-[90vh] overflow-y-auto">
       <h3 id="adminPanelTitle" class="text-2xl font-bold mb-6 text-white">
         Admin Panel
       </h3>
@@ -713,14 +756,16 @@
           "portfolio-item bg-[#222] rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 h-full flex flex-col relative";
         projectDiv.dataset.category = project.category;
         projectDiv.dataset.doctype = project.doctype || "";
+        projectDiv.dataset.id = project.id;
 
         projectDiv.innerHTML = `
           <img src="${project.image}" alt="${project.alt || project.title}" class="w-full h-48 object-cover" />
+          <button class="delete-doc" 
+            aria-label="Delete project ${project.title}"
+            data-id="${project.id}">
+            <i class="fas fa-trash"></i>
+          </button>
           <div class="p-6 flex-1 flex flex-col">
-            <button class="delete-doc absolute top-2 right-2 text-red-500 hover:text-red-700 text-lg bg-black bg-opacity-50 rounded-full w-8 h-8 flex items-center justify-center" 
-              onclick="confirmDeleteDocument(this)" data-id="${project.id}">
-              <i class="fas fa-trash"></i>
-            </button>
             <h3 class="text-xl font-bold mb-2 text-white">${project.title}</h3>
             <p class="text-gray-300 mb-4 flex-1">${project.desc}</p>
             <div class="flex justify-between items-center">
@@ -731,7 +776,7 @@
           </div>
           <a href="#" class="action-button" aria-label="${
             isProgramming ? "Live demo" : "View"
-          } of ${project.title} project">${isProgramming ? "Live Demo" : "View"} ${
+          } of ${project.title} project" data-id="${project.id}" data-type="project">${isProgramming ? "Live Demo" : "View"} ${
           isProgramming
             ? '<i class="fas fa-play-circle"></i>'
             : '<i class="fas fa-eye"></i>'
@@ -739,6 +784,32 @@
         `;
 
         portfolioGrid.appendChild(projectDiv);
+      });
+
+      // Attach delete event listeners for projects
+      document.querySelectorAll(".portfolio-item .delete-doc").forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          confirmDeleteDocument(btn);
+        });
+      });
+
+      // Attach view button event listeners for projects
+      document.querySelectorAll(".portfolio-item .action-button").forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+          e.preventDefault();
+          const id = btn.dataset.id;
+          const projects = loadProjects();
+          const project = projects.find(p => p.id === id);
+          if (!project) return;
+          // For demo, just alert or open image in new tab
+          if (project.image) {
+            // Open image in new tab
+            window.open(project.image, "_blank", "noopener");
+          } else {
+            alert("No preview available.");
+          }
+        });
       });
     }
 
@@ -756,7 +827,8 @@
             title: "Personal Statement",
             desc: "My academic and professional aspirations",
             icon: "fa-file-alt",
-            file: "documents/personal.pdf",
+            file: "https://placehold.co/600x800/png?text=Personal+Statement+PDF+Placeholder",
+            mimeType: "application/pdf",
           },
           {
             id: generateId(),
@@ -764,7 +836,8 @@
             title: "Resume",
             desc: "Professional experience and skills",
             icon: "fa-file-contract",
-            file: "documents/resume.pdf",
+            file: "https://placehold.co/600x800/png?text=Resume+PDF+Placeholder",
+            mimeType: "application/pdf",
           },
           {
             id: generateId(),
@@ -772,7 +845,8 @@
             title: "Additional Essay",
             desc: "Supplementary academic writing",
             icon: "fa-file-signature",
-            file: "documents/additional.pdf",
+            file: "https://placehold.co/600x800/png?text=Additional+Essay+PDF+Placeholder",
+            mimeType: "application/pdf",
           },
           {
             id: generateId(),
@@ -780,7 +854,8 @@
             title: "Cover Letter",
             desc: "Professional introduction letter",
             icon: "fa-envelope-open-text",
-            file: "documents/coverletter.pdf",
+            file: "https://placehold.co/600x800/png?text=Cover+Letter+PDF+Placeholder",
+            mimeType: "application/pdf",
           },
           {
             id: generateId(),
@@ -788,7 +863,8 @@
             title: "Recommendation",
             desc: "College counselor recommendation",
             icon: "fa-user-tie",
-            file: "documents/recommendation.pdf",
+            file: "https://placehold.co/600x800/png?text=Recommendation+PDF+Placeholder",
+            mimeType: "application/pdf",
           },
           {
             id: generateId(),
@@ -796,7 +872,8 @@
             title: "Report Card",
             desc: "Academic performance records",
             icon: "fa-file-certificate",
-            file: "documents/report-card.pdf",
+            file: "https://placehold.co/600x800/png?text=Report+Card+PDF+Placeholder",
+            mimeType: "application/pdf",
           },
           {
             id: generateId(),
@@ -804,7 +881,8 @@
             title: "S4 Report",
             desc: "Secondary 4 academic records",
             icon: "fa-file-export",
-            file: "documents/s4.pdf",
+            file: "https://placehold.co/600x800/png?text=S4+Report+PDF+Placeholder",
+            mimeType: "application/pdf",
           },
           {
             id: generateId(),
@@ -812,7 +890,8 @@
             title: "S5 Report",
             desc: "Secondary 5 academic records",
             icon: "fa-file-export",
-            file: "documents/s5-report.pdf",
+            file: "https://placehold.co/600x800/png?text=S5+Report+PDF+Placeholder",
+            mimeType: "application/pdf",
           },
           {
             id: generateId(),
@@ -820,7 +899,8 @@
             title: "S6 Report",
             desc: "Secondary 6 academic records",
             icon: "fa-file-export",
-            file: "documents/s6.pdf",
+            file: "https://placehold.co/600x800/png?text=S6+Report+PDF+Placeholder",
+            mimeType: "application/pdf",
           },
           {
             id: generateId(),
@@ -828,7 +908,8 @@
             title: "National Exam",
             desc: "Official exam certification",
             icon: "fa-award",
-            file: "documents/natinal.pdf",
+            file: "https://placehold.co/600x800/png?text=National+Exam+Certificate+PDF+Placeholder",
+            mimeType: "application/pdf",
           },
         ];
         saveDocuments(initialDocuments);
@@ -838,28 +919,29 @@
       documents.forEach((doc) => {
         const docDiv = document.createElement("div");
         docDiv.className =
-          "document-item bg-[#333] rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 h-full flex flex-col";
+          "document-item";
         docDiv.dataset.doctype = doc.doctype;
         docDiv.dataset.id = doc.id;
 
-        // Fix for uploaded documents: use base64 data URL if file is base64, else use file path
-        // Check if file string starts with "data:" (base64), else use as is
+        // Determine if file is base64 or URL
         let fileHref = doc.file;
         let downloadHref = doc.file;
-        if (doc.file.startsWith("data:")) {
-          // For base64 data, use as is
+        let mimeType = doc.mimeType || "";
+
+        if (doc.file && doc.file.startsWith("data:")) {
           fileHref = doc.file;
           downloadHref = doc.file;
-        } else {
-          // For uploaded docs, the file path is fake (e.g. documents/type.pdf), so we cannot open it.
-          // Instead, if the doc has a base64 property, use that.
-          if (doc.base64) {
-            fileHref = doc.base64;
-            downloadHref = doc.base64;
-          }
+          mimeType = doc.file.split(";")[0].split(":")[1];
+        } else if (doc.base64) {
+          fileHref = doc.base64;
+          downloadHref = doc.base64;
+          mimeType = doc.base64.split(";")[0].split(":")[1];
         }
 
         docDiv.innerHTML = `
+          <button class="delete-doc" aria-label="Delete document ${doc.title}" data-id="${doc.id}">
+            <i class="fas fa-trash"></i>
+          </button>
           <div class="p-4 flex-1 flex flex-col items-center justify-center">
             <i class="fas ${doc.icon} text-4xl text-red-500 mb-3"></i>
             <h3 class="text-lg font-bold mb-1 text-white text-center">${doc.title}</h3>
@@ -867,21 +949,96 @@
           </div>
           <div class="p-3 bg-[#444] flex justify-between items-center">
             <div class="flex gap-3">
-              <a href="${fileHref}" class="text-blue-400 hover:text-blue-300 text-sm" target="_blank" rel="noopener noreferrer">
+              <a href="#" class="view-link text-blue-400 hover:text-blue-300 text-sm" target="_blank" rel="noopener noreferrer" aria-label="View ${doc.title}">
                 <i class="fas fa-eye"></i> View
               </a>
-              <a href="${downloadHref}" download class="text-blue-400 hover:text-blue-300 text-sm">
+              <a href="#" class="download-link text-blue-400 hover:text-blue-300 text-sm" download aria-label="Download ${doc.title}">
                 <i class="fas fa-download"></i> Download
               </a>
             </div>
-            <button class="delete-doc text-red-500 hover:text-red-700 text-sm" data-id="${doc.id}" onclick="confirmDeleteDocument(this)">
-              <i class="fas fa-trash"></i>
-            </button>
           </div>
         `;
 
         documentsGrid.appendChild(docDiv);
+
+        // Setup view and download links properly
+        const viewLink = docDiv.querySelector(".view-link");
+        const downloadLink = docDiv.querySelector(".download-link");
+
+        if (doc.file && (doc.file.startsWith("data:") || doc.base64)) {
+          // For base64 data, create blob URL for viewing and downloading
+          const blob = base64ToBlob(doc.file || doc.base64);
+          const blobUrl = URL.createObjectURL(blob);
+          viewLink.href = blobUrl;
+          downloadLink.href = blobUrl;
+          downloadLink.download = doc.title.replace(/\s+/g, "_") + getFileExtensionFromMime(blob.type);
+          // Revoke blob URL on unload to avoid memory leaks
+          window.addEventListener("unload", () => URL.revokeObjectURL(blobUrl));
+        } else if (doc.file) {
+          // For URLs or relative paths, just use them directly
+          viewLink.href = doc.file;
+          downloadLink.href = doc.file;
+          downloadLink.download = doc.title.replace(/\s+/g, "_") + getFileExtensionFromFilename(doc.file);
+        } else {
+          // If no file, disable links
+          viewLink.removeAttribute("href");
+          downloadLink.removeAttribute("href");
+          viewLink.classList.add("opacity-50", "cursor-not-allowed");
+          downloadLink.classList.add("opacity-50", "cursor-not-allowed");
+        }
+
+        // Fix for PDF blank page issue: open PDFs in new tab with proper mime type
+        viewLink.addEventListener("click", (e) => {
+          e.preventDefault();
+          if (!viewLink.href) return;
+          const isPdf = (mimeType === "application/pdf") || viewLink.href.toLowerCase().endsWith(".pdf");
+          if (isPdf) {
+            // Open PDF in new tab
+            window.open(viewLink.href, "_blank", "noopener");
+          } else {
+            // For other files, trigger download or open in new tab
+            window.open(viewLink.href, "_blank", "noopener");
+          }
+        });
       });
+
+      // Attach delete event listeners for documents
+      document.querySelectorAll(".document-item .delete-doc").forEach((btn) => {
+        btn.addEventListener("click", (e) => {
+          e.stopPropagation();
+          confirmDeleteDocument(btn);
+        });
+      });
+    }
+
+    // Convert base64 data URL to Blob
+    function base64ToBlob(dataURL) {
+      const parts = dataURL.split(',');
+      const mime = parts[0].match(/:(.*?);/)[1];
+      const bstr = atob(parts[1]);
+      let n = bstr.length;
+      const u8arr = new Uint8Array(n);
+      while (n--) {
+        u8arr[n] = bstr.charCodeAt(n);
+      }
+      return new Blob([u8arr], { type: mime });
+    }
+
+    // Get file extension from MIME type
+    function getFileExtensionFromMime(mime) {
+      const map = {
+        "application/pdf": ".pdf",
+        "application/msword": ".doc",
+        "application/vnd.openxmlformats-officedocument.wordprocessingml.document": ".docx",
+        "text/plain": ".txt",
+      };
+      return map[mime] || "";
+    }
+
+    // Get file extension from filename string
+    function getFileExtensionFromFilename(filename) {
+      const match = filename.match(/\.[0-9a-z]+$/i);
+      return match ? match[0] : "";
     }
 
     // Capitalize first letter helper
@@ -901,7 +1058,10 @@
     document
       .getElementById("uploadProjectBtn")
       .addEventListener("click", () => {
-        if (!isAdmin) return;
+        if (!isAdmin) {
+          alert("Please login as admin to upload projects.");
+          return;
+        }
 
         const category = document.getElementById("projectCategory").value;
         const title = document.getElementById("projectTitle").value.trim();
@@ -914,6 +1074,7 @@
         }
 
         const reader = new FileReader();
+
         reader.onload = function (e) {
           const projects = loadProjects();
 
@@ -943,6 +1104,16 @@
             projectUploadStatus.style.display = "none";
           }, 4000);
         };
+
+        reader.onerror = function () {
+          projectUploadStatus.textContent = "Failed to read image file.";
+          projectUploadStatus.className = "mt-2 text-sm text-red-500 font-bold";
+          projectUploadStatus.style.display = "block";
+          setTimeout(() => {
+            projectUploadStatus.style.display = "none";
+          }, 4000);
+        };
+
         reader.readAsDataURL(imageFile);
       });
 
@@ -950,14 +1121,32 @@
     document
       .getElementById("uploadDocumentBtn")
       .addEventListener("click", function () {
-        if (!isAdmin) return; // Ensure the user is an admin
+        if (!isAdmin) {
+          alert("Please login as admin to upload documents.");
+          return;
+        }
 
         var type = document.getElementById("documentType").value;
-        var file = document.getElementById("documentFile").files[0];
+        var fileInput = document.getElementById("documentFile");
+        var file = fileInput.files[0];
         var status = document.getElementById("documentUploadStatus");
 
         if (!file) {
           status.textContent = "Please select a file";
+          status.className = "mt-2 text-sm text-red-500";
+          status.style.display = "block";
+          return;
+        }
+
+        // Validate file type
+        const allowedTypes = [
+          "application/pdf",
+          "application/msword",
+          "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
+          "text/plain"
+        ];
+        if (!allowedTypes.includes(file.type)) {
+          status.textContent = "Unsupported file type. Please upload PDF or Word documents.";
           status.className = "mt-2 text-sm text-red-500";
           status.style.display = "block";
           return;
@@ -968,6 +1157,7 @@
         status.style.display = "block";
 
         var reader = new FileReader();
+
         reader.onload = function (e) {
           var name = document.getElementById("documentType").options[
             document.getElementById("documentType").selectedIndex
@@ -981,10 +1171,11 @@
             id: generateId(),
             doctype: type,
             title: name,
-            desc: type.replace("-", " "),
+            desc: type.replace(/-/g, " "),
             icon,
             file: e.target.result, // Use base64 data URL for href and download
             base64: e.target.result,
+            mimeType: file.type,
           };
 
           documents.unshift(newDoc);
@@ -992,7 +1183,7 @@
           renderDocuments();
 
           // Reset the file input and show success message
-          document.getElementById("documentFile").value = "";
+          fileInput.value = "";
           status.textContent = "Document uploaded successfully!";
           status.className = "mt-2 text-sm text-green-500 font-bold";
           setTimeout(() => {
@@ -1003,6 +1194,7 @@
         reader.onerror = function () {
           status.textContent = "Upload failed";
           status.className = "mt-2 text-sm text-red-500";
+          status.style.display = "block";
         };
 
         reader.readAsDataURL(file);
