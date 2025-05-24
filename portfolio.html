@@ -663,6 +663,7 @@
             image:
               "https://images.unsplash.com/photo-1547658719-da2b51169166?auto=format&fit=crop&w=800&q=80",
             alt: "Brand Identity Design project showing a modern tech startup logo and branding materials on a desk",
+            demoLink: "https://buying-pied.vercel.app/"
           },
           {
             id: generateId(),
@@ -673,6 +674,7 @@
             image:
               "https://images.unsplash.com/photo-1581291518633-83b4ebd1d83e?auto=format&fit=crop&w=800&q=80",
             alt: "Marketing Materials project showing colorful brochures and flyers spread on a table",
+            demoLink: "https://buying-pied.vercel.app/"
           },
           {
             id: generateId(),
@@ -683,16 +685,47 @@
             image:
               "https://images.unsplash.com/photo-1555066931-4365d14bab8c?auto=format&fit=crop&w=800&q=80",
             alt: "E-commerce Platform project showing a laptop screen with online store interface",
+            demoLink: "https://buying-pied.vercel.app/"
           },
           {
             id: generateId(),
             category: "programming",
-            doctype: "cover-letter",
             title: "ElieTrailer: Movie Trailer Search and Watch Site",
             desc: "ElieTrailer is the perfect platform for movie lovers to search and watch trailers of their favorite films. With a user-friendly interface, users can quickly find and preview movies to decide what to watch. The site offers instant trailer playback from YouTube and includes subtitle options for accessibility.",
             image:
               "https://images.unsplash.com/photo-1542903660-eedba2cda473?auto=format&fit=crop&w=800&q=80",
             alt: "Mobile App Development project showing a smartphone with task management app interface",
+            demoLink: "https://buying-pied.vercel.app/"
+          },
+          {
+            id: generateId(),
+            category: "programming",
+            title: "TaskMaster: Task Management Web App",
+            desc: "TaskMaster is a web application designed to help users organize and manage their daily tasks efficiently with a clean and intuitive interface.",
+            image:
+              "https://images.unsplash.com/photo-1504384308090-c894fdcc538d?auto=format&fit=crop&w=800&q=80",
+            alt: "Task Management Web App project showing a desktop screen with task lists and calendar",
+            demoLink: "https://buying-pied.vercel.app/"
+          },
+          {
+            id: generateId(),
+            category: "programming",
+            title: "WeatherNow: Real-time Weather Forecast App",
+            desc: "WeatherNow provides real-time weather updates and forecasts with an easy-to-use interface and detailed weather maps.",
+            image:
+              "https://images.unsplash.com/photo-1506744038136-46273834b3fb?auto=format&fit=crop&w=800&q=80",
+            alt: "Weather Forecast App project showing a smartphone with weather data and maps",
+            demoLink: "https://buying-pied.vercel.app/"
+          },
+          {
+            id: generateId(),
+            category: "programming",
+            title: "FitTrack: Fitness Tracking Mobile App",
+            desc: "FitTrack helps users monitor their workouts, track progress, and set fitness goals with personalized recommendations.",
+            image:
+              "https://images.unsplash.com/photo-1554284126-1e7a0f1a7a1a?auto=format&fit=crop&w=800&q=80",
+            alt: "Fitness Tracking Mobile App project showing a smartphone with workout stats and graphs",
+            demoLink: "https://buying-pied.vercel.app/"
           },
           {
             id: generateId(),
@@ -774,7 +807,7 @@
               )}</span>
             </div>
           </div>
-          <a href="#" class="action-button" aria-label="${
+          <a href="${isProgramming ? "https://buying-pied.vercel.app/" : "#"}" target="${isProgramming ? "_blank" : "_self"}" class="action-button" aria-label="${
             isProgramming ? "Live demo" : "View"
           } of ${project.title} project" data-id="${project.id}" data-type="project">${isProgramming ? "Live Demo" : "View"} ${
           isProgramming
@@ -802,9 +835,12 @@
           const projects = loadProjects();
           const project = projects.find(p => p.id === id);
           if (!project) return;
-          // For demo, just alert or open image in new tab
-          if (project.image) {
-            // Open image in new tab
+
+          // Open the project demo link if it exists
+          if (project.demoLink) {
+            window.open(project.demoLink, "_blank", "noopener");
+          } else if (project.image) {
+            // fallback open image in new tab
             window.open(project.image, "_blank", "noopener");
           } else {
             alert("No preview available.");
@@ -1086,6 +1122,7 @@
             desc,
             image: e.target.result,
             alt: `${title} project image showing ${title}`,
+            demoLink: "https://buying-pied.vercel.app/"
           };
 
           projects.unshift(newProject);
@@ -1384,12 +1421,6 @@
     renderProjects();
     renderDocuments();
 
-    // Set 'All Skills' as active by default
-    // Set 'All Skills' as active by default
-    // Set 'All Skills' as active by default
-    // Set 'All Skills' as active by default
-    // Set 'All Skills' as active by default
-    // Set 'All Skills' as active by default
     // Set 'All Skills' as active by default
     document
       .querySelector('.skill-filter[data-category="all"]')
