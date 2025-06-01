@@ -659,10 +659,10 @@
             category: "design",
             doctype: "personal-statement",
             title: "Brand Identity Design",
-            desc: "Complete brand identity package for a tech startup.",
+            desc: "Alongside this project, my graphic design demonstrates creativity, visual communication, and a solid grasp of design principles like color, layout, and typography. Using tools such as Photoshop, Illustrator, and Figma, I created logos, posters, and digital content aimed at engaging and informing the target audience.",
             image:
               "designer.jpg",
-            alt: "Alongside this project, my graphic design demonstrates creativity, visual communication, and a solid grasp of design principles like color, layout, and typography. Using tools such as Photoshop, Illustrator, and Figma, I created logos, posters, and digital content aimed at engaging and informing the target audience.",
+            alt: "designer photo showing a designer working on a laptop with design software",
             demoLink: "designer.jpg"
           },
           {
@@ -670,10 +670,10 @@
             category: "design",
             doctype: "resume",
             title: "Marketing Materials",
-            desc: "Brochures and flyers for a local business.",
+            desc: "Alongside this project, my graphic design demonstrates the ability to combine creativity with practical design skills. From logos to promotional materials, each piece reflects thoughtful composition and effective use of tools like Photoshop, Illustrator, and Figma to deliver clear and engaging visuals.",
             image:
               "designer2.jpg",
-            alt: "Alongside this project, my graphic design demonstrates the ability to combine creativity with practical design skills. From logos to promotional materials, each piece reflects thoughtful composition and effective use of tools like Photoshop, Illustrator, and Figma to deliver clear and engaging visuals.",
+            alt: "desinger photo showing a designer working on a laptop with design software",
             demoLink: "designer2.jpg"
           },
           {
@@ -724,7 +724,7 @@
             title: "Track Competitions",
             desc: "Participation in regional and national track events.",
             image:
-              "young-african.jpg",
+              "runner.png",
             alt: "Track Competitions project showing an athlete running on a track during a race",
           },
           {
@@ -732,7 +732,7 @@
             category: "tailoring",
             doctype: "recommendation",
             title: "Custom Clothing Designs",
-            desc: "Handmade traditional and modern clothing designs.",
+            desc: "Alongside this project, my tailoring and fashion design showcase creativity, attention to detail, and a strong sense of style. From sketching to sewing, I focus on creating unique, wearable garments that balance design and functionality.",
             image:
               "sew.jpg",
             alt: "Custom Clothing Designs project showing handmade traditional and modern clothing on mannequins",
@@ -765,7 +765,7 @@
             title: "Athletic Performance",
             desc: "Track and field performance evaluation.",
             image:
-              "athlete.jpg",
+              "young-african.jpg",
             alt: "Athletic Performance project showing an athlete mid-jump during a track and field event",
           },
         ];
@@ -781,7 +781,7 @@
         projectDiv.dataset.category = project.category;
         projectDiv.dataset.doctype = project.doctype || "";
         projectDiv.dataset.id = project.id;
-
+        
         projectDiv.innerHTML = `
           <img src="${project.image}" alt="${project.alt || project.title}" class="w-full h-48 object-cover" />
           <button class="delete-doc" 
