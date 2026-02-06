@@ -16,37 +16,37 @@
 
   <!-- Google Fonts -->
   <link
-    href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@500;700;800&display=swap"
     rel="stylesheet"
   />
 
   <style>
     body {
-      font-family: "Poppins", sans-serif;
-      background-color: #1a1a1a;
-      color: #fff;
+      font-family: "Inter", sans-serif;
+      background-color: #f4f7fb;
+      color: #0f172a;
       margin: 0;
       min-height: 100vh;
       display: flex;
       flex-direction: column;
     }
     .btn-primary {
-      background-color: #ff0000;
-      color: #fff;
+      background-color: #1d4ed8;
+      color: #0f172a;
     }
     .btn-primary:hover {
-      background-color: #cc0000;
+      background-color: #1e3a8a;
     }
     .btn-secondary {
-      border: 2px solid #ff0000;
-      color: #ff0000;
+      border: 2px solid #1d4ed8;
+      color: #1d4ed8;
       background: transparent;
     }
     .btn-secondary:hover {
-      background-color: rgba(255, 0, 0, 0.1);
+      background-color: rgba(29, 78, 216, 0.12);
     }
     .portfolio-filter button.active {
-      background-color: #ff0000;
+      background-color: #1d4ed8;
       color: white;
     }
     .portfolio-item {
@@ -104,7 +104,7 @@
       white-space: nowrap;
     }
     .portfolio-item .action-button:hover {
-      background-color: #cc0000;
+      background-color: #1e3a8a;
     }
 
     /* Responsive container max width */
@@ -123,7 +123,7 @@
 
     /* Document item styles */
     .document-item {
-      background-color: #333;
+      background-color: #ffffff;
       border-radius: 0.5rem;
       overflow: hidden;
       box-shadow: 0 4px 6px rgba(0,0,0,0.3);
@@ -157,20 +157,27 @@
     }
     .document-item .delete-doc i {
       font-size: 1rem;
-      color: #ff0000;
+      color: #1d4ed8;
     }
+
+    h1, h2, h3, h4 { font-family: "Manrope", sans-serif; }
+    .text-red-500, .hover\:text-red-500:hover { color: #1d4ed8 !important; }
+    .bg-\[\#111\], .bg-\[\#222\], .bg-\[\#333\], .bg-gray-900, .bg-gray-800 { background-color: #ffffff !important; }
+    .text-gray-300, .text-gray-400, .text-gray-500 { color: #475569 !important; }
+    .text-white { color: #0f172a !important; }
+
   </style>
 </head>
 <body>
   <!-- Header -->
-  <header class="bg-[#222] text-white p-4 sticky top-0 z-50">
+  <header class="bg-[#ffffff] text-white p-4 sticky top-0 z-50">
     <div class="container flex justify-between items-center">
       <a href="index.html" class="text-2xl font-bold">Elie Mpuhwezimana</a>
       <nav class="hidden md:flex space-x-6">
         <a href="index.html" class="hover:text-red-500">Home</a>
         <a href="about.html" class="hover:text-red-500">About</a>
         <a href="portfolio.html" class="text-red-500">Portfolio</a>
-        <a href="contact.html" class="hover:text-red-500">Contact</a>
+        <a href="mailto:mpuwezimanaelie@gmail.com" class="hover:text-red-500">Contact</a>
       </nav>
       <button class="md:hidden text-white" aria-label="Toggle menu">
         <i class="fas fa-bars text-xl"></i>
@@ -179,7 +186,7 @@
   </header>
 
   <!-- Portfolio Filter Section -->
-  <section class="py-10 bg-[#222]">
+  <section class="py-10 bg-[#ffffff]">
     <div class="container text-center">
       <h1 class="text-4xl md:text-5xl font-bold mb-4">My Portfolio</h1>
       <p class="text-xl text-gray-300 max-w-2xl mx-auto mb-8">
@@ -218,17 +225,17 @@
         </button>
         <button
           class="skill-filter btn-secondary px-4 py-2 rounded-lg"
-          data-category="tailoring"
+          data-category="product-design"
           type="button"
         >
-          Tailoring
+          Product Design
         </button>
         <button
           class="skill-filter btn-secondary px-4 py-2 rounded-lg"
-          data-category="hospitality"
+          data-category="branding"
           type="button"
         >
-          Hospitality
+          Brand Strategy
         </button>
       </div>
 
@@ -236,7 +243,7 @@
       <div class="mb-8 max-w-md mx-auto">
         <select
           id="documentFilter"
-          class="bg-[#333] text-white px-4 py-2 rounded-lg border border-[#444] w-full"
+          class="bg-[#ffffff] text-white px-4 py-2 rounded-lg border border-[#b8c5d6] w-full"
           aria-label="Filter documents by type"
         >
           <option value="">Select Document Type</option>
@@ -274,7 +281,7 @@
   </section>
 
   <!-- Documents Section -->
-  <section class="py-10 pb-20 bg-[#222]">
+  <section class="py-10 pb-20 bg-[#ffffff]">
     <div class="container">
       <h2 class="text-3xl font-bold mb-8 text-white text-center">My Documents</h2>
 
@@ -304,7 +311,7 @@
     aria-modal="true"
     aria-labelledby="adminPanelTitle"
   >
-    <div class="bg-[#333] rounded-lg p-6 max-w-[600px] w-full mx-4 max-h-[90vh] overflow-y-auto">
+    <div class="bg-[#ffffff] rounded-lg p-6 max-w-[600px] w-full mx-4 max-h-[90vh] overflow-y-auto">
       <h3 id="adminPanelTitle" class="text-2xl font-bold mb-6 text-white">
         Admin Panel
       </h3>
@@ -317,7 +324,7 @@
           <input
             type="password"
             id="adminPassword"
-            class="w-full px-4 py-2 bg-[#444] text-white rounded-lg"
+            class="w-full px-4 py-2 bg-[#b8c5d6] text-white rounded-lg"
           />
         </div>
         <button
@@ -337,13 +344,13 @@
           <input
             type="password"
             id="newPassword"
-            class="w-full px-4 py-2 bg-[#444] text-white rounded-lg mb-2"
+            class="w-full px-4 py-2 bg-[#b8c5d6] text-white rounded-lg mb-2"
             placeholder="New password"
           />
           <input
             type="password"
             id="confirmPassword"
-            class="w-full px-4 py-2 bg-[#444] text-white rounded-lg"
+            class="w-full px-4 py-2 bg-[#b8c5d6] text-white rounded-lg"
             placeholder="Confirm password"
           />
           <input
@@ -356,19 +363,19 @@
 
         <div class="flex flex-col md:flex-row gap-4">
           <!-- Project Upload Section -->
-          <div class="w-full md:w-1/2 p-4 border border-[#444] rounded-lg">
+          <div class="w-full md:w-1/2 p-4 border border-[#b8c5d6] rounded-lg">
             <h4 class="text-lg font-bold mb-3 text-white">Upload Project</h4>
             <div class="mb-4">
               <label for="projectCategory" class="sr-only">Project Category</label>
               <select
                 id="projectCategory"
-                class="w-full px-4 py-2 bg-[#444] text-white rounded-lg"
+                class="w-full px-4 py-2 bg-[#b8c5d6] text-white rounded-lg"
               >
                 <option value="design">Graphic Design</option>
                 <option value="programming">Programming</option>
                 <option value="athletics">Athletics</option>
-                <option value="tailoring">Tailoring</option>
-                <option value="hospitality">Hospitality</option>
+                <option value="product-design">Product Design</option>
+                <option value="branding">Brand Strategy</option>
               </select>
               <label for="projectImage" class="sr-only">Project Image</label>
               <input
@@ -382,13 +389,13 @@
                 type="text"
                 id="projectTitle"
                 placeholder="Project Title"
-                class="w-full px-4 py-2 bg-[#444] text-white rounded-lg mb-2"
+                class="w-full px-4 py-2 bg-[#b8c5d6] text-white rounded-lg mb-2"
               />
               <label for="projectDesc" class="sr-only">Project Description</label>
               <textarea
                 id="projectDesc"
                 placeholder="Project Description"
-                class="w-full px-4 py-2 bg-[#444] text-white rounded-lg"
+                class="w-full px-4 py-2 bg-[#b8c5d6] text-white rounded-lg"
               ></textarea>
             </div>
             <button
@@ -407,13 +414,13 @@
           </div>
 
           <!-- Document Upload Section -->
-          <div class="w-full md:w-1/2 p-4 border border-[#444] rounded-lg">
+          <div class="w-full md:w-1/2 p-4 border border-[#b8c5d6] rounded-lg">
             <h4 class="text-lg font-bold mb-3 text-white">Upload Document</h4>
             <div class="mb-4">
               <label for="documentType" class="sr-only">Document Type</label>
               <select
                 id="documentType"
-                class="w-full px-4 py-2 bg-[#444] text-white rounded-lg mb-2"
+                class="w-full px-4 py-2 bg-[#b8c5d6] text-white rounded-lg mb-2"
               >
                 <option value="personal-statement">Personal Statement</option>
                 <option value="resume">Resume</option>
@@ -507,7 +514,7 @@
               >
             </li>
             <li>
-              <a href="contact.html" class="hover:text-red-500 transition"
+              <a href="mailto:mpuwezimanaelie@gmail.com" class="hover:text-red-500 transition"
                 >Contact</a
               >
             </li>
@@ -729,23 +736,23 @@
           },
           {
             id: generateId(),
-            category: "tailoring",
+            category: "product-design",
             doctype: "recommendation",
-            title: "Custom Clothing Designs",
-            desc: "Alongside this project, my tailoring and fashion design showcase creativity, attention to detail, and a strong sense of style. From sketching to sewing, I focus on creating unique, wearable garments that balance design and functionality.",
+            title: "Product Design Concepts",
+            desc: "This project highlights interface structure, user flow clarity, and accessibility-first design decisions to improve how users interact with digital products.",
             image:
-              "sew.jpg",
-            alt: "Custom Clothing Designs project showing handmade traditional and modern clothing on mannequins",
+              "shoppingimage.jpg",
+            alt: "Product Design Concepts showing interface prototypes and workflow screens",
           },
           {
             id: generateId(),
-            category: "hospitality",
+            category: "branding",
             doctype: "s4-report",
-            title: "🏨European, american and british welcoming service ",
-            desc: "Guest service training and management experience.",
+            title: "Brand Communication Campaign",
+            desc: "Strategic branding and communication work for organizational visibility.",
             image:
               "hostpito.jpg",
-            alt: "Hotel Management project showing hotel lobby with reception desk and guests",
+            alt: "Brand communication campaign visuals and identity presentation assets",
           },
           {
             id: generateId(),
@@ -777,7 +784,7 @@
         const isProgramming = project.category === "programming";
         const projectDiv = document.createElement("div");
         projectDiv.className =
-          "portfolio-item bg-[#222] rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 h-full flex flex-col relative";
+          "portfolio-item bg-[#ffffff] rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 h-full flex flex-col relative";
         projectDiv.dataset.category = project.category;
         projectDiv.dataset.doctype = project.doctype || "";
         projectDiv.dataset.id = project.id;
@@ -974,7 +981,7 @@
             <h3 class="text-lg font-bold mb-1 text-white text-center">${doc.title}</h3>
             <p class="text-gray-300 text-sm text-center mb-3">${doc.desc}</p>
           </div>
-          <div class="p-3 bg-[#444] flex justify-between items-center">
+          <div class="p-3 bg-[#b8c5d6] flex justify-between items-center">
             <div class="flex gap-3">
               <a href="#" class="view-link text-blue-400 hover:text-blue-300 text-sm" target="_blank" rel="noopener noreferrer" aria-label="View ${doc.title}">
                 <i class="fas fa-eye"></i> View
@@ -1234,12 +1241,12 @@
     deleteModal.className =
       "hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50";
     deleteModal.innerHTML = `
-      <div class="bg-[#333] rounded-lg p-6 max-w-md w-full mx-4">
+      <div class="bg-[#ffffff] rounded-lg p-6 max-w-md w-full mx-4">
         <h3 class="text-xl font-bold mb-4 text-white">Confirm Delete</h3>
         <p class="text-gray-300 mb-4">Are you sure you want to permanently delete this item?</p>
         <div class="mb-4">
           <label class="block text-gray-300 mb-2">Admin Password Required</label>
-          <input type="password" id="deletePassword" class="w-full px-4 py-2 bg-[#444] text-white rounded-lg mb-2" placeholder="Enter admin password" />
+          <input type="password" id="deletePassword" class="w-full px-4 py-2 bg-[#b8c5d6] text-white rounded-lg mb-2" placeholder="Enter admin password" />
           <p id="passwordError" class="text-red-500 text-sm hidden">Incorrect password</p>
         </div>
         <div class="flex gap-2">
@@ -1403,7 +1410,7 @@
       mobileMenu.classList.toggle("top-16");
       mobileMenu.classList.toggle("left-0");
       mobileMenu.classList.toggle("right-0");
-      mobileMenu.classList.toggle("bg-[#222]");
+      mobileMenu.classList.toggle("bg-[#ffffff]");
       mobileMenu.classList.toggle("p-4");
       mobileMenu.classList.toggle("space-y-4");
     });
