@@ -258,21 +258,20 @@
             <span class="chip px-4 py-2 rounded-full text-sm font-semibold">Brand Strategy</span>
             <span class="chip px-4 py-2 rounded-full text-sm font-semibold">Creative Direction</span>
           </div>
-          <div class="grid sm:grid-cols-3 gap-4 max-w-3xl">
+          <div class="grid sm:grid-cols-2 gap-4 max-w-3xl">
             <a href="portfolio.html" class="btn-primary px-6 py-4 rounded-lg font-bold text-center transition">Explore Portfolio Hub</a>
-            <a href="blog.html" class="btn-secondary px-6 py-4 rounded-lg font-bold text-center transition">Read My Story</a>
             <a href="mailto:mpuwezimanaelie@gmail.com?subject=Project%20Discussion&body=Hello%20Elie,%20I%20would%20like%20to%20discuss%20a%20task%20or%20deal." class="bg-slate-900 text-white px-6 py-4 rounded-lg font-bold text-center hover:bg-slate-700 transition">Connect Me</a>
           </div>
         </section>
 
         <section id="about" class="panel p-8 md:p-12">
           <div class="grid md:grid-cols-2 gap-8 items-center">
-            <img src="mpover pic.jpg" alt="Professional portrait of Elie Mpuhwezimana, smiling confidently, wearing a smart casual shirt, studio background" class="rounded-xl shadow-xl w-full max-w-md"/>
+            <img id="aboutProfileImage" src="mpover pic.jpg" alt="Professional portrait of Elie Mpuhwezimana, smiling confidently, wearing a smart casual shirt, studio background" class="rounded-xl shadow-xl w-full max-w-md"/>
             <div>
               <h2 class="text-3xl font-extrabold mb-4">About Me</h2>
               <p class="text-slate-600 mb-4">I'm a focused creative professional with strong expertise in graphic design, visual communication, and IT implementation. I translate ideas into high-quality digital experiences that support organizational goals.</p>
               <p class="text-slate-600 mb-6">Athletics remains a long-term personal passion, while my professional value-add is strategic creative contribution: combining design thinking, digital execution, and clear communication to strengthen team outcomes.</p>
-              <div class="flex flex-wrap gap-4">
+              <div class="flex gap-4" style="flex-wrap: nowrap;">
                 <a href="blog.html" class="btn-primary px-7 py-3 rounded-lg font-semibold">View My Blog</a>
                 <a href="https://calendar.google.com/" target="_blank" rel="noopener noreferrer" class="btn-secondary px-7 py-3 rounded-lg font-semibold">Book My Collaboration</a>
               </div>
@@ -368,8 +367,12 @@
     });
 
     const profileImage = document.getElementById("profileImage");
+    const aboutProfileImage = document.getElementById("aboutProfileImage");
     const savedImage = localStorage.getItem("profileImage");
-    if (savedImage) profileImage.src = savedImage;
+    if (savedImage) {
+      profileImage.src = savedImage;
+      if (aboutProfileImage) aboutProfileImage.src = savedImage;
+    }
 
     document.getElementById("editProfileBtn").addEventListener("click", function () {
       document.getElementById("adminPanel").classList.remove("hidden");
