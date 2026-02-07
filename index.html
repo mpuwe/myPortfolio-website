@@ -18,16 +18,16 @@
       --muted: #475569;
       --border: #dbe4f0;
     }
-    body { font-family: "Inter", sans-serif; background: var(--bg); color: var(--ink); }
+    body { font-family: "Inter", sans-serif; background: var(--bg); color: var(--ink); overflow-x: hidden; }
     h1,h2,h3,h4 { font-family: "Manrope", sans-serif; }
     a { text-decoration: none; }
 
-    .layout-shell { max-width: 1320px; margin: 0 auto; padding: .65rem .7rem .9rem; }
+    .layout-shell { max-width: 1320px; margin: 0 auto; padding: .65rem .7rem; }
     .home-grid { display: grid; grid-template-columns: 400px 1fr; gap: .8rem; align-items: start; }
     .phone-stick { position: sticky; top: 10px; }
 
     .phone-frame {
-      width: 362px; height: min(93vh, 805px); margin: 0 auto; position: relative;
+      width: 362px; height: min(95vh, 820px); margin: 0 auto; position: relative;
       background: #0b1220; border-radius: 34px; border: 8px solid #0f172a;
       box-shadow: 0 28px 60px rgba(15, 23, 42, 0.35); overflow: hidden;
       display: flex; flex-direction: column;
@@ -39,11 +39,12 @@
     .social-icon:hover { background: #1d4ed8; color: #fff; transform: translateY(-2px); }
     .mini-link { background: #1e293b; color: #cbd5e1; border-radius: .7rem; padding: .65rem .2rem; font-size: .72rem; font-weight: 600; display:flex; flex-direction:column; align-items:center; gap:.35rem; }
 
-    .phone-nav { position: absolute; left: 0; right: 0; bottom: 0; background: linear-gradient(to top, rgba(2,6,23,.95), rgba(2,6,23,.7)); border-top: 1px solid #334155; padding: .32rem .5rem .4rem; }
+    .phone-nav { position: absolute; left: 0; right: 0; bottom: 0; background: linear-gradient(to top, rgba(2,6,23,.95), rgba(2,6,23,.7)); border-top: 1px solid #334155; padding: .2rem .45rem .26rem; }
     .phone-nav-grid { display: grid; grid-template-columns: repeat(3,1fr); align-items: center; }
-    .nav-btn { width: 100%; display: flex; justify-content: center; align-items: center; color: #e2e8f0; opacity: .97; background: transparent; border: 0; padding: .1rem 0; margin: 0; }
-    .nav-btn i { font-size: 1.22rem; line-height: 1; }
+    .nav-btn { width: 100%; display: flex; justify-content: center; align-items: center; color: #e2e8f0; opacity: .97; background: rgba(15,23,42,.45); border: 1px solid rgba(148,163,184,.22); padding: .25rem 0; margin: 0; border-radius: 999px; height: 2rem; }
+    .nav-btn i { font-size: 1.05rem; line-height: 1; }
     .nav-btn:hover { color: #ffffff; opacity: 1; }
+    .nav-btn:active { transform: scale(.96); }
 
     .panel { background: var(--surface); border: 1px solid var(--border); border-radius: 1rem; box-shadow: 0 12px 35px rgba(15, 23, 42, 0.08); }
     .btn-primary { background: var(--primary); color:#fff; }
@@ -55,6 +56,8 @@
     .text-red-500,.hover\:text-red-500:hover { color: var(--primary) !important; }
     .bg-gray-900,.bg-gray-800,.bg-gray-700,.bg-gray-950,.bg-\[\#111\],.bg-\[\#222\],.bg-\[\#333\] { background-color: var(--surface) !important; }
     .text-gray-300,.text-gray-400,.text-gray-500 { color: var(--muted) !important; }
+    .hero-panel { padding-bottom: calc(1rem + 12px); }
+    .about-panel { padding: .9rem; }
 
 
     /* Local utility classes (Tailwind-free implementation) */
@@ -196,8 +199,12 @@
 
     @media (max-width: 1024px) {
       .home-grid { grid-template-columns: 1fr; }
-      .phone-frame { width: 332px; height: min(88vh, 740px); }
+      .phone-frame { width: 332px; height: min(90vh, 760px); }
       .phone-stick { position: static; }
+    }
+    @media (min-width: 768px) {
+      .hero-panel { padding-bottom: calc(1.25rem + 12px); }
+      .about-panel { padding: 1rem; }
     }
   </style>
 </head>
@@ -247,7 +254,7 @@
       </aside>
 
       <main class="space-y-8">
-        <section class="panel p-8 md:p-12">
+        <section class="panel p-8 md:p-12 hero-panel">
           <p class="uppercase tracking-[.22em] text-sm text-slate-500 mb-4">Digital Portfolio Experience</p>
           <h1 class="text-4xl md:text-5xl font-extrabold leading-tight mb-5">Transform <span class="text-blue-700">design, code, and sport.</span></h1>
           <h2 class="text-xl md:text-2xl text-slate-600 mb-8">I’m Elie Mpuhwezimana — a graphic design and IT professional focused on brand communication, user experience, and practical digital solutions.</h2>
@@ -260,11 +267,11 @@
           </div>
           <div class="grid sm:grid-cols-2 gap-4 max-w-3xl" style="grid-auto-flow: column;">
             <a href="portfolio.html" class="btn-primary px-6 py-4 rounded-lg font-bold text-center transition">Explore Portfolio Hub</a>
-            <a href="mailto:mpuwezimanaelie@gmail.com?subject=Project%20Discussion&body=Hello%20Elie,%20I%20would%20like%20to%20discuss%20a%20task%20or%20deal." class="bg-slate-900 text-white px-6 py-4 rounded-lg font-bold text-center hover:bg-slate-700 transition">Connect Me</a>
+            <a href="contact.html" class="bg-slate-900 text-white px-6 py-4 rounded-lg font-bold text-center hover:bg-slate-700 transition">Connect Me</a>
           </div>
         </section>
 
-        <section id="about" class="panel p-8 md:p-12">
+        <section id="about" class="panel about-panel">
           <div class="grid md:grid-cols-2 gap-8 items-center">
             <img id="aboutProfileImage" src="mpover pic.jpg" alt="Professional portrait of Elie Mpuhwezimana, smiling confidently, wearing a smart casual shirt, studio background" class="rounded-xl shadow-xl w-full max-w-md"/>
             <div>

@@ -12,6 +12,7 @@
     *{box-sizing:border-box} body{margin:0;font-family:Inter,sans-serif;background:var(--bg);color:var(--ink)} h1,h2,h3{font-family:Manrope,sans-serif}
     a{text-decoration:none}
     .container{width:min(1150px,92%);margin:0 auto}
+    .hidden{display:none !important}
     .header{position:sticky;top:0;background:rgba(255,255,255,.92);backdrop-filter:blur(6px);border-bottom:1px solid var(--border);z-index:10}
     .header .inner{display:flex;justify-content:space-between;align-items:center;padding:.9rem 0}
     .nav{display:flex;gap:1rem}.nav a{color:var(--muted);font-weight:600}.nav a.active,.nav a:hover{color:var(--primary)}
@@ -19,8 +20,10 @@
     .hero{margin:1rem 0;padding:1.2rem;display:grid;grid-template-columns:220px 1fr;gap:1rem;align-items:center}
     .hero img{width:100%;height:220px;object-fit:cover;border-radius:12px;border:2px solid var(--border)}
     .lead{color:var(--muted);line-height:1.65}
-    .btn{display:inline-block;padding:.72rem 1rem;border-radius:10px;font-weight:700;border:2px solid transparent;cursor:pointer}
+    .btn{display:inline-block;padding:.72rem 1rem;border-radius:10px;font-weight:700;border:2px solid transparent;cursor:pointer;transition:all .2s ease}
     .btn-primary{background:var(--primary);color:#fff}.btn-secondary{border-color:var(--primary);color:var(--primary);background:#fff}
+    .btn:hover{transform:translateY(-1px);box-shadow:0 8px 16px rgba(15,23,42,.12)}
+    .btn:active{transform:translateY(0)}
     .toolbar{display:flex;justify-content:space-between;align-items:center;gap:.8rem;margin:.8rem 0}
     .filters{display:flex;flex-wrap:wrap;gap:.45rem}
     .filter-btn{border:1px solid var(--border);background:#fff;padding:.4rem .65rem;border-radius:999px;font-weight:600;color:var(--muted);cursor:pointer}
@@ -33,6 +36,17 @@
     .tag{font-size:.7rem;font-weight:700;color:#0f172a;background:#e2e8f0;padding:.2rem .5rem;border-radius:999px}
     .muted{color:var(--muted)}
     .actions{display:flex;gap:.45rem;flex-wrap:wrap;margin-top:.5rem}
+    .post-actions{display:flex;align-items:center;gap:.6rem;margin-top:.8rem;flex-wrap:wrap}
+    .action-btn{border:1px solid var(--border);background:#fff;padding:.35rem .65rem;border-radius:999px;font-weight:700;color:var(--muted);cursor:pointer;transition:all .2s ease}
+    .action-btn:hover{border-color:#93c5fd;color:#1e40af;box-shadow:0 6px 12px rgba(15,23,42,.08)}
+    .action-btn:active{transform:scale(.97)}
+    .comment-box{margin-top:.8rem;border-top:1px solid var(--border);padding-top:.8rem}
+    .comment-form textarea{min-height:70px;background:#fff;color:var(--ink);border:1px solid var(--border)}
+    .comment{padding:.6rem;border:1px solid var(--border);border-radius:10px;margin-top:.6rem;background:#f8fafc}
+    .comment-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:.35rem}
+    .reply-box{margin-top:.5rem;padding-left:.75rem;border-left:2px solid #e2e8f0}
+    .reply{margin-top:.4rem;padding:.45rem;border-radius:8px;background:#fff;border:1px solid var(--border)}
+    .reply-form{margin-top:.5rem}
     .side-card{padding:1rem}
     .list{margin:.45rem 0 0;padding-left:1.1rem;color:var(--muted)}
 
@@ -54,7 +68,7 @@
         <a href="index.html">Home</a>
         <a class="active" href="blog.html">Blog</a>
         <a href="portfolio.html">Portfolio</a>
-        <a href="mailto:mpuwezimanaelie@gmail.com?subject=Project%20Discussion&body=Hello%20Elie,%20I%20would%20like%20to%20discuss%20a%20task%20or%20deal.">Hire Me</a>
+        <a href="contact.html">Hire Me</a>
       </nav>
     </div>
   </header>
@@ -158,16 +172,24 @@
     if (profileImage) document.getElementById('blogProfileImage').src = profileImage;
 
     const defaults = [
-      { id: 1, category: 'Behind-the-Scenes', title: "The Athlete’s Mindset in Debugging", body: 'How athletics discipline improves problem-solving in development work.', tags: ['Athletics','IT'], type: 'Post', attachments: [] },
-      { id: 2, category: 'Case Studies', title: 'Deep Dive: Building a High-Performance Training App', body: 'A full-stack breakdown combining athletics data and web performance.', tags: ['Athletics','Web Dev','IT'], type: 'Case Study', attachments: [] },
-      { id: 3, category: 'How-To Guides', title: 'IT Guide: Setting up the Ultimate Home Office', body: 'Hardware, ergonomics, and productivity tooling for creators.', tags: ['IT'], type: 'Guide', attachments: [] },
-      { id: 4, category: 'Case Studies', title: 'Visualizing Speed: Graphic Design for Athletic Data', body: 'Turning training metrics into clear visual systems and dashboards.', tags: ['Graphic Design','Athletics'], type: 'Case Study', attachments: [] }
+      { id: 1, category: 'Behind-the-Scenes', title: "The Athlete’s Mindset in Debugging", body: 'How athletics discipline improves problem-solving in development work.', tags: ['Athletics','IT'], type: 'Post', attachments: [], likes: 0, comments: [] },
+      { id: 2, category: 'Case Studies', title: 'Deep Dive: Building a High-Performance Training App', body: 'A full-stack breakdown combining athletics data and web performance.', tags: ['Athletics','Web Dev','IT'], type: 'Case Study', attachments: [], likes: 0, comments: [] },
+      { id: 3, category: 'How-To Guides', title: 'IT Guide: Setting up the Ultimate Home Office', body: 'Hardware, ergonomics, and productivity tooling for creators.', tags: ['IT'], type: 'Guide', attachments: [], likes: 0, comments: [] },
+      { id: 4, category: 'Case Studies', title: 'Visualizing Speed: Graphic Design for Athletic Data', body: 'Turning training metrics into clear visual systems and dashboards.', tags: ['Graphic Design','Athletics'], type: 'Case Study', attachments: [], likes: 0, comments: [] }
     ];
+
+    function normalizeItem(item){
+      return {
+        ...item,
+        likes: Number(item.likes || 0),
+        comments: Array.isArray(item.comments) ? item.comments : []
+      };
+    }
 
     function getItems(){
       const raw = localStorage.getItem(KEY);
       if (!raw) { localStorage.setItem(KEY, JSON.stringify(defaults)); return defaults; }
-      try { return JSON.parse(raw); } catch { return defaults; }
+      try { return JSON.parse(raw).map(normalizeItem); } catch { return defaults; }
     }
     function setItems(items){ localStorage.setItem(KEY, JSON.stringify(items)); }
 
@@ -188,6 +210,25 @@
       blogGrid.innerHTML = items.map(it => {
         const tags = (it.tags || []).map(t => `<span class="tag">${t}</span>`).join('');
         const attachments = (it.attachments || []).map(a => `<a class="btn btn-secondary" href="${a.data}" download="${a.name}" style="margin-top:.45rem">Download ${a.name}</a>`).join('');
+        const comments = (it.comments || []).map(comment => {
+          const replies = (comment.replies || []).map(reply => `<div class="reply"><p class="muted">${reply.text}</p></div>`).join('');
+          return `
+            <div class="comment">
+              <div class="comment-meta">
+                <strong>Viewer</strong>
+                <button type="button" class="action-btn reply-toggle" data-id="${it.id}" data-comment="${comment.id}">Reply</button>
+              </div>
+              <p class="muted">${comment.text}</p>
+              <div class="reply-box">
+                ${replies}
+                <div class="reply-form hidden" data-id="${it.id}" data-comment="${comment.id}">
+                  <textarea placeholder="Write a reply..." aria-label="Reply to comment"></textarea>
+                  <button type="button" class="action-btn reply-submit" data-id="${it.id}" data-comment="${comment.id}">Send Reply</button>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
         return `
           <article class="card">
             <span class="badge">${it.category}</span>
@@ -195,9 +236,89 @@
             <div class="tags">${tags}</div>
             <p class="muted">${it.body}</p>
             ${attachments}
+            <div class="post-actions">
+              <button type="button" class="action-btn like-btn" data-id="${it.id}">
+                <i class="fas fa-heart"></i> Like <span>(${it.likes || 0})</span>
+              </button>
+              <button type="button" class="action-btn comment-toggle" data-id="${it.id}">
+                <i class="fas fa-comment"></i> Comment
+              </button>
+            </div>
+            <div class="comment-box hidden" data-id="${it.id}">
+              <div class="comment-form">
+                <textarea placeholder="Share a comment..." aria-label="Comment"></textarea>
+                <button type="button" class="action-btn comment-submit" data-id="${it.id}">Post Comment</button>
+              </div>
+              <div class="comment-list">
+                ${comments || ''}
+              </div>
+            </div>
           </article>
         `;
       }).join('');
+
+      blogGrid.querySelectorAll('.like-btn').forEach(btn => {
+        btn.onclick = () => handleLike(Number(btn.dataset.id));
+      });
+      blogGrid.querySelectorAll('.comment-toggle').forEach(btn => {
+        btn.onclick = () => toggleCommentBox(Number(btn.dataset.id));
+      });
+      blogGrid.querySelectorAll('.comment-submit').forEach(btn => {
+        btn.onclick = () => submitComment(Number(btn.dataset.id), btn);
+      });
+      blogGrid.querySelectorAll('.reply-toggle').forEach(btn => {
+        btn.onclick = () => toggleReplyForm(Number(btn.dataset.id), Number(btn.dataset.comment));
+      });
+      blogGrid.querySelectorAll('.reply-submit').forEach(btn => {
+        btn.onclick = () => submitReply(Number(btn.dataset.id), Number(btn.dataset.comment), btn);
+      });
+    }
+
+    function handleLike(id){
+      const items = getItems();
+      const target = items.find(item => item.id === id);
+      if (!target) return;
+      target.likes = Number(target.likes || 0) + 1;
+      setItems(items);
+      render();
+    }
+
+    function toggleCommentBox(id){
+      const box = blogGrid.querySelector(`.comment-box[data-id="${id}"]`);
+      if (box) box.classList.toggle('hidden');
+    }
+
+    function submitComment(id, button){
+      const form = button.closest('.comment-form');
+      const textarea = form ? form.querySelector('textarea') : null;
+      if (!textarea || !textarea.value.trim()) return;
+      const items = getItems();
+      const target = items.find(item => item.id === id);
+      if (!target) return;
+      target.comments = target.comments || [];
+      target.comments.push({ id: Date.now(), text: textarea.value.trim(), replies: [] });
+      setItems(items);
+      render();
+    }
+
+    function toggleReplyForm(id, commentId){
+      const form = blogGrid.querySelector(`.reply-form[data-id="${id}"][data-comment="${commentId}"]`);
+      if (form) form.classList.toggle('hidden');
+    }
+
+    function submitReply(id, commentId, button){
+      const form = button.closest('.reply-form');
+      const textarea = form ? form.querySelector('textarea') : null;
+      if (!textarea || !textarea.value.trim()) return;
+      const items = getItems();
+      const target = items.find(item => item.id === id);
+      if (!target) return;
+      const comment = (target.comments || []).find(entry => entry.id === commentId);
+      if (!comment) return;
+      comment.replies = comment.replies || [];
+      comment.replies.push({ id: Date.now(), text: textarea.value.trim() });
+      setItems(items);
+      render();
     }
 
     const adminModal = document.getElementById('adminModal');
