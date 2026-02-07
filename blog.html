@@ -230,7 +230,7 @@
                 <button type="button" class="action-btn reply-toggle" data-id="${it.id}" data-comment="${comment.id}">Reply</button>
               </div>
               <p class="muted">
-                <span class="comment-text" data-full="${fullText.replace(/"/g, '&quot;')}" data-short="${shortText.replace(/"/g, '&quot;')}">${shortText}</span>
+                <span class="comment-text" data-full="${fullText.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}" data-short="${shortText.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}">${shortText.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</span>
               </p>
               ${isLong ? `<button type="button" class="action-btn read-more" data-state="short">Read more</button>` : ''}
               <div class="reply-box">
@@ -259,8 +259,8 @@
               </button>
               ${isAdmin ? `<button type="button" class="action-btn delete-btn" data-id="${it.id}"><i class="fas fa-trash"></i> Delete</button>` : ''}
             </div>
-            <div class="comment-box hidden" data-id="${it.id}">
-              <div class="comment-form">
+            <div class="comment-box" data-id="${it.id}">
+              <div class="comment-form hidden">
                 <textarea placeholder="Share a comment..." aria-label="Comment"></textarea>
                 <button type="button" class="action-btn comment-submit" data-id="${it.id}">Post Comment</button>
               </div>
@@ -305,8 +305,8 @@
     }
 
     function toggleCommentBox(id){
-      const box = blogGrid.querySelector(`.comment-box[data-id="${id}"]`);
-      if (box) box.classList.toggle('hidden');
+      const form = blogGrid.querySelector(`.comment-box[data-id="${id}"] .comment-form`);
+      if (form) form.classList.toggle('hidden');
     }
 
     function submitComment(id, button){
