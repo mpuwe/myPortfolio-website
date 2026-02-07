@@ -42,6 +42,8 @@
     .like-btn{color:#166534;border-color:#bbf7d0}
     .like-btn:hover{color:#14532d;border-color:#86efac}
     .action-btn:active{transform:scale(.97)}
+    .delete-btn{border-color:#fecaca;color:#dc2626}
+    .delete-btn:hover{border-color:#fca5a5;color:#b91c1c}
     .comment-box{margin-top:.8rem;border-top:1px solid var(--border);padding-top:.8rem}
     .comment-form textarea{min-height:70px;background:#fff;color:var(--ink);border:1px solid var(--border)}
     .comment{padding:.6rem;border:1px solid var(--border);border-radius:10px;margin-top:.6rem;background:#f8fafc}
@@ -49,6 +51,8 @@
     .reply-box{margin-top:.5rem;padding-left:.75rem;border-left:2px solid #e2e8f0}
     .reply{margin-top:.4rem;padding:.45rem;border-radius:8px;background:#fff;border:1px solid var(--border)}
     .reply-form{margin-top:.5rem}
+    .comment-text{display:block}
+    .read-more{margin-top:.35rem}
     .side-card{padding:1rem}
     .list{margin:.45rem 0 0;padding-left:1.1rem;color:var(--muted)}
 
@@ -161,6 +165,7 @@
     const blogGrid = document.getElementById('blogGrid');
     const filterBar = document.getElementById('filterBar');
     const KEY = 'blogItems';
+    const ADMIN_KEY = 'blogAdmin';
     const categories = [
       'Case Studies',
       'How-To Guides',
@@ -208,11 +213,15 @@
 
     function render(){
       renderFilters();
+      const isAdmin = localStorage.getItem(ADMIN_KEY) === 'true';
       const items = getItems().filter(it => activeCategory === 'All' || it.category === activeCategory).reverse();
       blogGrid.innerHTML = items.map(it => {
         const tags = (it.tags || []).map(t => `<span class="tag">${t}</span>`).join('');
         const attachments = (it.attachments || []).map(a => `<a class="btn btn-secondary" href="${a.data}" download="${a.name}" style="margin-top:.45rem">Download ${a.name}</a>`).join('');
         const comments = (it.comments || []).map(comment => {
+          const fullText = comment.text || '';
+          const isLong = fullText.length > 140;
+          const shortText = isLong ? `${fullText.slice(0, 140)}...` : fullText;
           const replies = (comment.replies || []).map(reply => `<div class="reply"><p class="muted">${reply.text}</p></div>`).join('');
           return `
             <div class="comment">
@@ -220,7 +229,10 @@
                 <strong>Viewer</strong>
                 <button type="button" class="action-btn reply-toggle" data-id="${it.id}" data-comment="${comment.id}">Reply</button>
               </div>
-              <p class="muted">${comment.text}</p>
+              <p class="muted">
+                <span class="comment-text" data-full="${fullText.replace(/"/g, '&quot;')}" data-short="${shortText.replace(/"/g, '&quot;')}">${shortText}</span>
+              </p>
+              ${isLong ? `<button type="button" class="action-btn read-more" data-state="short">Read more</button>` : ''}
               <div class="reply-box">
                 ${replies}
                 <div class="reply-form hidden" data-id="${it.id}" data-comment="${comment.id}">
@@ -245,6 +257,7 @@
               <button type="button" class="action-btn comment-toggle" data-id="${it.id}">
                 <i class="fas fa-comment"></i> Comment
               </button>
+              ${isAdmin ? `<button type="button" class="action-btn delete-btn" data-id="${it.id}"><i class="fas fa-trash"></i> Delete</button>` : ''}
             </div>
             <div class="comment-box hidden" data-id="${it.id}">
               <div class="comment-form">
@@ -273,6 +286,12 @@
       });
       blogGrid.querySelectorAll('.reply-submit').forEach(btn => {
         btn.onclick = () => submitReply(Number(btn.dataset.id), Number(btn.dataset.comment), btn);
+      });
+      blogGrid.querySelectorAll('.delete-btn').forEach(btn => {
+        btn.onclick = () => deletePost(Number(btn.dataset.id));
+      });
+      blogGrid.querySelectorAll('.read-more').forEach(btn => {
+        btn.onclick = () => toggleReadMore(btn);
       });
     }
 
@@ -331,8 +350,10 @@
 
     document.getElementById('verifyAdmin').onclick = () => {
       if (document.getElementById('adminPassword').value === 'elie') {
+        localStorage.setItem(ADMIN_KEY, 'true');
         document.getElementById('authWrap').style.display = 'none';
         document.getElementById('uploadWrap').style.display = 'block';
+        render();
       } else alert('Incorrect password');
     };
 
@@ -347,7 +368,7 @@
 
       const pushItem = (attachments=[]) => {
         const items = getItems();
-        items.push({ id: Date.now(), category, title, body, tags, type, attachments });
+        items.push({ id: Date.now(), category, title, body, tags, type, attachments, likes: 0, comments: [] });
         setItems(items);
         render();
         adminModal.classList.remove('show');
@@ -381,3 +402,25 @@
   </script>
 </body>
 </html>
+    function deletePost(id){
+      if (!confirm('Delete this post?')) return;
+      const items = getItems().filter(item => item.id !== id);
+      setItems(items);
+      render();
+    }
+
+    function toggleReadMore(button){
+      const comment = button.closest('.comment');
+      const textEl = comment ? comment.querySelector('.comment-text') : null;
+      if (!textEl) return;
+      const state = button.dataset.state;
+      if (state === 'short') {
+        textEl.textContent = textEl.dataset.full;
+        button.textContent = 'Show less';
+        button.dataset.state = 'full';
+      } else {
+        textEl.textContent = textEl.dataset.short;
+        button.textContent = 'Read more';
+        button.dataset.state = 'short';
+      }
+    }
