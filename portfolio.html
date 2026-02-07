@@ -5,8 +5,6 @@
   <title>Portfolio - Elie Mpuhwezimana</title>
   <meta name="description" content="View Elie Mpuhwezimana's portfolio of design, programming, and athletic projects" />
 
-  <!-- Tailwind CSS via CDN -->
-  <script src="https://cdn.tailwindcss.com"></script>
 
   <!-- Font Awesome for icons -->
   <link
@@ -31,22 +29,22 @@
       flex-direction: column;
     }
     .btn-primary {
-      background-color: #1d4ed8;
-      color: #0f172a;
+      background-color: #1e3a8a;
+      color: #ffffff;
     }
     .btn-primary:hover {
-      background-color: #1e3a8a;
+      background-color: #172554;
     }
     .btn-secondary {
-      border: 2px solid #1d4ed8;
-      color: #1d4ed8;
+      border: 2px solid #1e3a8a;
+      color: #1e3a8a;
       background: transparent;
     }
     .btn-secondary:hover {
-      background-color: rgba(29, 78, 216, 0.12);
+      background-color: rgba(30, 58, 138, 0.12);
     }
     .portfolio-filter button.active {
-      background-color: #1d4ed8;
+      background-color: #1e3a8a;
       color: white;
     }
     .portfolio-item {
@@ -104,7 +102,7 @@
       white-space: nowrap;
     }
     .portfolio-item .action-button:hover {
-      background-color: #1e3a8a;
+      background-color: #172554;
     }
 
     /* Responsive container max width */
@@ -157,14 +155,22 @@
     }
     .document-item .delete-doc i {
       font-size: 1rem;
-      color: #1d4ed8;
+      color: #1e3a8a;
     }
 
     h1, h2, h3, h4 { font-family: "Manrope", sans-serif; }
-    .text-red-500, .hover\:text-red-500:hover { color: #1d4ed8 !important; }
+    .text-red-500, .hover\:text-red-500:hover { color: #1e3a8a !important; }
     .bg-\[\#111\], .bg-\[\#222\], .bg-\[\#333\], .bg-gray-900, .bg-gray-800 { background-color: #ffffff !important; }
     .text-gray-300, .text-gray-400, .text-gray-500 { color: #475569 !important; }
     .text-white { color: #0f172a !important; }
+    .section-title { font-size: 2rem; font-weight: 800; margin-bottom: 1rem; }
+    .section-subtitle { color: #475569; max-width: 680px; margin: 0 auto 2rem; text-align: center; }
+    .experience-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap: 1.25rem; }
+    .experience-card { background: #ffffff; border-radius: .75rem; padding: 1.25rem; box-shadow: 0 8px 20px rgba(15,23,42,.08); border: 1px solid #dbe4f0; }
+    .experience-card h3 { margin: 0 0 .35rem; font-size: 1.1rem; }
+    .experience-card p { margin: 0; color: #475569; }
+    .link-accent { color: #1e3a8a; }
+    .link-accent:hover { color: #172554; }
 
   </style>
 </head>
@@ -190,7 +196,7 @@
     <div class="container text-center">
       <h1 class="text-4xl md:text-5xl font-bold mb-4">My Portfolio</h1>
       <p class="text-xl text-gray-300 max-w-2xl mx-auto mb-8">
-        A showcase of my diverse work across multiple disciplines
+        A concise view of my projects, documents, and professional experience.
       </p>
 
       <!-- Skill Filter Buttons -->
@@ -262,13 +268,13 @@
     </div>
   </section>
 
-  <!-- Main Content Grid -->
-  <section class="py-10 pb-20 flex-grow">
+  <!-- Projects Section -->
+  <section class="py-10 pb-16 flex-grow">
     <div class="container">
       <div class="flex flex-col lg:flex-row gap-8">
         <!-- Projects Column (Left) -->
         <div class="w-full">
-          <h2 class="text-3xl font-bold mb-8 text-white">My Projects</h2>
+          <h2 class="section-title text-white">Projects</h2>
           <div
             class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8"
             id="portfolioGrid"
@@ -281,15 +287,38 @@
   </section>
 
   <!-- Documents Section -->
-  <section class="py-10 pb-20 bg-[#ffffff]">
+  <section class="py-10 pb-16 bg-[#ffffff]">
     <div class="container">
-      <h2 class="text-3xl font-bold mb-8 text-white text-center">My Documents</h2>
+      <h2 class="section-title text-white text-center">Documents</h2>
+      <p class="section-subtitle">Academic records, recommendations, and official files organized for quick review.</p>
 
       <div
         class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8"
         id="documentsGrid"
         aria-live="polite"
       >
+      </div>
+    </div>
+  </section>
+
+  <!-- Experience Section -->
+  <section class="py-10 pb-20">
+    <div class="container">
+      <h2 class="section-title text-white text-center">Experience</h2>
+      <p class="section-subtitle">Focused highlights that show how I apply design, technology, and leadership in real projects.</p>
+      <div class="experience-grid">
+        <div class="experience-card">
+          <h3>Graphic Design & Branding</h3>
+          <p>Built brand systems, social assets, and marketing collateral for campaigns and events.</p>
+        </div>
+        <div class="experience-card">
+          <h3>Web & IT Support</h3>
+          <p>Delivered responsive websites, dashboards, and technical setup for teams and organizations.</p>
+        </div>
+        <div class="experience-card">
+          <h3>Athletics & Leadership</h3>
+          <p>Applied discipline and performance mindset to team collaboration, coaching, and event planning.</p>
+        </div>
       </div>
     </div>
   </section>
@@ -357,7 +386,7 @@
             type="button"
             value="Update"
             onclick="updatePassword()"
-            class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg mt-2"
+            class="w-full btn-primary font-bold py-2 px-4 rounded-lg mt-2"
           />
         </div>
 
@@ -400,7 +429,7 @@
             </div>
             <button
               id="uploadProjectBtn"
-              class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-2 px-4 rounded-lg"
+              class="w-full btn-primary font-bold py-2 px-4 rounded-lg"
               type="button"
             >
               Upload Project
@@ -983,10 +1012,10 @@
           </div>
           <div class="p-3 bg-[#b8c5d6] flex justify-between items-center">
             <div class="flex gap-3">
-              <a href="#" class="view-link text-blue-400 hover:text-blue-300 text-sm" target="_blank" rel="noopener noreferrer" aria-label="View ${doc.title}">
+              <a href="#" class="view-link link-accent text-sm" target="_blank" rel="noopener noreferrer" aria-label="View ${doc.title}">
                 <i class="fas fa-eye"></i> View
               </a>
-              <a href="#" class="download-link text-blue-400 hover:text-blue-300 text-sm" download aria-label="Download ${doc.title}">
+              <a href="#" class="download-link link-accent text-sm" download aria-label="Download ${doc.title}">
                 <i class="fas fa-download"></i> Download
               </a>
             </div>
