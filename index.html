@@ -11,8 +11,8 @@
     :root {
       --bg: #f4f7fb;
       --surface: #ffffff;
-      --primary: #1d4ed8;
-      --primary-dark: #1e3a8a;
+      --primary: #1e3a8a;
+      --primary-dark: #172554;
       --accent: #0f766e;
       --ink: #0f172a;
       --muted: #475569;
@@ -36,13 +36,14 @@
     .phone-body { flex: 1; background: radial-gradient(circle at top, #1e3a8a, #0f172a 60%); color: #fff; padding: 2.7rem .75rem 4rem; text-align: center; }
     .social-icons { display: flex; justify-content: center; gap: .55rem; margin-bottom: .55rem; }
     .social-icon { width: 2.5rem; height: 2.5rem; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; color: #dbeafe; background: rgba(255,255,255,.12); transition: .2s; }
-    .social-icon:hover { background: #1d4ed8; color: #fff; transform: translateY(-2px); }
+    .social-icon:hover { background: #1e3a8a; color: #fff; transform: translateY(-2px); }
     .mini-link { background: #1e293b; color: #cbd5e1; border-radius: .7rem; padding: .65rem .2rem; font-size: .72rem; font-weight: 600; display:flex; flex-direction:column; align-items:center; gap:.35rem; }
 
     .phone-nav { position: absolute; left: 0; right: 0; bottom: 0; background: linear-gradient(to top, rgba(2,6,23,.95), rgba(2,6,23,.7)); border-top: 1px solid #334155; padding: .32rem .5rem .4rem; }
     .phone-nav-grid { display: grid; grid-template-columns: repeat(3,1fr); align-items: center; }
     .nav-btn { width: 100%; display: flex; justify-content: center; align-items: center; color: #e2e8f0; opacity: .97; background: transparent; border: 0; padding: .02rem 0; margin: 0; height: 1.05rem; }
     .nav-btn i { font-size: 1.02rem; line-height: 1; font-weight: 400; }
+    .nav-triangle { font-size: 1rem; line-height: 1; }
     .nav-btn:hover { color: #ffffff; opacity: 1; }
     .nav-btn:active { transform: scale(.96); }
 
@@ -154,7 +155,7 @@
     .tracking-\[\.22em\] { letter-spacing: .22em; }
     .text-white { color: #fff; }
     .text-blue-300 { color: #93c5fd; }
-    .text-blue-700 { color: #1d4ed8; }
+    .text-blue-700 { color: #1e3a8a; }
     .text-cyan-200 { color: #a5f3fc; }
     .text-cyan-300 { color: #67e8f9; }
     .text-slate-200 { color: #e2e8f0; }
@@ -165,7 +166,7 @@
     .bg-slate-700 { background: #334155; }
     .bg-slate-800 { background: #1e293b; }
     .bg-slate-900 { background: #0f172a; }
-    .bg-blue-600 { background: #2563eb; }
+    .bg-blue-600 { background: #1e3a8a; }
     .bg-opacity-70 { background-color: rgba(0,0,0,.7); }
     .shadow-lg { box-shadow: 0 10px 25px rgba(15, 23, 42, 0.18); }
     .shadow-xl { box-shadow: 0 14px 32px rgba(15, 23, 42, 0.22); }
@@ -177,13 +178,13 @@
     .list-inside { list-style-position: inside; }
     .mr-2 { margin-right: .5rem; }
     .hover\:opacity-100:hover { opacity: 1; }
-    .hover\:bg-blue-700:hover { background: #1d4ed8; }
+    .hover\:bg-blue-700:hover { background: #172554; }
     .hover\:bg-slate-600:hover { background: #475569; }
     .hover\:bg-slate-700:hover { background: #334155; }
-    .hover\:text-blue-700:hover { color: #1d4ed8; }
+    .hover\:text-blue-700:hover { color: #1e3a8a; }
     .focus\:outline-none:focus { outline: none; }
     .focus\:ring-2:focus { box-shadow: 0 0 0 2px rgba(29,78,216,.25); }
-    .focus\:ring-blue-500:focus { border-color: #3b82f6; }
+    .focus\:ring-blue-500:focus { border-color: #1e3a8a; }
 
     @media (min-width: 640px) {
       .sm\:grid-cols-3 { grid-template-columns: repeat(3,minmax(0,1fr)); }
@@ -249,7 +250,7 @@
                 <i class="far fa-circle"></i>
               </button>
               <button type="button" aria-label="Back" class="nav-btn transition" title="Back">
-                <i class="fas fa-play" style="transform: rotate(180deg); font-weight: 400;"></i>
+                <span class="nav-triangle">▷</span>
               </button>
             </div>
           </div>
