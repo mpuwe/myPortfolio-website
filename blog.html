@@ -29,8 +29,8 @@
     .filter-btn{border:1px solid var(--border);background:#fff;padding:.4rem .65rem;border-radius:999px;font-weight:600;color:var(--muted);cursor:pointer}
     .filter-btn.active{background:#dbeafe;border-color:#93c5fd;color:#1e3a8a}
     .layout{display:grid;grid-template-columns:2fr 1fr;gap:.9rem}
-    .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.8rem}
-    .card{padding:1rem;border:1px solid var(--border);border-radius:12px;background:#fff}
+    .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.8rem;align-items:start}
+    .card{padding:1rem;border:1px solid var(--border);border-radius:12px;background:#fff;align-self:start}
     .badge{display:inline-block;font-size:.75rem;font-weight:700;color:#1e3a8a;background:#dbeafe;padding:.2rem .55rem;border-radius:999px}
     .tags{display:flex;flex-wrap:wrap;gap:.35rem;margin:.55rem 0}
     .tag{font-size:.7rem;font-weight:700;color:#0f172a;background:#e2e8f0;padding:.2rem .5rem;border-radius:999px}
@@ -45,6 +45,7 @@
     .delete-btn{border-color:#fecaca;color:#dc2626}
     .delete-btn:hover{border-color:#fca5a5;color:#b91c1c}
     .comment-box{margin-top:.8rem;border-top:1px solid var(--border);padding-top:.8rem}
+    .comment-list{max-height:220px;overflow-y:auto;padding-right:.35rem}
     .comment-form textarea{min-height:70px;background:#fff;color:var(--ink);border:1px solid var(--border)}
     .comment{padding:.6rem;border:1px solid var(--border);border-radius:10px;margin-top:.6rem;background:#f8fafc}
     .comment-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:.35rem}
@@ -161,6 +162,18 @@
     </div>
   </div>
 
+  <div id="deleteModal" class="modal" aria-hidden="true">
+    <div class="modal-box">
+      <h3 style="margin:.1rem 0 .6rem">Confirm Delete</h3>
+      <p class="muted" style="margin:0 0 .6rem">Enter admin password to delete this post.</p>
+      <input id="deletePassword" type="password" placeholder="Admin password" />
+      <div class="actions">
+        <button id="confirmDelete" class="btn btn-primary">Delete</button>
+        <button id="cancelDelete" class="btn btn-secondary">Cancel</button>
+      </div>
+    </div>
+  </div>
+
   <script>
     const blogGrid = document.getElementById('blogGrid');
     const filterBar = document.getElementById('filterBar');
@@ -217,7 +230,15 @@
       const items = getItems().filter(it => activeCategory === 'All' || it.category === activeCategory).reverse();
       blogGrid.innerHTML = items.map(it => {
         const tags = (it.tags || []).map(t => `<span class="tag">${t}</span>`).join('');
-        const attachments = (it.attachments || []).map(a => `<a class="btn btn-secondary" href="${a.data}" download="${a.name}" style="margin-top:.45rem">Download ${a.name}</a>`).join('');
+        const attachments = (it.attachments || []).map(a => {
+          if (a.data && a.data.startsWith('data:video')) {
+            return `<video controls style="width:100%;margin-top:.45rem;border-radius:12px;border:1px solid var(--border)"><source src="${a.data}"></video>`;
+          }
+          if (a.data && a.data.startsWith('data:image')) {
+            return `<img src="${a.data}" alt="${a.name}" style="width:100%;margin-top:.45rem;border-radius:12px;border:1px solid var(--border)"/>`;
+          }
+          return `<a class="btn btn-secondary" href="${a.data}" download="${a.name}" style="margin-top:.45rem">Download ${a.name}</a>`;
+        }).join('');
         const comments = (it.comments || []).map(comment => {
           const fullText = comment.text || '';
           const isLong = fullText.length > 140;
@@ -288,7 +309,7 @@
         btn.onclick = () => submitReply(Number(btn.dataset.id), Number(btn.dataset.comment), btn);
       });
       blogGrid.querySelectorAll('.delete-btn').forEach(btn => {
-        btn.onclick = () => deletePost(Number(btn.dataset.id));
+        btn.onclick = () => requestDeletePassword(Number(btn.dataset.id));
       });
       blogGrid.querySelectorAll('.read-more').forEach(btn => {
         btn.onclick = () => toggleReadMore(btn);
@@ -347,16 +368,32 @@
       render();
     }
 
-    function deletePost(id){
-      if (!confirm('Delete this post?')) return;
-      const password = prompt('Enter admin password to delete');
-      if (password !== 'elie') {
-        alert('Incorrect password.');
-        return;
-      }
-      const items = getItems().filter(item => item.id !== id);
-      setItems(items);
-      render();
+    function requestDeletePassword(id){
+      const deleteModal = document.getElementById('deleteModal');
+      const deletePassword = document.getElementById('deletePassword');
+      const confirmDelete = document.getElementById('confirmDelete');
+      const cancelDelete = document.getElementById('cancelDelete');
+
+      deletePassword.value = '';
+      deleteModal.classList.add('show');
+
+      const cleanup = () => {
+        deleteModal.classList.remove('show');
+        confirmDelete.onclick = null;
+        cancelDelete.onclick = null;
+      };
+
+      cancelDelete.onclick = () => cleanup();
+      confirmDelete.onclick = () => {
+        if (deletePassword.value !== 'elie') {
+          alert('Incorrect password.');
+          return;
+        }
+        const items = getItems().filter(item => item.id !== id);
+        setItems(items);
+        cleanup();
+        render();
+      };
     }
 
     function toggleReadMore(button){
