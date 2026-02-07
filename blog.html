@@ -1,0 +1,260 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Blog | Elie Mpuhwezimana</title>
+  <meta name="description" content="Stories, achievements, documents, books, and discussions by Elie Mpuhwezimana." />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@500;700;800&display=swap" rel="stylesheet" />
+  <style>
+    :root{--bg:#f4f7fb;--surface:#fff;--ink:#0f172a;--muted:#475569;--primary:#1d4ed8;--border:#dbe4f0}
+    *{box-sizing:border-box} body{margin:0;font-family:Inter,sans-serif;background:var(--bg);color:var(--ink)} h1,h2,h3{font-family:Manrope,sans-serif}
+    a{text-decoration:none}
+    .container{width:min(1150px,92%);margin:0 auto}
+    .header{position:sticky;top:0;background:rgba(255,255,255,.92);backdrop-filter:blur(6px);border-bottom:1px solid var(--border);z-index:10}
+    .header .inner{display:flex;justify-content:space-between;align-items:center;padding:.9rem 0}
+    .nav{display:flex;gap:1rem}.nav a{color:var(--muted);font-weight:600}.nav a.active,.nav a:hover{color:var(--primary)}
+    .panel{background:var(--surface);border:1px solid var(--border);border-radius:14px;box-shadow:0 10px 30px rgba(15,23,42,.07)}
+    .hero{margin:1rem 0;padding:1.2rem;display:grid;grid-template-columns:220px 1fr;gap:1rem;align-items:center}
+    .hero img{width:100%;height:220px;object-fit:cover;border-radius:12px;border:2px solid var(--border)}
+    .lead{color:var(--muted);line-height:1.65}
+    .btn{display:inline-block;padding:.72rem 1rem;border-radius:10px;font-weight:700;border:2px solid transparent;cursor:pointer}
+    .btn-primary{background:var(--primary);color:#fff}.btn-secondary{border-color:var(--primary);color:var(--primary);background:#fff}
+    .toolbar{display:flex;justify-content:space-between;align-items:center;gap:.8rem;margin:.8rem 0}
+    .filters{display:flex;flex-wrap:wrap;gap:.45rem}
+    .filter-btn{border:1px solid var(--border);background:#fff;padding:.4rem .65rem;border-radius:999px;font-weight:600;color:var(--muted);cursor:pointer}
+    .filter-btn.active{background:#dbeafe;border-color:#93c5fd;color:#1e40af}
+    .layout{display:grid;grid-template-columns:2fr 1fr;gap:.9rem}
+    .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.8rem}
+    .card{padding:1rem;border:1px solid var(--border);border-radius:12px;background:#fff}
+    .badge{display:inline-block;font-size:.75rem;font-weight:700;color:#1e40af;background:#dbeafe;padding:.2rem .55rem;border-radius:999px}
+    .tags{display:flex;flex-wrap:wrap;gap:.35rem;margin:.55rem 0}
+    .tag{font-size:.7rem;font-weight:700;color:#0f172a;background:#e2e8f0;padding:.2rem .5rem;border-radius:999px}
+    .muted{color:var(--muted)}
+    .actions{display:flex;gap:.45rem;flex-wrap:wrap;margin-top:.5rem}
+    .side-card{padding:1rem}
+    .list{margin:.45rem 0 0;padding-left:1.1rem;color:var(--muted)}
+
+    .modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:1rem;z-index:99}
+    .modal.show{display:flex}
+    .modal-box{width:min(720px,100%);background:#0f172a;color:#fff;border-radius:14px;padding:1rem}
+    .row{display:grid;grid-template-columns:1fr 1fr;gap:.65rem}
+    input,select,textarea{width:100%;padding:.62rem;border-radius:8px;border:1px solid #334155;background:#111827;color:#fff}
+    textarea{min-height:88px}
+
+    @media (max-width:900px){.hero{grid-template-columns:1fr}.layout{grid-template-columns:1fr}.grid{grid-template-columns:1fr}.row{grid-template-columns:1fr}.nav{font-size:.9rem;gap:.7rem}}
+  </style>
+</head>
+<body>
+  <header class="header">
+    <div class="container inner">
+      <a href="index.html" style="font-weight:800;color:#0f172a">Elie Mpuhwezimana</a>
+      <nav class="nav">
+        <a href="index.html">Home</a>
+        <a class="active" href="blog.html">Blog</a>
+        <a href="portfolio.html">Portfolio</a>
+        <a href="mailto:mpuwezimanaelie@gmail.com?subject=Project%20Discussion&body=Hello%20Elie,%20I%20would%20like%20to%20discuss%20a%20task%20or%20deal.">Hire Me</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <section class="panel hero">
+      <img id="blogProfileImage" src="mpover pic.jpg" alt="Elie profile" />
+      <div>
+        <h1 style="margin:.1rem 0 .45rem">View My Blog</h1>
+        <p class="lead">Welcome to my blog space for case studies, how-to guides, behind-the-scenes workflows, insights, and milestones across Athletics, Web Development, IT, and Graphic Design.</p>
+        <div class="actions">
+          <a class="btn btn-primary" href="portfolio.html">Go to Portfolio</a>
+          <a class="btn btn-secondary" href="https://calendar.google.com/" target="_blank" rel="noopener noreferrer">Book My Collaboration</a>
+        </div>
+      </div>
+    </section>
+
+    <div class="toolbar">
+      <h2 style="margin:0">Latest Blog Items</h2>
+      <button id="openAdmin" class="btn btn-primary">Admin Upload</button>
+    </div>
+
+    <div class="filters" id="filterBar"></div>
+
+    <div class="layout">
+      <section id="blogGrid" class="grid"></section>
+
+      <aside class="panel side-card">
+        <h3>Tools of the Trade</h3>
+        <ul class="list">
+          <li>Notion</li>
+          <li>Trello</li>
+          <li>Canva</li>
+          <li>Figma</li>
+          <li>VS Code</li>
+        </ul>
+
+        <h3 style="margin-top:1.1rem">Recent Milestones</h3>
+        <ul class="list">
+          <li>New 400m training PR</li>
+          <li>Launched portfolio refresh</li>
+          <li>Completed IT office setup</li>
+        </ul>
+      </aside>
+    </div>
+
+    <p class="muted" style="text-align:center;margin:1rem 0 2rem">© 2025 Elie Mpuhwezimana</p>
+  </main>
+
+  <div id="adminModal" class="modal" aria-hidden="true">
+    <div class="modal-box">
+      <h3 style="margin:.1rem 0 .6rem">Blog Admin</h3>
+      <div id="authWrap">
+        <input id="adminPassword" type="password" placeholder="Enter admin password" />
+        <div class="actions"><button id="verifyAdmin" class="btn btn-primary">Verify</button><button id="closeAdmin" class="btn btn-secondary">Close</button></div>
+      </div>
+      <div id="uploadWrap" style="display:none">
+        <div class="row">
+          <select id="itemCategory">
+            <option value="Case Studies">Case Studies</option>
+            <option value="How-To Guides">How-To Guides</option>
+            <option value="Behind-the-Scenes">Behind-the-Scenes</option>
+            <option value="Insights">Insights</option>
+            <option value="Milestones">Milestones</option>
+          </select>
+          <input id="itemTitle" type="text" placeholder="Title" />
+        </div>
+        <div class="row">
+          <input id="itemTags" type="text" placeholder="Tags (comma separated)" />
+          <select id="itemType">
+            <option value="Post">Post</option>
+            <option value="Announcement">Announcement</option>
+            <option value="Education">Education</option>
+            <option value="Discussion">Discussion</option>
+          </select>
+        </div>
+        <textarea id="itemBody" placeholder="Description"></textarea>
+        <input id="itemFiles" type="file" multiple accept="image/*,video/*,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" />
+        <div class="actions">
+          <button id="saveItem" class="btn btn-primary">Publish</button>
+          <button id="closeAdmin2" class="btn btn-secondary">Close</button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const blogGrid = document.getElementById('blogGrid');
+    const filterBar = document.getElementById('filterBar');
+    const KEY = 'blogItems';
+    const categories = [
+      'Case Studies',
+      'How-To Guides',
+      'Behind-the-Scenes',
+      'Insights',
+      'Milestones'
+    ];
+    let activeCategory = 'All';
+
+    const profileImage = localStorage.getItem('profileImage');
+    if (profileImage) document.getElementById('blogProfileImage').src = profileImage;
+
+    const defaults = [
+      { id: 1, category: 'Behind-the-Scenes', title: "The Athlete’s Mindset in Debugging", body: 'How athletics discipline improves problem-solving in development work.', tags: ['Athletics','IT'], type: 'Post', attachments: [] },
+      { id: 2, category: 'Case Studies', title: 'Deep Dive: Building a High-Performance Training App', body: 'A full-stack breakdown combining athletics data and web performance.', tags: ['Athletics','Web Dev','IT'], type: 'Case Study', attachments: [] },
+      { id: 3, category: 'How-To Guides', title: 'IT Guide: Setting up the Ultimate Home Office', body: 'Hardware, ergonomics, and productivity tooling for creators.', tags: ['IT'], type: 'Guide', attachments: [] },
+      { id: 4, category: 'Case Studies', title: 'Visualizing Speed: Graphic Design for Athletic Data', body: 'Turning training metrics into clear visual systems and dashboards.', tags: ['Graphic Design','Athletics'], type: 'Case Study', attachments: [] }
+    ];
+
+    function getItems(){
+      const raw = localStorage.getItem(KEY);
+      if (!raw) { localStorage.setItem(KEY, JSON.stringify(defaults)); return defaults; }
+      try { return JSON.parse(raw); } catch { return defaults; }
+    }
+    function setItems(items){ localStorage.setItem(KEY, JSON.stringify(items)); }
+
+    function renderFilters(){
+      const buttons = ['All', ...categories].map(cat => {
+        const active = cat === activeCategory ? 'active' : '';
+        return `<button class="filter-btn ${active}" data-cat="${cat}">${cat}</button>`;
+      }).join('');
+      filterBar.innerHTML = buttons;
+      filterBar.querySelectorAll('button').forEach(btn => {
+        btn.onclick = () => { activeCategory = btn.dataset.cat; render(); };
+      });
+    }
+
+    function render(){
+      renderFilters();
+      const items = getItems().filter(it => activeCategory === 'All' || it.category === activeCategory).reverse();
+      blogGrid.innerHTML = items.map(it => {
+        const tags = (it.tags || []).map(t => `<span class="tag">${t}</span>`).join('');
+        const attachments = (it.attachments || []).map(a => `<a class="btn btn-secondary" href="${a.data}" download="${a.name}" style="margin-top:.45rem">Download ${a.name}</a>`).join('');
+        return `
+          <article class="card">
+            <span class="badge">${it.category}</span>
+            <h3 style="margin:.45rem 0">${it.title}</h3>
+            <div class="tags">${tags}</div>
+            <p class="muted">${it.body}</p>
+            ${attachments}
+          </article>
+        `;
+      }).join('');
+    }
+
+    const adminModal = document.getElementById('adminModal');
+    document.getElementById('openAdmin').onclick = () => adminModal.classList.add('show');
+    document.getElementById('closeAdmin').onclick = () => adminModal.classList.remove('show');
+    document.getElementById('closeAdmin2').onclick = () => adminModal.classList.remove('show');
+    adminModal.addEventListener('click', e => { if (e.target === adminModal) adminModal.classList.remove('show'); });
+
+    document.getElementById('verifyAdmin').onclick = () => {
+      if (document.getElementById('adminPassword').value === 'elie') {
+        document.getElementById('authWrap').style.display = 'none';
+        document.getElementById('uploadWrap').style.display = 'block';
+      } else alert('Incorrect password');
+    };
+
+    document.getElementById('saveItem').onclick = () => {
+      const category = document.getElementById('itemCategory').value;
+      const title = document.getElementById('itemTitle').value.trim();
+      const body = document.getElementById('itemBody').value.trim();
+      const tags = document.getElementById('itemTags').value.split(',').map(t => t.trim()).filter(Boolean);
+      const type = document.getElementById('itemType').value;
+      const files = Array.from(document.getElementById('itemFiles').files || []);
+      if (!title || !body) return alert('Title and description are required');
+
+      const pushItem = (attachments=[]) => {
+        const items = getItems();
+        items.push({ id: Date.now(), category, title, body, tags, type, attachments });
+        setItems(items);
+        render();
+        adminModal.classList.remove('show');
+        document.getElementById('authWrap').style.display = 'block';
+        document.getElementById('uploadWrap').style.display = 'none';
+        document.getElementById('adminPassword').value = '';
+        document.getElementById('itemTitle').value = '';
+        document.getElementById('itemBody').value = '';
+        document.getElementById('itemTags').value = '';
+        document.getElementById('itemFiles').value = '';
+      };
+
+      if (files.length) {
+        const attachments = [];
+        let remaining = files.length;
+        files.forEach(file => {
+          const reader = new FileReader();
+          reader.onload = e => {
+            attachments.push({ name: file.name, data: e.target.result });
+            remaining -= 1;
+            if (remaining === 0) pushItem(attachments);
+          };
+          reader.readAsDataURL(file);
+        });
+      } else {
+        pushItem();
+      }
+    };
+
+    render();
+  </script>
+</body>
+</html>
