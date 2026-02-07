@@ -39,13 +39,15 @@
     .info-card{padding:.8rem;border:1px solid var(--border);border-radius:12px;background:#f8fafc}
     .info-card i{color:var(--accent);margin-right:.35rem}
     .testimonials{padding:1.2rem;border-left:4px solid var(--primary);background:linear-gradient(135deg,#fff,#f8fafc);position:sticky;top:92px;height:fit-content}
+    .testimonials-inner{max-height:540px;overflow-y:auto;padding-right:.4rem}
     .testimonial{border:1px solid var(--border);border-radius:12px;padding:.9rem;margin-top:.9rem;background:#fff}
     .testimonial p{margin:.5rem 0 0;color:var(--muted)}
-    .comment-list{display:flex;flex-direction:column;gap:.6rem;margin:.8rem 0;max-height:260px;overflow-y:auto;padding-right:.25rem}
+    .comment-list{display:flex;flex-direction:column;gap:.6rem;margin:.8rem 0;padding-right:.25rem}
     .comment-card{border:1px solid var(--border);border-radius:12px;padding:.75rem;background:#fff}
     .comment-card span{display:inline-block;font-size:.75rem;font-weight:700;color:#1e40af;background:#dbeafe;padding:.2rem .55rem;border-radius:999px}
     .comment-card p{margin:.5rem 0 0;color:var(--muted)}
     .suggestions-form{margin-top:.6rem}
+    .suggestions-form h4{margin-bottom:.7rem}
     .suggestions-form textarea{min-height:90px}
     .actions{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem}
     .muted{color:var(--muted)}
@@ -131,45 +133,47 @@
           <h1>Let’s Build Something Meaningful</h1>
           <p class="lead">Share your goals, timeline, and challenges. I’ll respond with a clear plan to deliver modern design and reliable digital solutions.</p>
           <div class="actions">
-            <a class="btn btn-primary" href="https://calendar.google.com/" target="_blank" rel="noopener noreferrer">Arrange Meeting</a>
+            <a class="btn btn-primary" href="https://calendar.google.com/" target="_blank" rel="noopener noreferrer">Schedual Meeting</a>
             <a class="btn btn-secondary" href="blog.html">View My Blog</a>
           </div>
         </section>
       </div>
 
       <aside class="panel testimonials">
-        <h3>Client &amp; Manager Testimonies</h3>
-        <p class="muted" style="margin-top:.4rem">A few notes from collaborators and partners.</p>
-        <div id="commentList" class="comment-list"></div>
-        <div class="testimonial">
-          <strong>Brand Strategy Lead</strong>
-          <p>“Elie delivered a clean visual system that made our campaign feel cohesive and premium.”</p>
-        </div>
-        <div class="testimonial">
-          <strong>Startup Founder</strong>
-          <p>“Fast communication and excellent execution. The final product exceeded our expectations.”</p>
-        </div>
-        <div class="testimonial">
-          <strong>IT Coordinator</strong>
-          <p>“Responsive, organized, and professional. The support process was smooth and reliable.”</p>
-        </div>
-        <div class="suggestions-form">
-          <h4 style="margin:.6rem 0 .4rem">Suggestions</h4>
-          <label for="skillField">Select Skill/Field</label>
-          <select id="skillField">
-            <option>Graphic Design</option>
-            <option>Web Development</option>
-            <option>IT Support</option>
-            <option>Brand Strategy</option>
-          </select>
-          <label for="commentRole" style="margin-top:.6rem">Role (Client/Manager)</label>
-          <input id="commentRole" type="text" placeholder="e.g. Marketing Manager" />
-          <label for="commentPhone" style="margin-top:.6rem">Phone Number</label>
-          <input id="commentPhone" type="tel" placeholder="+250 7xx xxx xxx" />
-          <label for="commentText" style="margin-top:.6rem">Add Comment</label>
-          <textarea id="commentText" placeholder="Share a suggestion or testimony..."></textarea>
-          <div class="actions">
-            <button id="addComment" type="button" class="btn btn-primary">Add Comment</button>
+        <div class="testimonials-inner">
+          <h3>Client &amp; Manager Testimonies</h3>
+          <p class="muted" style="margin-top:.4rem">A few notes from collaborators and partners.</p>
+          <div id="commentList" class="comment-list"></div>
+          <div class="testimonial">
+            <strong>Brand Strategy Lead</strong>
+            <p>“Elie delivered a clean visual system that made our campaign feel cohesive and premium.”</p>
+          </div>
+          <div class="testimonial">
+            <strong>Startup Founder</strong>
+            <p>“Fast communication and excellent execution. The final product exceeded our expectations.”</p>
+          </div>
+          <div class="testimonial">
+            <strong>IT Coordinator</strong>
+            <p>“Responsive, organized, and professional. The support process was smooth and reliable.”</p>
+          </div>
+          <div class="suggestions-form">
+            <h4>Suggestions</h4>
+            <label for="skillField">Select Skill/Field</label>
+            <select id="skillField">
+              <option>Graphic Design</option>
+              <option>Web Development</option>
+              <option>IT Support</option>
+              <option>Brand Strategy</option>
+            </select>
+            <label for="commentRole" style="margin-top:.6rem">Role (Client/Manager)</label>
+            <input id="commentRole" type="text" placeholder="e.g. Marketing Manager" />
+            <label for="commentPhone" style="margin-top:.6rem">Phone Number</label>
+            <input id="commentPhone" type="tel" placeholder="+250 7xx xxx xxx" />
+            <label for="commentText" style="margin-top:.6rem">Add Comment</label>
+            <textarea id="commentText" placeholder="Share a suggestion or testimony..."></textarea>
+            <div class="actions">
+              <button id="addComment" type="button" class="btn btn-primary">Add Comment</button>
+            </div>
           </div>
         </div>
       </aside>
