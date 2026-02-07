@@ -254,13 +254,13 @@
               <button type="button" class="action-btn like-btn" data-id="${it.id}">
                 <i class="fas fa-heart"></i> Like <span>(${it.likes || 0})</span>
               </button>
-              <button type="button" class="action-btn comment-toggle" data-id="${it.id}">
+              <button type="button" class="action-btn comment-toggle" data-id="${it.id}" data-state="closed">
                 <i class="fas fa-comment"></i> Comment
               </button>
               ${isAdmin ? `<button type="button" class="action-btn delete-btn" data-id="${it.id}"><i class="fas fa-trash"></i> Delete</button>` : ''}
             </div>
-            <div class="comment-box" data-id="${it.id}">
-              <div class="comment-form hidden">
+            <div class="comment-box hidden" data-id="${it.id}">
+              <div class="comment-form">
                 <textarea placeholder="Share a comment..." aria-label="Comment"></textarea>
                 <button type="button" class="action-btn comment-submit" data-id="${it.id}">Post Comment</button>
               </div>
@@ -305,8 +305,13 @@
     }
 
     function toggleCommentBox(id){
-      const form = blogGrid.querySelector(`.comment-box[data-id="${id}"] .comment-form`);
-      if (form) form.classList.toggle('hidden');
+      const box = blogGrid.querySelector(`.comment-box[data-id="${id}"]`);
+      const toggle = blogGrid.querySelector(`.comment-toggle[data-id="${id}"]`);
+      if (!box || !toggle) return;
+      const isClosed = toggle.dataset.state === 'closed';
+      box.classList.toggle('hidden');
+      toggle.dataset.state = isClosed ? 'open' : 'closed';
+      toggle.innerHTML = isClosed ? '<i class="fas fa-comment"></i> Hide' : '<i class="fas fa-comment"></i> Comment';
     }
 
     function submitComment(id, button){
@@ -340,6 +345,34 @@
       comment.replies.push({ id: Date.now(), text: textarea.value.trim() });
       setItems(items);
       render();
+    }
+
+    function deletePost(id){
+      if (!confirm('Delete this post?')) return;
+      const password = prompt('Enter admin password to delete');
+      if (password !== 'elie') {
+        alert('Incorrect password.');
+        return;
+      }
+      const items = getItems().filter(item => item.id !== id);
+      setItems(items);
+      render();
+    }
+
+    function toggleReadMore(button){
+      const comment = button.closest('.comment');
+      const textEl = comment ? comment.querySelector('.comment-text') : null;
+      if (!textEl) return;
+      const state = button.dataset.state;
+      if (state === 'short') {
+        textEl.textContent = textEl.dataset.full;
+        button.textContent = 'Show less';
+        button.dataset.state = 'full';
+      } else {
+        textEl.textContent = textEl.dataset.short;
+        button.textContent = 'Read more';
+        button.dataset.state = 'short';
+      }
     }
 
     const adminModal = document.getElementById('adminModal');
@@ -402,25 +435,3 @@
   </script>
 </body>
 </html>
-    function deletePost(id){
-      if (!confirm('Delete this post?')) return;
-      const items = getItems().filter(item => item.id !== id);
-      setItems(items);
-      render();
-    }
-
-    function toggleReadMore(button){
-      const comment = button.closest('.comment');
-      const textEl = comment ? comment.querySelector('.comment-text') : null;
-      if (!textEl) return;
-      const state = button.dataset.state;
-      if (state === 'short') {
-        textEl.textContent = textEl.dataset.full;
-        button.textContent = 'Show less';
-        button.dataset.state = 'full';
-      } else {
-        textEl.textContent = textEl.dataset.short;
-        button.textContent = 'Read more';
-        button.dataset.state = 'short';
-      }
-    }
