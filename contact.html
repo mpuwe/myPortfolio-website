@@ -78,7 +78,7 @@
         <div class="panel form-card">
           <h2 id="contactForm" style="margin-bottom:.6rem">Contact Form</h2>
           <p class="muted">Fill in the details below and I’ll get back within 24-48 hours.</p>
-        <form>
+        <form action="mailto:mpuwezimanaelie@gmail.com" method="post" enctype="text/plain">
           <div class="form-grid" style="margin-top:1rem">
             <div>
               <label for="fullName">Full Name</label>
@@ -141,21 +141,6 @@
         <h3>Client &amp; Manager Testimonies</h3>
         <p class="muted" style="margin-top:.4rem">A few notes from collaborators and partners.</p>
         <div id="commentList" class="comment-list"></div>
-        <div class="suggestions-form">
-          <h4 style="margin:.6rem 0 .4rem">Suggestions</h4>
-          <label for="skillField">Select Skill/Field</label>
-          <select id="skillField">
-            <option>Graphic Design</option>
-            <option>Web Development</option>
-            <option>IT Support</option>
-            <option>Brand Strategy</option>
-          </select>
-          <label for="commentText" style="margin-top:.6rem">Add Comment</label>
-          <textarea id="commentText" placeholder="Share a suggestion or testimony..."></textarea>
-          <div class="actions">
-            <button id="addComment" type="button" class="btn btn-primary">Add Comment</button>
-          </div>
-        </div>
         <div class="testimonial">
           <strong>Brand Strategy Lead</strong>
           <p>“Elie delivered a clean visual system that made our campaign feel cohesive and premium.”</p>
@@ -168,6 +153,25 @@
           <strong>IT Coordinator</strong>
           <p>“Responsive, organized, and professional. The support process was smooth and reliable.”</p>
         </div>
+        <div class="suggestions-form">
+          <h4 style="margin:.6rem 0 .4rem">Suggestions</h4>
+          <label for="skillField">Select Skill/Field</label>
+          <select id="skillField">
+            <option>Graphic Design</option>
+            <option>Web Development</option>
+            <option>IT Support</option>
+            <option>Brand Strategy</option>
+          </select>
+          <label for="commentRole" style="margin-top:.6rem">Role (Client/Manager)</label>
+          <input id="commentRole" type="text" placeholder="e.g. Marketing Manager" />
+          <label for="commentPhone" style="margin-top:.6rem">Phone Number</label>
+          <input id="commentPhone" type="tel" placeholder="+250 7xx xxx xxx" />
+          <label for="commentText" style="margin-top:.6rem">Add Comment</label>
+          <textarea id="commentText" placeholder="Share a suggestion or testimony..."></textarea>
+          <div class="actions">
+            <button id="addComment" type="button" class="btn btn-primary">Add Comment</button>
+          </div>
+        </div>
       </aside>
     </section>
   </main>
@@ -175,8 +179,8 @@
     const commentList = document.getElementById("commentList");
     const commentKey = "contactTestimonials";
     const defaultComments = [
-      { field: "Graphic Design", text: "Outstanding attention to detail and quick turnaround." },
-      { field: "Web Development", text: "Clean build, responsive layout, and helpful support." }
+      { field: "Graphic Design", role: "Brand Manager", phone: "+250 788 123 456", text: "Outstanding attention to detail and quick turnaround." },
+      { field: "Web Development", role: "Project Lead", phone: "+250 790 555 111", text: "Clean build, responsive layout, and helpful support." }
     ];
 
     function getComments() {
@@ -197,6 +201,7 @@
       commentList.innerHTML = comments.map((comment) => `
         <div class="comment-card">
           <span>${comment.field}</span>
+          <p><strong>${comment.role || "Client"}</strong> · ${comment.phone || "N/A"}</p>
           <p>${comment.text}</p>
         </div>
       `).join("");
@@ -204,11 +209,15 @@
 
     document.getElementById("addComment").addEventListener("click", () => {
       const field = document.getElementById("skillField").value;
+      const role = document.getElementById("commentRole").value.trim();
+      const phone = document.getElementById("commentPhone").value.trim();
       const text = document.getElementById("commentText").value.trim();
       if (!text) return;
       const comments = getComments();
-      comments.unshift({ field, text });
+      comments.unshift({ field, role, phone, text });
       setComments(comments);
+      document.getElementById("commentRole").value = "";
+      document.getElementById("commentPhone").value = "";
       document.getElementById("commentText").value = "";
       renderComments();
     });

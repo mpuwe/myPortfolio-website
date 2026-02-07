@@ -22,8 +22,8 @@
     h1,h2,h3,h4 { font-family: "Manrope", sans-serif; }
     a { text-decoration: none; }
 
-    .layout-shell { max-width: 1320px; margin: 0 auto; padding: .6rem; }
-    .home-grid { display: grid; grid-template-columns: 400px 1fr; gap: .55rem; align-items: start; }
+    .layout-shell { max-width: 1320px; margin: .6rem auto; padding: .6rem; }
+    .home-grid { display: grid; grid-template-columns: 400px 1fr; gap: .45rem; align-items: start; }
     .phone-stick { position: sticky; top: 10px; }
 
     .phone-frame {
@@ -39,9 +39,9 @@
     .social-icon:hover { background: #1d4ed8; color: #fff; transform: translateY(-2px); }
     .mini-link { background: #1e293b; color: #cbd5e1; border-radius: .7rem; padding: .65rem .2rem; font-size: .72rem; font-weight: 600; display:flex; flex-direction:column; align-items:center; gap:.35rem; }
 
-    .phone-nav { position: absolute; left: 0; right: 0; bottom: 0; background: linear-gradient(to top, rgba(2,6,23,.95), rgba(2,6,23,.7)); border-top: 1px solid #334155; padding: .12rem .35rem .16rem; }
+    .phone-nav { position: absolute; left: 0; right: 0; bottom: 0; background: linear-gradient(to top, rgba(2,6,23,.95), rgba(2,6,23,.7)); border-top: 1px solid #334155; padding: .08rem .3rem .12rem; }
     .phone-nav-grid { display: grid; grid-template-columns: repeat(3,1fr); align-items: center; }
-    .nav-btn { width: 100%; display: flex; justify-content: center; align-items: center; color: #e2e8f0; opacity: .97; background: transparent; border: 0; padding: .1rem 0; margin: 0; height: 1.55rem; }
+    .nav-btn { width: 100%; display: flex; justify-content: center; align-items: center; color: #e2e8f0; opacity: .97; background: transparent; border: 0; padding: .08rem 0; margin: 0; height: 1.45rem; }
     .nav-btn i { font-size: 1.02rem; line-height: 1; font-weight: 400; }
     .nav-btn:hover { color: #ffffff; opacity: 1; }
     .nav-btn:active { transform: scale(.96); }
@@ -56,8 +56,8 @@
     .text-red-500,.hover\:text-red-500:hover { color: var(--primary) !important; }
     .bg-gray-900,.bg-gray-800,.bg-gray-700,.bg-gray-950,.bg-\[\#111\],.bg-\[\#222\],.bg-\[\#333\] { background-color: var(--surface) !important; }
     .text-gray-300,.text-gray-400,.text-gray-500 { color: var(--muted) !important; }
-    .hero-panel { padding-bottom: calc(1rem + 10px); }
-    .about-panel { padding: .55rem; }
+    .hero-panel { padding-bottom: calc(1rem + 18px); }
+    .about-panel { padding: .45rem; }
     .about-body { max-height: 0; overflow: hidden; transition: max-height .45s ease; }
     .about-panel.is-visible .about-body { max-height: 1200px; }
 
@@ -92,7 +92,7 @@
     .gap-8 { gap: 2rem; }
     .space-y-2 > * + * { margin-top: .5rem; }
     .space-y-3 > * + * { margin-top: .75rem; }
-    .space-y-8 > * + * { margin-top: .6rem; }
+    .space-y-8 > * + * { margin-top: .45rem; }
     .p-5 { padding: 1.25rem; }
     .p-6 { padding: 1.5rem; }
     .p-8 { padding: 1rem; }
@@ -205,8 +205,8 @@
       .phone-stick { position: static; }
     }
     @media (min-width: 768px) {
-      .hero-panel { padding-bottom: calc(1.25rem + 10px); }
-      .about-panel { padding: .7rem; }
+      .hero-panel { padding-bottom: calc(1.25rem + 18px); }
+      .about-panel { padding: .6rem; }
     }
   </style>
 </head>
@@ -248,7 +248,7 @@
                 <i class="far fa-circle"></i>
               </button>
               <button type="button" aria-label="Back" class="nav-btn transition" title="Back">
-                <i class="far fa-circle"></i>
+                <i class="fas fa-play" style="transform: rotate(180deg); font-weight: 400;"></i>
               </button>
             </div>
           </div>
