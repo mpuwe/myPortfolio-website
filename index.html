@@ -22,8 +22,8 @@
     h1,h2,h3,h4 { font-family: "Manrope", sans-serif; }
     a { text-decoration: none; }
 
-    .layout-shell { max-width: 1320px; margin: .6rem auto; padding: .6rem; }
-    .home-grid { display: grid; grid-template-columns: 400px 1fr; gap: .45rem; align-items: start; }
+    .layout-shell { max-width: 1320px; margin: .4rem auto; padding: .4rem; }
+    .home-grid { display: grid; grid-template-columns: 400px 1fr; gap: .35rem; align-items: start; }
     .phone-stick { position: sticky; top: 10px; }
 
     .phone-frame {
@@ -39,9 +39,9 @@
     .social-icon:hover { background: #1d4ed8; color: #fff; transform: translateY(-2px); }
     .mini-link { background: #1e293b; color: #cbd5e1; border-radius: .7rem; padding: .65rem .2rem; font-size: .72rem; font-weight: 600; display:flex; flex-direction:column; align-items:center; gap:.35rem; }
 
-    .phone-nav { position: absolute; left: 0; right: 0; bottom: 0; background: linear-gradient(to top, rgba(2,6,23,.95), rgba(2,6,23,.7)); border-top: 1px solid #334155; padding: .08rem .3rem .12rem; }
+    .phone-nav { position: absolute; left: 0; right: 0; bottom: 0; background: linear-gradient(to top, rgba(2,6,23,.95), rgba(2,6,23,.7)); border-top: 1px solid #334155; padding: .05rem .24rem .08rem; }
     .phone-nav-grid { display: grid; grid-template-columns: repeat(3,1fr); align-items: center; }
-    .nav-btn { width: 100%; display: flex; justify-content: center; align-items: center; color: #e2e8f0; opacity: .97; background: transparent; border: 0; padding: .08rem 0; margin: 0; height: 1.45rem; }
+    .nav-btn { width: 100%; display: flex; justify-content: center; align-items: center; color: #e2e8f0; opacity: .97; background: transparent; border: 0; padding: .05rem 0; margin: 0; height: 1.35rem; }
     .nav-btn i { font-size: 1.02rem; line-height: 1; font-weight: 400; }
     .nav-btn:hover { color: #ffffff; opacity: 1; }
     .nav-btn:active { transform: scale(.96); }
@@ -92,7 +92,8 @@
     .gap-8 { gap: 2rem; }
     .space-y-2 > * + * { margin-top: .5rem; }
     .space-y-3 > * + * { margin-top: .75rem; }
-    .space-y-8 > * + * { margin-top: .45rem; }
+    .space-y-8 > * + * { margin-top: .35rem; }
+    .footer-contact a { word-break: break-all; }
     .p-5 { padding: 1.25rem; }
     .p-6 { padding: 1.5rem; }
     .p-8 { padding: 1rem; }
@@ -257,9 +258,9 @@
 
       <main class="space-y-8">
         <section class="panel p-8 md:p-12 hero-panel">
-          <p class="uppercase tracking-[.22em] text-sm text-slate-500 mb-4">Digital Portfolio Experience</p>
-          <h1 class="text-4xl md:text-5xl font-extrabold leading-tight mb-5">Transform <span class="text-blue-700">design, code, and sport.</span></h1>
-          <h2 class="text-xl md:text-2xl text-slate-600 mb-8">I’m Elie Mpuhwezimana — a graphic design and IT professional focused on brand communication, user experience, and practical digital solutions.</h2>
+          <p class="uppercase tracking-[.22em] text-sm text-slate-500 mb-2">Digital Portfolio Experience</p>
+          <h1 class="text-4xl md:text-5xl font-extrabold leading-tight mb-3">Transform <span class="text-blue-700">design, code, and sport.</span></h1>
+          <h2 class="text-xl md:text-2xl text-slate-600 mb-6">I’m Elie Mpuhwezimana — a graphic design and IT professional focused on brand communication, user experience, and practical digital solutions.</h2>
           <div class="flex flex-wrap gap-3 mb-8">
             <span class="chip px-4 py-2 rounded-full text-sm font-semibold">Graphic Design</span>
             <span class="chip px-4 py-2 rounded-full text-sm font-semibold">Programming</span>
@@ -274,7 +275,7 @@
         </section>
 
         <section id="about" class="panel about-panel">
-          <h2 class="text-3xl font-extrabold mb-4">About Me</h2>
+          <h2 class="text-3xl font-extrabold mb-2">About Me</h2>
           <div class="about-body">
             <div class="grid md:grid-cols-2 gap-8 items-center">
               <img id="aboutProfileImage" src="mpover pic.jpg" alt="Professional portrait of Elie Mpuhwezimana, smiling confidently, wearing a smart casual shirt, studio background" class="rounded-xl shadow-xl w-full max-w-md"/>
@@ -334,7 +335,7 @@
             </div>
             <div>
               <h3 class="text-xl font-extrabold mb-3 text-blue-700">Direct Contact</h3>
-              <ul class="space-y-3 text-slate-600"><li><i class="fas fa-envelope text-blue-700 mr-2"></i><a href="mailto:mpuwezimanaelie@gmail.com" class="hover:text-blue-700">mpuwezimanaelie@gmail.com</a></li><li><i class="fas fa-phone text-blue-700 mr-2"></i><a href="tel:+250790737511" class="hover:text-blue-700">+250 790 737 511</a></li><li><i class="fas fa-map-marker-alt text-blue-700 mr-2"></i>Kigali, Rwanda</li></ul>
+              <ul class="space-y-3 text-slate-600 footer-contact"><li><i class="fas fa-envelope text-blue-700 mr-2"></i><a href="mailto:mpuwezimanaelie@gmail.com" class="hover:text-blue-700">mpuwezimanaelie@gmail.com</a></li><li><i class="fas fa-phone text-blue-700 mr-2"></i><a href="tel:+250790737511" class="hover:text-blue-700">+250 790 737 511</a></li><li><i class="fas fa-map-marker-alt text-blue-700 mr-2"></i>Kigali, Rwanda</li></ul>
             </div>
           </div>
           <div class="border-t border-slate-200 mt-8 pt-6 text-sm text-slate-500">© 2025 Elie Mpuhwezimana. All rights reserved.</div>
