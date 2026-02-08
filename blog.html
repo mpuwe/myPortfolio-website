@@ -30,7 +30,9 @@
     .filter-btn.active{background:#dbeafe;border-color:#93c5fd;color:#1e3a8a}
     .layout{display:grid;grid-template-columns:2fr 1fr;gap:.9rem}
     .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.8rem;align-items:start}
-    .card{padding:1rem;border:1px solid var(--border);border-radius:12px;background:#fff;align-self:start}
+    .card{padding:1rem;border:1px solid var(--border);border-radius:12px;background:#fff;align-self:start;display:flex;flex-direction:column;gap:.6rem}
+    .post-content{max-height:none;overflow:visible}
+    .post-content.expanded{max-height:340px;overflow:auto;padding-right:.35rem}
     .badge{display:inline-block;font-size:.75rem;font-weight:700;color:#1e3a8a;background:#dbeafe;padding:.2rem .55rem;border-radius:999px}
     .tags{display:flex;flex-wrap:wrap;gap:.35rem;margin:.55rem 0}
     .tag{font-size:.7rem;font-weight:700;color:#0f172a;background:#e2e8f0;padding:.2rem .5rem;border-radius:999px}
@@ -44,7 +46,7 @@
     .action-btn:active{transform:scale(.97)}
     .delete-btn{border-color:#fecaca;color:#dc2626}
     .delete-btn:hover{border-color:#fca5a5;color:#b91c1c}
-    .comment-box{margin-top:.8rem;border-top:1px solid var(--border);padding-top:.8rem}
+    .comment-box{margin-top:.2rem;border-top:1px solid var(--border);padding-top:.6rem}
     .comment-list{max-height:220px;overflow-y:auto;padding-right:.35rem}
     .comment-form textarea{min-height:70px;background:#fff;color:var(--ink);border:1px solid var(--border)}
     .comment{padding:.6rem;border:1px solid var(--border);border-radius:10px;margin-top:.6rem;background:#f8fafc}
@@ -110,17 +112,8 @@
       <section id="blogGrid" class="grid"></section>
 
       <aside class="panel side-card">
-        <h3>Tools of the Trade</h3>
-        <ul class="list">
-          <li>Notion</li>
-          <li>Trello</li>
-          <li>Canva</li>
-          <li>Figma</li>
-          <li>VS Code</li>
-        </ul>
-
-        <h3 style="margin-top:1.1rem">Trending &amp; Opportunities</h3>
-        <ul id="trendingList" class="list"></ul>
+        <h3>Trending &amp; Opportunities</h3>
+        <div id="trendingList" class="list"></div>
       </aside>
     </div>
 
@@ -139,7 +132,10 @@
           <div>
             <h4 style="margin:.2rem 0 .6rem">Current Post</h4>
             <select id="itemCategory">
-              <option value="Case Studies">Case Studies</option>
+              <option value="Track Lesson">Track Lesson</option>
+              <option value="General Post">General Post</option>
+              <option value="Quick Announcement">Quick Announcement</option>
+              <option value="Normal Update">Normal Update</option>
             </select>
             <input id="itemTitle" type="text" placeholder="Title" style="margin-top:.5rem" />
             <textarea id="itemBody" placeholder="Description" style="margin-top:.5rem"></textarea>
@@ -196,11 +192,10 @@
     const FILE_DB = 'blogFiles';
     let fileDb;
     const categories = [
-      'Case Studies',
-      'How-To Guides',
-      'Behind-the-Scenes',
-      'Insights',
-      'Milestones'
+      'Track Lesson',
+      'General Post',
+      'Quick Announcement',
+      'Normal Update'
     ];
     let activeCategory = 'All';
 
@@ -208,10 +203,10 @@
     if (profileImage) document.getElementById('blogProfileImage').src = profileImage;
 
     const defaults = [
-      { id: 1, category: 'Case Studies', title: "The Athlete’s Mindset in Debugging", body: 'How athletics discipline improves problem-solving in development work.', attachments: [], likes: 0, comments: [] },
-      { id: 2, category: 'Case Studies', title: 'Deep Dive: Building a High-Performance Training App', body: 'A full-stack breakdown combining athletics data and web performance.', attachments: [], likes: 0, comments: [] },
-      { id: 3, category: 'Case Studies', title: 'IT Guide: Setting up the Ultimate Home Office', body: 'Hardware, ergonomics, and productivity tooling for creators.', attachments: [], likes: 0, comments: [] },
-      { id: 4, category: 'Case Studies', title: 'Visualizing Speed: Graphic Design for Athletic Data', body: 'Turning training metrics into clear visual systems and dashboards.', attachments: [], likes: 0, comments: [] }
+      { id: 1, category: 'Track Lesson', title: "The Athlete’s Mindset in Debugging", body: 'How athletics discipline improves problem-solving in development work.', attachments: [], likes: 0, comments: [] },
+      { id: 2, category: 'General Post', title: 'Deep Dive: Building a High-Performance Training App', body: 'A full-stack breakdown combining athletics data and web performance.', attachments: [], likes: 0, comments: [] },
+      { id: 3, category: 'Quick Announcement', title: 'IT Guide: Setting up the Ultimate Home Office', body: 'Hardware, ergonomics, and productivity tooling for creators.', attachments: [], likes: 0, comments: [] },
+      { id: 4, category: 'Normal Update', title: 'Visualizing Speed: Graphic Design for Athletic Data', body: 'Turning training metrics into clear visual systems and dashboards.', attachments: [], likes: 0, comments: [] }
     ];
 
     function normalizeItem(item){
@@ -289,12 +284,22 @@
           <article class="card">
             <span class="badge">${it.category}</span>
             <h3 style="margin:.45rem 0">${it.title}</h3>
-            <div class="tags">${tags}</div>
-            <p class="muted">
-              <span class="comment-text" data-full="${it.body.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}" data-short="${(it.body.length > 180 ? `${it.body.slice(0, 180)}...` : it.body).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}">${(it.body.length > 180 ? `${it.body.slice(0, 180)}...` : it.body).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</span>
-            </p>
-            ${it.body.length > 180 ? `<button type="button" class="action-btn post-more" data-state="short">More</button>` : ''}
-            ${attachments}
+            <div class="post-content">
+              <p class="muted">
+                <span class="comment-text" data-full="${it.body.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}" data-short="${(it.body.length > 180 ? `${it.body.slice(0, 180)}...` : it.body).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}">${(it.body.length > 180 ? `${it.body.slice(0, 180)}...` : it.body).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</span>
+              </p>
+              ${it.body.length > 180 ? `<button type="button" class="action-btn post-more" data-state="short">More</button>` : ''}
+              ${attachments}
+              <div class="comment-box hidden" data-id="${it.id}">
+                <div class="comment-form">
+                  <textarea placeholder="Share a comment..." aria-label="Comment"></textarea>
+                  <button type="button" class="action-btn comment-submit" data-id="${it.id}">Post Comment</button>
+                </div>
+                <div class="comment-list">
+                  ${comments || ''}
+                </div>
+              </div>
+            </div>
             <div class="post-actions">
               <button type="button" class="action-btn like-btn" data-id="${it.id}">
                 <i class="fas fa-heart"></i> Like <span>(${it.likes || 0})</span>
@@ -303,15 +308,6 @@
                 <i class="fas fa-comment"></i> Comment <span>(${(it.comments || []).length})</span>
               </button>
               ${isAdmin ? `<button type="button" class="action-btn delete-btn" data-id="${it.id}"><i class="fas fa-trash"></i> Delete</button>` : ''}
-            </div>
-            <div class="comment-box hidden" data-id="${it.id}">
-              <div class="comment-form">
-                <textarea placeholder="Share a comment..." aria-label="Comment"></textarea>
-                <button type="button" class="action-btn comment-submit" data-id="${it.id}">Post Comment</button>
-              </div>
-              <div class="comment-list">
-                ${comments || ''}
-              </div>
             </div>
           </article>
         `;
@@ -444,16 +440,19 @@
     function togglePostMore(button){
       const card = button.closest('.card');
       const textEl = card ? card.querySelector('.comment-text') : null;
-      if (!textEl) return;
+      const content = card ? card.querySelector('.post-content') : null;
+      if (!textEl || !content) return;
       const state = button.dataset.state;
       if (state === 'short') {
         textEl.textContent = textEl.dataset.full;
         button.textContent = 'Less';
         button.dataset.state = 'full';
+        content.classList.add('expanded');
       } else {
         textEl.textContent = textEl.dataset.short;
         button.textContent = 'More';
         button.dataset.state = 'short';
+        content.classList.remove('expanded');
       }
     }
 
@@ -623,13 +622,32 @@
       if (!list) return;
       const items = getTrends();
       if (!items.length) {
-        list.innerHTML = '<li class="muted">No trending items yet.</li>';
+        list.innerHTML = '<p class="muted">No trending items yet.</p>';
         return;
       }
-      list.innerHTML = items.map(item => {
-        const link = item.link ? `<a href="${item.link}" target="_blank" rel="noopener noreferrer">${item.title}</a>` : item.title;
-        return `<li>${link}<br/><span class="muted">${item.type}${item.desc ? ` · ${item.desc}` : ''}</span></li>`;
+      const tools = `
+        <div style="margin-bottom:.9rem">
+          <strong>Tools of the Trade</strong>
+          <ul class="list" style="margin-top:.4rem">
+            <li>Notion</li>
+            <li>Trello</li>
+            <li>Canva</li>
+            <li>Figma</li>
+            <li>VS Code</li>
+          </ul>
+        </div>
+      `;
+      const entries = items.map(item => {
+        const link = item.link ? `<div><a href="${item.link}" target="_blank" rel="noopener noreferrer">${item.link}</a></div>` : '';
+        return `
+          <div style="margin-bottom:.8rem">
+            <strong>${item.title}</strong>
+            ${link}
+            <div class="muted">${item.type}${item.desc ? ` · ${item.desc}` : ''}</div>
+          </div>
+        `;
       }).join('');
+      list.innerHTML = tools + entries;
     }
 
     render();
