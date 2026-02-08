@@ -154,6 +154,7 @@
         </div>
         <textarea id="itemBody" placeholder="Description"></textarea>
         <input id="itemFiles" type="file" multiple accept="image/*,video/*,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" />
+        <p class="muted" style="margin:.35rem 0 0">You can upload images or videos to appear directly in the post.</p>
         <div class="actions">
           <button id="saveItem" class="btn btn-primary">Publish</button>
           <button id="closeAdmin2" class="btn btn-secondary">Close</button>
@@ -276,7 +277,7 @@
                 <i class="fas fa-heart"></i> Like <span>(${it.likes || 0})</span>
               </button>
               <button type="button" class="action-btn comment-toggle" data-id="${it.id}" data-state="closed">
-                <i class="fas fa-comment"></i> Comment
+                <i class="fas fa-comment"></i> Comment <span>(${(it.comments || []).length})</span>
               </button>
               ${isAdmin ? `<button type="button" class="action-btn delete-btn" data-id="${it.id}"><i class="fas fa-trash"></i> Delete</button>` : ''}
             </div>
@@ -332,7 +333,8 @@
       const isClosed = toggle.dataset.state === 'closed';
       box.classList.toggle('hidden');
       toggle.dataset.state = isClosed ? 'open' : 'closed';
-      toggle.innerHTML = isClosed ? '<i class="fas fa-comment"></i> Hide' : '<i class="fas fa-comment"></i> Comment';
+      const count = (getItems().find(item => item.id === id)?.comments || []).length;
+      toggle.innerHTML = isClosed ? `<i class="fas fa-comment"></i> Hide` : `<i class="fas fa-comment"></i> Comment <span>(${count})</span>`;
     }
 
     function submitComment(id, button){
