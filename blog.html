@@ -30,7 +30,7 @@
     .filter-btn.active{background:#dbeafe;border-color:#93c5fd;color:#1e3a8a}
     .layout{display:grid;grid-template-columns:2fr 1fr;gap:.9rem}
     .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.8rem;align-items:start}
-    .card{padding:1rem;border:1px solid var(--border);border-radius:12px;background:#fff;align-self:start;display:flex;flex-direction:column;gap:.6rem}
+    .card{padding:1rem;border:1px solid var(--border);border-radius:12px;background:#fff;align-self:start;display:flex;flex-direction:column;gap:.6rem;height:420px;overflow:hidden}
     .post-content{max-height:none;overflow:visible}
     .post-content.expanded{max-height:340px;overflow:auto;padding-right:.35rem}
     .badge{display:inline-block;font-size:.75rem;font-weight:700;color:#1e3a8a;background:#dbeafe;padding:.2rem .55rem;border-radius:999px}
@@ -68,6 +68,9 @@
     .modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:1rem;z-index:99}
     .modal.show{display:flex}
     .modal-box{width:min(720px,100%);background:#0f172a;color:#fff;border-radius:14px;padding:1rem}
+    .modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem}
+    .modal-close{background:transparent;border:0;color:#e2e8f0;font-size:1.2rem;cursor:pointer}
+    .modal-content{max-height:60vh;overflow-y:auto;padding-right:.35rem}
     .row{display:grid;grid-template-columns:1fr 1fr;gap:.65rem}
     input,select,textarea{width:100%;padding:.62rem;border-radius:8px;border:1px solid #334155;background:#111827;color:#fff}
     textarea{min-height:88px}
@@ -180,6 +183,16 @@
         <button id="confirmDelete" class="btn btn-primary">Delete</button>
         <button id="cancelDelete" class="btn btn-secondary">Cancel</button>
       </div>
+    </div>
+  </div>
+
+  <div id="commentModal" class="modal" aria-hidden="true">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="commentModalTitle" style="margin:0">Post Comments</h3>
+        <button type="button" class="modal-close" id="closeCommentModal" aria-label="Close comments">✕</button>
+      </div>
+      <div id="commentModalContent" class="modal-content"></div>
     </div>
   </div>
 
@@ -304,7 +317,7 @@
               <button type="button" class="action-btn like-btn" data-id="${it.id}">
                 <i class="fas fa-heart"></i> Like <span>(${it.likes || 0})</span>
               </button>
-              <button type="button" class="action-btn comment-toggle" data-id="${it.id}" data-state="closed">
+              <button type="button" class="action-btn comment-toggle" data-id="${it.id}">
                 <i class="fas fa-comment"></i> Comment <span>(${(it.comments || []).length})</span>
               </button>
               ${isAdmin ? `<button type="button" class="action-btn delete-btn" data-id="${it.id}"><i class="fas fa-trash"></i> Delete</button>` : ''}
@@ -317,7 +330,7 @@
         btn.onclick = () => handleLike(Number(btn.dataset.id));
       });
       blogGrid.querySelectorAll('.comment-toggle').forEach(btn => {
-        btn.onclick = () => toggleCommentBox(Number(btn.dataset.id));
+        btn.onclick = () => openCommentModal(Number(btn.dataset.id));
       });
       blogGrid.querySelectorAll('.comment-submit').forEach(btn => {
         btn.onclick = () => submitComment(Number(btn.dataset.id), btn);
@@ -349,15 +362,52 @@
       render();
     }
 
-    function toggleCommentBox(id){
-      const box = blogGrid.querySelector(`.comment-box[data-id="${id}"]`);
-      const toggle = blogGrid.querySelector(`.comment-toggle[data-id="${id}"]`);
-      if (!box || !toggle) return;
-      const isClosed = toggle.dataset.state === 'closed';
-      box.classList.toggle('hidden');
-      toggle.dataset.state = isClosed ? 'open' : 'closed';
-      const count = (getItems().find(item => item.id === id)?.comments || []).length;
-      toggle.innerHTML = isClosed ? `<i class="fas fa-comment"></i> Hide` : `<i class="fas fa-comment"></i> Comment <span>(${count})</span>`;
+    function openCommentModal(id){
+      const modal = document.getElementById('commentModal');
+      const content = document.getElementById('commentModalContent');
+      const title = document.getElementById('commentModalTitle');
+      const items = getItems();
+      const target = items.find(item => item.id === id);
+      if (!target || !modal || !content) return;
+      title.textContent = target.title;
+      const commentList = (target.comments || []).map(comment => {
+        const replies = (comment.replies || []).map(reply => `<div class="reply"><p class="muted">${reply.text}</p></div>`).join('');
+        return `
+          <div class="comment">
+            <div class="comment-meta">
+              <strong>Viewer</strong>
+              <button type="button" class="action-btn reply-toggle" data-id="${target.id}" data-comment="${comment.id}">Reply</button>
+            </div>
+            <p class="muted">${comment.text}</p>
+            <div class="reply-box">
+              ${replies}
+              <div class="reply-form hidden" data-id="${target.id}" data-comment="${comment.id}">
+                <textarea placeholder="Write a reply..." aria-label="Reply to comment"></textarea>
+                <button type="button" class="action-btn reply-submit" data-id="${target.id}" data-comment="${comment.id}">Send Reply</button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+      content.innerHTML = `
+        <div class="comment-form">
+          <textarea placeholder="Share a comment..." aria-label="Comment"></textarea>
+          <button type="button" class="action-btn comment-submit" data-id="${target.id}">Post Comment</button>
+        </div>
+        <div class="comment-list">
+          ${commentList || '<p class="muted">No comments yet.</p>'}
+        </div>
+      `;
+      modal.classList.add('show');
+      content.querySelectorAll('.reply-toggle').forEach(btn => {
+        btn.onclick = () => toggleReplyForm(Number(btn.dataset.id), Number(btn.dataset.comment));
+      });
+      content.querySelectorAll('.reply-submit').forEach(btn => {
+        btn.onclick = () => submitReply(Number(btn.dataset.id), Number(btn.dataset.comment), btn);
+      });
+      content.querySelectorAll('.comment-submit').forEach(btn => {
+        btn.onclick = () => submitComment(Number(btn.dataset.id), btn);
+      });
     }
 
     function submitComment(id, button){
@@ -457,6 +507,14 @@
     }
 
     const adminModal = document.getElementById('adminModal');
+    const commentModal = document.getElementById('commentModal');
+    const closeCommentModal = document.getElementById('closeCommentModal');
+    if (closeCommentModal) {
+      closeCommentModal.onclick = () => commentModal.classList.remove('show');
+    }
+    if (commentModal) {
+      commentModal.addEventListener('click', e => { if (e.target === commentModal) commentModal.classList.remove('show'); });
+    }
     document.getElementById('openAdmin').onclick = () => adminModal.classList.add('show');
     document.getElementById('closeAdmin').onclick = () => adminModal.classList.remove('show');
     document.getElementById('closeAdmin2').onclick = () => adminModal.classList.remove('show');
