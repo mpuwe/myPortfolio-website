@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Elie Mpuhwezimana | Creative Technology Portfolio</title>
   <meta name="description" content="Professional portfolio showcasing Elie's diverse skills in design, programming, athletics and more"/>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@500;700;800&display=swap" rel="stylesheet"/>
   <style>
     :root {
@@ -62,10 +62,12 @@
     .loading-ring { width: 64px; height: 64px; border-radius: 999px; border: 4px solid rgba(148,163,184,.35); border-top-color: #38bdf8; margin: 0 auto 1rem; animation: spin 1s linear infinite; }
     .loading-text { font-weight: 700; letter-spacing: .08em; text-transform: uppercase; font-size: .8rem; }
     @keyframes spin { to { transform: rotate(360deg); } }
-    .hero-panel { padding-bottom: calc(1rem + 36px); }
+    .hero-panel { padding-bottom: calc(1rem + 36px); height: 82vh; display: flex; flex-direction: column; justify-content: center; }
+    .hero-title { margin-bottom: .5rem; }
     .about-panel { padding: .45rem; }
-    .about-body { max-height: 0; overflow: hidden; transition: max-height .45s ease; }
-    .about-panel.is-visible .about-body { max-height: 1200px; }
+    .about-body { width: 980px; max-width: 100%; height: 320px; overflow: hidden; }
+    .about-grid { height: 100%; }
+    .about-photo { width: 100%; height: 100%; object-fit: cover; }
 
 
     /* Local utility classes (Tailwind-free implementation) */
@@ -212,8 +214,10 @@
       .phone-stick { position: static; }
     }
     @media (min-width: 768px) {
-      .hero-panel { padding-bottom: calc(1.25rem + 18px); }
       .about-panel { padding: .6rem; }
+    }
+    @media (max-width: 900px) {
+      .hero-panel { height: 70vh; }
     }
   </style>
 </head>
@@ -271,7 +275,7 @@
       <main class="space-y-8">
         <section class="panel p-8 md:p-12 hero-panel">
           <p class="uppercase tracking-[.22em] text-sm text-slate-500 mb-2">Digital Portfolio Experience</p>
-          <h1 class="text-4xl md:text-5xl font-extrabold leading-tight mb-3">Transform <span class="text-blue-700">design, code, and sport.</span></h1>
+          <h1 class="text-4xl md:text-5xl font-extrabold leading-tight hero-title">Transform <span class="text-blue-700">design, code, and sport.</span></h1>
           <h2 class="text-xl md:text-2xl text-slate-600 mb-6">I’m Elie Mpuhwezimana — a graphic design and IT professional focused on brand communication, user experience, and practical digital solutions.</h2>
           <div class="flex flex-wrap gap-3 mb-8">
             <span class="chip px-4 py-2 rounded-full text-sm font-semibold">Graphic Design</span>
@@ -289,8 +293,8 @@
         <section id="about" class="panel about-panel">
           <h2 class="text-3xl font-extrabold mb-1">About Me</h2>
           <div class="about-body">
-            <div class="grid md:grid-cols-2 gap-8 items-center">
-              <img id="aboutProfileImage" src="mpover pic.jpg" alt="Professional portrait of Elie Mpuhwezimana, smiling confidently, wearing a smart casual shirt, studio background" class="rounded-xl shadow-xl w-full max-w-md"/>
+            <div class="grid md:grid-cols-2 gap-8 items-center about-grid">
+              <img id="aboutProfileImage" src="mpover pic.jpg" alt="Professional portrait of Elie Mpuhwezimana, smiling confidently, wearing a smart casual shirt, studio background" class="rounded-xl shadow-xl about-photo"/>
               <div>
                 <p class="text-slate-600 mb-4">I'm a focused creative professional with strong expertise in graphic design, visual communication, and IT implementation. I translate ideas into high-quality digital experiences that support organizational goals.</p>
                 <p class="text-slate-600 mb-6">Athletics remains a long-term personal passion, while my professional value-add is strategic creative contribution: combining design thinking, digital execution, and clear communication to strengthen team outcomes.</p>
@@ -361,7 +365,7 @@
       <h3 class="text-2xl font-extrabold mb-6 text-blue-300" id="adminPanelTitle">Admin Controls</h3>
       <div id="passwordVerify" class="mb-8">
         <label for="adminPassword" class="block text-white mb-3 font-semibold text-lg">Enter Admin Password</label>
-        <input id="adminPassword" type="password" autocomplete="current-password" placeholder="Enter Your Password" class="w-full px-5 py-3 bg-slate-800 border border-slate-700 rounded-lg text-white text-lg focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+        <input id="adminPassword" type="password" autocomplete="current-password" placeholder="Enter Your Password" maxlength="32" class="w-full px-5 py-3 bg-slate-800 border border-slate-700 rounded-lg text-white text-lg focus:outline-none focus:ring-2 focus:ring-blue-500"/>
         <button id="verifyPassword" class="btn-primary mt-6 px-6 py-3 rounded-lg w-full font-bold text-lg">Verify</button>
       </div>
       <div id="adminActions" class="hidden space-y-8">
@@ -374,7 +378,7 @@
         </div>
         <div class="p-6 border border-slate-700 rounded-lg">
           <h4 class="font-bold mb-5 text-xl">Change Password</h4>
-          <div class="mb-6"><label for="newAdminPassword" class="block mb-2 text-lg font-semibold">New Password</label><input id="newAdminPassword" type="password" autocomplete="new-password" class="w-full px-5 py-3 bg-slate-800 border border-slate-700 rounded-lg text-lg focus:outline-none focus:ring-2 focus:ring-blue-500"/></div>
+          <div class="mb-6"><label for="newAdminPassword" class="block mb-2 text-lg font-semibold">New Password</label><input id="newAdminPassword" type="password" autocomplete="new-password" maxlength="32" class="w-full px-5 py-3 bg-slate-800 border border-slate-700 rounded-lg text-lg focus:outline-none focus:ring-2 focus:ring-blue-500"/></div>
           <button id="changePassword" class="btn-primary px-6 py-3 rounded-lg w-full font-bold text-lg flex items-center justify-center gap-3"><i class="fas fa-key"></i>Update Password</button>
         </div>
       </div>
@@ -459,19 +463,6 @@
       if (loader) loader.style.display = "none";
     });
 
-    const aboutPanel = document.querySelector("#about");
-    if (aboutPanel && "IntersectionObserver" in window) {
-      const observer = new IntersectionObserver((entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            aboutPanel.classList.add("is-visible");
-          }
-        });
-      }, { threshold: 0.35 });
-      observer.observe(aboutPanel);
-    } else if (aboutPanel) {
-      aboutPanel.classList.add("is-visible");
-    }
   </script>
 </body>
 </html>

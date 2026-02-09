@@ -28,7 +28,7 @@
     .filters{display:flex;flex-wrap:wrap;gap:.45rem;margin-bottom:.8rem}
     .filter-btn{border:1px solid var(--border);background:#fff;padding:.4rem .65rem;border-radius:999px;font-weight:600;color:var(--muted);cursor:pointer}
     .filter-btn.active{background:#dbeafe;border-color:#93c5fd;color:#1e3a8a}
-    .layout{display:grid;grid-template-columns:2fr 1fr;gap:.9rem}
+    .layout{display:grid;grid-template-columns:2fr 1fr;gap:.9rem;align-items:start}
     .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.8rem;align-items:start}
     .card{padding:1rem;border:1px solid var(--border);border-radius:12px;background:#fff;align-self:start;display:flex;flex-direction:column;gap:.6rem;height:420px;overflow:hidden}
     .post-content{max-height:240px;overflow:hidden}
@@ -62,12 +62,23 @@
     .upload-cube::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(255,255,255,.3),transparent);animation:liquid 1.2s ease-in-out infinite}
     .upload-progress span{font-weight:700;color:#166534}
     @keyframes liquid{0%{transform:translateY(100%)}50%{transform:translateY(40%)}100%{transform:translateY(100%)}}
-    .side-card{padding:1rem}
+    .side-card{padding:1rem;position:sticky;top:88px;height:fit-content;align-self:start}
     .list{margin:.45rem 0 0;padding-left:1.1rem;color:var(--muted)}
+    .attachment-preview{margin-top:.45rem;border-radius:12px;border:1px solid var(--border);overflow:hidden;background:#f8fafc;cursor:pointer;position:relative}
+    .attachment-media{width:100%;height:180px;object-fit:cover;display:block}
+    .attachment-frame{width:100%;height:180px;border:0;display:block;background:#fff}
+    .attachment-doc{display:flex;align-items:center;gap:.75rem;padding:.9rem}
+    .attachment-icon{width:40px;height:40px;border-radius:10px;background:#dbeafe;color:#1e3a8a;display:flex;align-items:center;justify-content:center;font-size:1.1rem}
+    .attachment-label{font-weight:700;color:var(--ink)}
+    .attachment-sub{font-size:.8rem;color:var(--muted)}
+    .expand-chip{position:absolute;bottom:8px;right:8px;background:rgba(15,23,42,.85);color:#fff;border-radius:999px;padding:.25rem .6rem;font-size:.7rem;font-weight:700}
 
     .modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:1rem;z-index:99}
     .modal.show{display:flex}
     .modal-box{width:min(720px,100%);background:#0f172a;color:#fff;border-radius:14px;padding:1rem}
+    .attachment-modal-box{width:min(920px,100%);background:#0f172a;color:#fff;border-radius:14px;padding:1rem}
+    .attachment-modal-content{max-height:75vh;overflow:auto}
+    .attachment-modal-content img,.attachment-modal-content iframe,.attachment-modal-content video{width:100%;height:auto;border-radius:12px}
     .modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem}
     .modal-close{background:transparent;border:0;color:#e2e8f0;font-size:1.2rem;cursor:pointer}
     .modal-content{max-height:60vh;overflow-y:auto;padding-right:.35rem}
@@ -127,7 +138,7 @@
     <div class="modal-box">
       <h3 style="margin:.1rem 0 .6rem">Blog Admin</h3>
       <div id="authWrap">
-        <input id="adminPassword" type="password" placeholder="Enter admin password" />
+        <input id="adminPassword" type="password" placeholder="Enter admin password" maxlength="32" />
         <div class="actions"><button id="verifyAdmin" class="btn btn-primary">Verify</button><button id="closeAdmin" class="btn btn-secondary">Close</button></div>
       </div>
       <div id="uploadWrap" style="display:none">
@@ -140,7 +151,7 @@
               <option value="Quick Announcement">Quick Announcement</option>
               <option value="Normal Update">Normal Update</option>
             </select>
-            <input id="itemTitle" type="text" placeholder="Title" style="margin-top:.5rem" />
+            <input id="itemTitle" type="text" placeholder="Title" style="margin-top:.5rem" maxlength="72" />
             <textarea id="itemBody" placeholder="Description" style="margin-top:.5rem"></textarea>
             <input id="itemFiles" type="file" multiple accept="image/*,video/*,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" />
             <p class="muted" style="margin:.35rem 0 0">You can upload images, videos, or PDFs to appear in the post.</p>
@@ -155,14 +166,14 @@
           </div>
           <div>
             <h4 style="margin:.2rem 0 .6rem">Trending &amp; Opportunities</h4>
-            <input id="trendTitle" type="text" placeholder="Title" />
+            <input id="trendTitle" type="text" placeholder="Title" maxlength="72" />
             <select id="trendType" style="margin-top:.5rem">
               <option value="Trending Tool">Trending Tool</option>
               <option value="New Version">New Version</option>
               <option value="Job Link">Job Link</option>
               <option value="Scholarship Link">Scholarship Link</option>
             </select>
-            <input id="trendLink" type="url" placeholder="Link (optional)" style="margin-top:.5rem" />
+            <input id="trendLink" type="url" placeholder="Link (optional)" style="margin-top:.5rem" maxlength="160" />
             <textarea id="trendDesc" placeholder="Short description" style="margin-top:.5rem"></textarea>
             <div class="actions">
               <button id="addTrend" class="btn btn-primary">Add Item</button>
@@ -178,7 +189,7 @@
     <div class="modal-box">
       <h3 style="margin:.1rem 0 .6rem">Confirm Delete</h3>
       <p class="muted" style="margin:0 0 .6rem">Enter admin password to delete this post.</p>
-      <input id="deletePassword" type="password" placeholder="Admin password" />
+      <input id="deletePassword" type="password" placeholder="Admin password" maxlength="32" />
       <div class="actions">
         <button id="confirmDelete" class="btn btn-primary">Delete</button>
         <button id="cancelDelete" class="btn btn-secondary">Cancel</button>
@@ -196,6 +207,16 @@
     </div>
   </div>
 
+  <div id="attachmentModal" class="modal" aria-hidden="true">
+    <div class="attachment-modal-box">
+      <div class="modal-header">
+        <h3 id="attachmentModalTitle" style="margin:0">Attachment Preview</h3>
+        <button type="button" class="modal-close" id="closeAttachmentModal" aria-label="Close attachment preview">✕</button>
+      </div>
+      <div id="attachmentModalContent" class="attachment-modal-content"></div>
+    </div>
+  </div>
+
   <script>
     const blogGrid = document.getElementById('blogGrid');
     const filterBar = document.getElementById('filterBar');
@@ -203,6 +224,8 @@
     const ADMIN_KEY = 'blogAdmin';
     const TREND_KEY = 'blogTrends';
     const FILE_DB = 'blogFiles';
+    const TITLE_LIMIT = 72;
+    const LINK_LIMIT = 160;
     let fileDb;
     const categories = [
       'Track Lesson',
@@ -238,6 +261,51 @@
     }
     function setItems(items){ localStorage.setItem(KEY, JSON.stringify(items)); }
 
+    function clampText(text, limit){
+      if (!text) return '';
+      return text.length > limit ? `${text.slice(0, limit)}…` : text;
+    }
+
+    function getAttachmentPreview({ type = '', src = '', name = 'Attachment' }){
+      const safeName = name || 'Attachment';
+      if (type.startsWith('image')) {
+        return `
+          <div class="attachment-preview" data-full-src="${src}" data-type="image" data-name="${safeName}">
+            <img class="attachment-media" src="${src}" alt="${safeName}" />
+            <span class="expand-chip">Click to Expand</span>
+          </div>
+        `;
+      }
+      if (type.startsWith('video')) {
+        return `
+          <div class="attachment-preview" data-full-src="${src}" data-type="video" data-name="${safeName}">
+            <video class="attachment-media" src="${src}" muted></video>
+            <span class="expand-chip">Click to Expand</span>
+          </div>
+        `;
+      }
+      if (type === 'application/pdf') {
+        return `
+          <div class="attachment-preview" data-full-src="${src}" data-type="pdf" data-name="${safeName}">
+            <iframe class="attachment-frame" title="${safeName}" src="${src}"></iframe>
+            <span class="expand-chip">Click to Expand</span>
+          </div>
+        `;
+      }
+      return `
+        <div class="attachment-preview" data-full-src="${src}" data-type="doc" data-name="${safeName}">
+          <div class="attachment-doc">
+            <div class="attachment-icon"><i class="fas fa-file-alt"></i></div>
+            <div>
+              <div class="attachment-label">${safeName}</div>
+              <div class="attachment-sub">Click to Expand</div>
+            </div>
+          </div>
+          <span class="expand-chip">Click to Expand</span>
+        </div>
+      `;
+    }
+
     function renderFilters(){
       const buttons = ['All', ...categories].map(cat => {
         const active = cat === activeCategory ? 'active' : '';
@@ -257,17 +325,18 @@
         const tags = (it.tags || []).map(t => `<span class="tag">${t}</span>`).join('');
         const attachments = (it.attachments || []).map(a => {
           if (a.data && a.data.startsWith('data:video')) {
-            return `<video controls style="width:100%;margin-top:.45rem;border-radius:12px;border:1px solid var(--border)"><source src="${a.data}"></video>`;
+            return getAttachmentPreview({ type: 'video', src: a.data, name: a.name });
           }
           if (a.data && a.data.startsWith('data:image')) {
-            return `<img src="${a.data}" alt="${a.name}" style="width:100%;margin-top:.45rem;border-radius:12px;border:1px solid var(--border)"/>`;
+            return getAttachmentPreview({ type: 'image', src: a.data, name: a.name });
           }
           if (a.blobId) {
             const dataType = a.type || 'file';
             return `<div class="attachment-slot" data-blob-id="${a.blobId}" data-type="${dataType}" data-name="${a.name}"></div>`;
           }
-          return `<a class="btn btn-secondary" href="${a.data}" download="${a.name}" style="margin-top:.45rem">Download ${a.name}</a>`;
+          return getAttachmentPreview({ type: a.type || 'doc', src: a.data, name: a.name });
         }).join('');
+        const safeTitle = clampText(it.title || '', TITLE_LIMIT);
         const comments = (it.comments || []).map(comment => {
           const fullText = comment.text || '';
           const isLong = fullText.length > 140;
@@ -296,7 +365,7 @@
         return `
           <article class="card">
             <span class="badge">${it.category}</span>
-            <h3 style="margin:.45rem 0">${it.title}</h3>
+            <h3 style="margin:.45rem 0" title="${it.title || ''}">${safeTitle}</h3>
             <div class="post-content">
               <p class="muted">
                 <span class="comment-text" data-full="${it.body.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}" data-short="${(it.body.length > 180 ? `${it.body.slice(0, 180)}...` : it.body).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}">${(it.body.length > 180 ? `${it.body.slice(0, 180)}...` : it.body).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</span>
@@ -350,6 +419,7 @@
       blogGrid.querySelectorAll('.post-more').forEach(btn => {
         btn.onclick = () => togglePostMore(btn);
       });
+      wireAttachmentPreviews();
       hydrateAttachments();
     }
 
@@ -407,6 +477,44 @@
       });
       content.querySelectorAll('.comment-submit').forEach(btn => {
         btn.onclick = () => submitComment(Number(btn.dataset.id), btn);
+      });
+    }
+
+    function openAttachmentModal({ src, type, name }){
+      const modal = document.getElementById('attachmentModal');
+      const content = document.getElementById('attachmentModalContent');
+      const title = document.getElementById('attachmentModalTitle');
+      if (!modal || !content) return;
+      title.textContent = name || 'Attachment Preview';
+      if (type === 'image') {
+        content.innerHTML = `<img src="${src}" alt="${name || 'Attachment'}" />`;
+      } else if (type === 'video') {
+        content.innerHTML = `<video controls src="${src}"></video>`;
+      } else if (type === 'pdf') {
+        content.innerHTML = `<iframe title="${name || 'Document'}" src="${src}"></iframe>`;
+      } else {
+        content.innerHTML = `
+          <div class="attachment-doc">
+            <div class="attachment-icon"><i class="fas fa-file-alt"></i></div>
+            <div>
+              <div class="attachment-label">${name || 'Document'}</div>
+              <div class="attachment-sub">This file cannot be previewed. Use the link below to download.</div>
+              <a class="btn btn-secondary" href="${src}" download="${name || 'document'}" style="margin-top:.75rem">Download</a>
+            </div>
+          </div>
+        `;
+      }
+      modal.classList.add('show');
+    }
+
+    function wireAttachmentPreviews(){
+      blogGrid.querySelectorAll('.attachment-preview').forEach(preview => {
+        preview.onclick = () => {
+          const src = preview.dataset.fullSrc;
+          const type = preview.dataset.type;
+          const name = preview.dataset.name;
+          openAttachmentModal({ src, type, name });
+        };
       });
     }
 
@@ -508,12 +616,20 @@
 
     const adminModal = document.getElementById('adminModal');
     const commentModal = document.getElementById('commentModal');
+    const attachmentModal = document.getElementById('attachmentModal');
     const closeCommentModal = document.getElementById('closeCommentModal');
+    const closeAttachmentModal = document.getElementById('closeAttachmentModal');
     if (closeCommentModal) {
       closeCommentModal.onclick = () => commentModal.classList.remove('show');
     }
+    if (closeAttachmentModal) {
+      closeAttachmentModal.onclick = () => attachmentModal.classList.remove('show');
+    }
     if (commentModal) {
       commentModal.addEventListener('click', e => { if (e.target === commentModal) commentModal.classList.remove('show'); });
+    }
+    if (attachmentModal) {
+      attachmentModal.addEventListener('click', e => { if (e.target === attachmentModal) attachmentModal.classList.remove('show'); });
     }
     document.getElementById('openAdmin').onclick = () => adminModal.classList.add('show');
     document.getElementById('closeAdmin').onclick = () => adminModal.classList.remove('show');
@@ -535,6 +651,7 @@
       const body = document.getElementById('itemBody').value.trim();
       const files = Array.from(document.getElementById('itemFiles').files || []);
       if (!title || !body) return alert('Title and description are required');
+      if (title.length > TITLE_LIMIT) return alert(`Title must be ${TITLE_LIMIT} characters or less.`);
 
       const pushItem = (attachments=[]) => {
         const items = getItems();
@@ -573,8 +690,10 @@
     document.getElementById('addTrend').onclick = () => {
       const title = document.getElementById('trendTitle').value.trim();
       if (!title) return;
+      if (title.length > TITLE_LIMIT) return alert(`Title must be ${TITLE_LIMIT} characters or less.`);
       const type = document.getElementById('trendType').value;
       const link = document.getElementById('trendLink').value.trim();
+      if (link.length > LINK_LIMIT) return alert(`Link must be ${LINK_LIMIT} characters or less.`);
       const desc = document.getElementById('trendDesc').value.trim();
       const trends = getTrends();
       trends.unshift({ id: Date.now(), title, type, link, desc });
@@ -656,13 +775,16 @@
         if (!file || !file.blob) continue;
         const url = URL.createObjectURL(file.blob);
         if (type.startsWith('video')) {
-          slot.innerHTML = `<video controls style="width:100%;margin-top:.45rem;border-radius:12px;border:1px solid var(--border)"><source src="${url}"></video>`;
+          slot.innerHTML = getAttachmentPreview({ type: 'video', src: url, name: file.name });
         } else if (type.startsWith('image')) {
-          slot.innerHTML = `<img src="${url}" alt="${file.name || 'attachment'}" style="width:100%;margin-top:.45rem;border-radius:12px;border:1px solid var(--border)"/>`;
+          slot.innerHTML = getAttachmentPreview({ type: 'image', src: url, name: file.name });
+        } else if (type === 'application/pdf') {
+          slot.innerHTML = getAttachmentPreview({ type: 'application/pdf', src: url, name: file.name });
         } else {
-          slot.innerHTML = `<a class="btn btn-secondary" href="${url}" download="${file.name || 'attachment'}" style="margin-top:.45rem">Download ${file.name || 'File'}</a>`;
+          slot.innerHTML = getAttachmentPreview({ type: 'doc', src: url, name: file.name });
         }
       }
+      wireAttachmentPreviews();
     }
 
     function getTrends(){
@@ -696,10 +818,12 @@
         </div>
       `;
       const entries = items.map(item => {
-        const link = item.link ? `<div><a href="${item.link}" target="_blank" rel="noopener noreferrer">${item.link}</a></div>` : '';
+        const safeTitle = clampText(item.title || '', TITLE_LIMIT);
+        const safeLink = clampText(item.link || '', LINK_LIMIT);
+        const link = item.link ? `<div><a href="${item.link}" target="_blank" rel="noopener noreferrer">${safeLink}</a></div>` : '';
         return `
           <div style="margin-bottom:.8rem">
-            <strong>${item.title}</strong>
+            <strong>${safeTitle}</strong>
             ${link}
             <div class="muted">${item.type}${item.desc ? ` · ${item.desc}` : ''}</div>
           </div>
