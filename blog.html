@@ -6,6 +6,7 @@
   <title>Blog | Elie Mpuhwezimana</title>
   <meta name="description" content="Stories, achievements, documents, books, and discussions by Elie Mpuhwezimana." />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@500;700;800&display=swap" rel="stylesheet" />
   <style>
     :root{--bg:#f4f7fb;--surface:#fff;--ink:#0f172a;--muted:#475569;--primary:#1e3a8a;--border:#dbe4f0}
@@ -78,7 +79,9 @@
     .modal-box{width:min(720px,100%);background:#0f172a;color:#fff;border-radius:14px;padding:1rem}
     .attachment-modal-box{width:min(920px,100%);background:#0f172a;color:#fff;border-radius:14px;padding:1rem}
     .attachment-modal-content{max-height:75vh;overflow:auto}
-    .attachment-modal-content img,.attachment-modal-content iframe,.attachment-modal-content video{width:100%;height:auto;border-radius:12px}
+    .attachment-modal-content img,.attachment-modal-content iframe,.attachment-modal-content video,.attachment-modal-content canvas{width:100%;height:auto;border-radius:12px}
+    .attachment-rotatable{transition:transform .2s ease}
+    .rotate-btn{background:#1e293b;border:1px solid #334155;color:#e2e8f0;border-radius:999px;padding:.35rem .8rem;font-size:.8rem;font-weight:700;cursor:pointer}
     .modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem}
     .modal-close{background:transparent;border:0;color:#e2e8f0;font-size:1.2rem;cursor:pointer}
     .modal-content{max-height:60vh;overflow-y:auto;padding-right:.35rem}
@@ -211,7 +214,10 @@
     <div class="attachment-modal-box">
       <div class="modal-header">
         <h3 id="attachmentModalTitle" style="margin:0">Attachment Preview</h3>
-        <button type="button" class="modal-close" id="closeAttachmentModal" aria-label="Close attachment preview">✕</button>
+        <div class="actions" style="margin:0">
+          <button type="button" class="rotate-btn" id="rotateAttachment" aria-label="Rotate attachment">Rotate</button>
+          <button type="button" class="modal-close" id="closeAttachmentModal" aria-label="Close attachment preview">✕</button>
+        </div>
       </div>
       <div id="attachmentModalContent" class="attachment-modal-content"></div>
     </div>
@@ -287,7 +293,7 @@
       if (type === 'application/pdf') {
         return `
           <div class="attachment-preview" data-full-src="${src}" data-type="pdf" data-name="${safeName}">
-            <iframe class="attachment-frame" title="${safeName}" src="${src}"></iframe>
+            <canvas class="attachment-frame attachment-canvas" data-src="${src}" aria-label="${safeName}"></canvas>
             <span class="expand-chip">Click to Expand</span>
           </div>
         `;
@@ -420,6 +426,7 @@
         btn.onclick = () => togglePostMore(btn);
       });
       wireAttachmentPreviews();
+      renderPdfPreviews();
       hydrateAttachments();
     }
 
@@ -480,31 +487,37 @@
       });
     }
 
+    let attachmentRotation = 0;
+
     function openAttachmentModal({ src, type, name }){
       const modal = document.getElementById('attachmentModal');
       const content = document.getElementById('attachmentModalContent');
       const title = document.getElementById('attachmentModalTitle');
       if (!modal || !content) return;
       title.textContent = name || 'Attachment Preview';
+      attachmentRotation = 0;
       if (type === 'image') {
-        content.innerHTML = `<img src="${src}" alt="${name || 'Attachment'}" />`;
+        content.innerHTML = `<div class="attachment-rotatable"><img src="${src}" alt="${name || 'Attachment'}" /></div>`;
       } else if (type === 'video') {
-        content.innerHTML = `<video controls src="${src}"></video>`;
+        content.innerHTML = `<div class="attachment-rotatable"><video controls src="${src}"></video></div>`;
       } else if (type === 'pdf') {
-        content.innerHTML = `<iframe title="${name || 'Document'}" src="${src}"></iframe>`;
+        content.innerHTML = `<div class="attachment-rotatable"><iframe title="${name || 'Document'}" src="${src}" style="height:70vh"></iframe></div>`;
       } else {
         content.innerHTML = `
-          <div class="attachment-doc">
-            <div class="attachment-icon"><i class="fas fa-file-alt"></i></div>
-            <div>
-              <div class="attachment-label">${name || 'Document'}</div>
-              <div class="attachment-sub">This file cannot be previewed. Use the link below to download.</div>
-              <a class="btn btn-secondary" href="${src}" download="${name || 'document'}" style="margin-top:.75rem">Download</a>
+          <div class="attachment-rotatable">
+            <div class="attachment-doc">
+              <div class="attachment-icon"><i class="fas fa-file-alt"></i></div>
+              <div>
+                <div class="attachment-label">${name || 'Document'}</div>
+                <div class="attachment-sub">This file cannot be previewed. Use the link below to download.</div>
+                <a class="btn btn-secondary" href="${src}" download="${name || 'document'}" style="margin-top:.75rem">Download</a>
+              </div>
             </div>
           </div>
         `;
       }
       modal.classList.add('show');
+      applyAttachmentRotation();
     }
 
     function wireAttachmentPreviews(){
@@ -515,6 +528,31 @@
           const name = preview.dataset.name;
           openAttachmentModal({ src, type, name });
         };
+      });
+    }
+
+    function applyAttachmentRotation(){
+      const content = document.getElementById('attachmentModalContent');
+      const rotatable = content ? content.querySelector('.attachment-rotatable') : null;
+      if (rotatable) rotatable.style.transform = `rotate(${attachmentRotation}deg)`;
+    }
+
+    function renderPdfPreviews(){
+      if (!window.pdfjsLib) return;
+      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+      const canvases = Array.from(document.querySelectorAll('.attachment-canvas'));
+      canvases.forEach(canvas => {
+        if (canvas.dataset.rendered === 'true') return;
+        const src = canvas.dataset.src;
+        if (!src) return;
+        canvas.dataset.rendered = 'true';
+        pdfjsLib.getDocument(src).promise.then(pdf => pdf.getPage(1)).then(page => {
+          const viewport = page.getViewport({ scale: 1 });
+          const ctx = canvas.getContext('2d');
+          canvas.width = viewport.width;
+          canvas.height = viewport.height;
+          page.render({ canvasContext: ctx, viewport });
+        });
       });
     }
 
@@ -619,11 +657,18 @@
     const attachmentModal = document.getElementById('attachmentModal');
     const closeCommentModal = document.getElementById('closeCommentModal');
     const closeAttachmentModal = document.getElementById('closeAttachmentModal');
+    const rotateAttachment = document.getElementById('rotateAttachment');
     if (closeCommentModal) {
       closeCommentModal.onclick = () => commentModal.classList.remove('show');
     }
     if (closeAttachmentModal) {
       closeAttachmentModal.onclick = () => attachmentModal.classList.remove('show');
+    }
+    if (rotateAttachment) {
+      rotateAttachment.onclick = () => {
+        attachmentRotation = (attachmentRotation + 90) % 360;
+        applyAttachmentRotation();
+      };
     }
     if (commentModal) {
       commentModal.addEventListener('click', e => { if (e.target === commentModal) commentModal.classList.remove('show'); });
@@ -785,6 +830,7 @@
         }
       }
       wireAttachmentPreviews();
+      renderPdfPreviews();
     }
 
     function getTrends(){

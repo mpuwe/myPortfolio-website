@@ -22,7 +22,7 @@
     h1,h2,h3,h4 { font-family: "Manrope", sans-serif; }
     a { text-decoration: none; }
 
-    .layout-shell { max-width: 1320px; margin: .4rem auto; padding: .4rem; }
+    .layout-shell { max-width: 1320px; width: 100%; margin: .4rem auto; padding: .4rem; box-sizing: border-box; }
     .home-grid { display: grid; grid-template-columns: 400px 1fr; gap: .35rem; align-items: start; }
     .phone-stick { position: sticky; top: 10px; }
 
@@ -62,10 +62,10 @@
     .loading-ring { width: 64px; height: 64px; border-radius: 999px; border: 4px solid rgba(148,163,184,.35); border-top-color: #38bdf8; margin: 0 auto 1rem; animation: spin 1s linear infinite; }
     .loading-text { font-weight: 700; letter-spacing: .08em; text-transform: uppercase; font-size: .8rem; }
     @keyframes spin { to { transform: rotate(360deg); } }
-    .hero-panel { padding-bottom: calc(1rem + 36px); height: 82vh; display: flex; flex-direction: column; justify-content: center; }
+    .hero-panel { padding-bottom: calc(1rem + 36px); height: 90vh; display: flex; flex-direction: column; justify-content: center; }
     .hero-title { margin-bottom: .5rem; }
     .about-panel { padding: .45rem; }
-    .about-body { width: 980px; max-width: 100%; height: 320px; overflow: hidden; }
+    .about-body { width: 100%; height: 320px; overflow: hidden; box-sizing: border-box; }
     .about-grid { height: 100%; }
     .about-photo { width: 100%; height: 100%; object-fit: cover; }
 
@@ -272,9 +272,9 @@
         </div>
       </aside>
 
-      <main class="space-y-8">
+      <main class="space-y-3">
         <section class="panel p-8 md:p-12 hero-panel">
-          <p class="uppercase tracking-[.22em] text-sm text-slate-500 mb-2">Digital Portfolio Experience</p>
+          <p class="uppercase tracking-[.22em] text-sm text-slate-500 mb-1">Digital Portfolio Experience</p>
           <h1 class="text-4xl md:text-5xl font-extrabold leading-tight hero-title">Transform <span class="text-blue-700">design, code, and sport.</span></h1>
           <h2 class="text-xl md:text-2xl text-slate-600 mb-6">I’m Elie Mpuhwezimana — a graphic design and IT professional focused on brand communication, user experience, and practical digital solutions.</h2>
           <div class="flex flex-wrap gap-3 mb-8">
