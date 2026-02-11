@@ -1,0 +1,234 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Contact | Elie Mpuhwezimana</title>
+  <meta name="description" content="Get in touch with Elie Mpuhwezimana for collaborations, design, and technology projects." />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@500;700;800&display=swap" rel="stylesheet" />
+  <style>
+    /* Easy customization: update colors and spacing below to match your brand. */
+    :root{--bg:#f4f7fb;--surface:#fff;--ink:#0f172a;--muted:#475569;--primary:#1e3a8a;--accent:#0f766e;--border:#dbe4f0}
+    *{box-sizing:border-box}
+    body{margin:0;font-family:Inter,sans-serif;background:var(--bg);color:var(--ink);overflow-x:hidden}
+    h1,h2,h3{font-family:Manrope,sans-serif;margin:0}
+    a{text-decoration:none;color:inherit}
+    img{max-width:100%;display:block}
+    .container{width:min(1200px,96%);margin:0 auto}
+    .header{position:sticky;top:0;background:rgba(255,255,255,.92);backdrop-filter:blur(6px);border-bottom:1px solid var(--border);z-index:10}
+    .header .inner{display:flex;justify-content:space-between;align-items:center;padding:.9rem 0}
+    .nav{display:flex;gap:1rem;flex-wrap:wrap}
+    .nav a{color:var(--muted);font-weight:600}
+    .nav a.active,.nav a:hover{color:var(--primary)}
+    .panel{background:var(--surface);border:1px solid var(--border);border-radius:14px;box-shadow:0 10px 30px rgba(15,23,42,.07)}
+    .hero{margin:1.2rem 0;padding:1.4rem;display:flex;flex-direction:column;gap:.6rem}
+    .lead{color:var(--muted);line-height:1.7}
+    .layout{display:grid;grid-template-columns:1.5fr 1fr;gap:1rem;margin-top:.6rem;margin-bottom:2rem}
+    .form-card{padding:1.4rem}
+    .form-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.9rem}
+    label{display:block;font-weight:600;margin-bottom:.35rem}
+    input,textarea,select{width:100%;padding:.75rem;border-radius:10px;border:1px solid var(--border);background:#fff;color:var(--ink);font-family:inherit}
+    textarea{min-height:120px;resize:vertical}
+    .btn{display:inline-block;padding:.7rem 1rem;border-radius:10px;font-weight:700;border:2px solid transparent;cursor:pointer;transition:all .2s ease}
+    .btn-primary{background:var(--primary);color:#fff}
+    .btn-secondary{border-color:var(--primary);color:var(--primary);background:#fff}
+    .btn:hover{transform:translateY(-1px);box-shadow:0 10px 18px rgba(15,23,42,.12)}
+    .btn:active{transform:translateY(0)}
+    .contact-info{display:grid;grid-template-columns:repeat(3,1fr);gap:.8rem;margin-top:1rem}
+    .info-card{padding:.8rem;border:1px solid var(--border);border-radius:12px;background:#f8fafc}
+    .info-card i{color:var(--accent);margin-right:.35rem}
+    .testimonials{padding:1.2rem;border-left:4px solid var(--primary);background:linear-gradient(135deg,#fff,#f8fafc);position:sticky;top:92px;height:fit-content}
+    .testimonials-inner{max-height:540px;overflow-y:auto;padding-right:.4rem}
+    .testimonial{border:1px solid var(--border);border-radius:12px;padding:.9rem;margin-top:.9rem;background:#fff}
+    .testimonial p{margin:.5rem 0 0;color:var(--muted)}
+    .comment-list{display:flex;flex-direction:column;gap:.6rem;margin:.8rem 0;padding-right:.25rem}
+    .comment-card{border:1px solid var(--border);border-radius:12px;padding:.75rem;background:#fff}
+    .comment-card span{display:inline-block;font-size:.75rem;font-weight:700;color:#1e3a8a;background:#dbeafe;padding:.2rem .55rem;border-radius:999px}
+    .comment-card p{margin:.5rem 0 0;color:var(--muted)}
+    .suggestions-form{margin-top:.6rem}
+    .suggestions-form h4{margin-bottom:.7rem}
+    .suggestions-form textarea{min-height:90px}
+    .actions{display:flex;gap:.6rem;flex-wrap:wrap;margin-top:1rem}
+    .muted{color:var(--muted)}
+
+    @media (max-width:960px){
+      .layout{grid-template-columns:1fr}
+      .form-grid{grid-template-columns:1fr}
+      .contact-info{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+  <!-- Header -->
+  <header class="header">
+    <div class="container inner">
+      <a href="index.html" style="font-weight:800;color:#0f172a">Elie Mpuhwezimana</a>
+      <nav class="nav">
+        <a href="index.html">Home</a>
+        <a href="blog.html">Blog</a>
+        <a href="portfolio.html">Portfolio</a>
+        <a class="active" href="contact.html">Contact</a>
+      </nav>
+    </div>
+  </header>
+
+  <main class="container">
+    <!-- Contact layout -->
+    <section class="layout">
+      <div>
+        <div class="panel form-card">
+          <h2 id="contactForm" style="margin-bottom:.6rem">Contact Form</h2>
+          <p class="muted">Fill in the details below and I’ll get back within 24-48 hours.</p>
+        <form action="https://formsubmit.co/2d357a1cdedf59ba0e8cb95d3996ebbe" method="post">
+          <input type="hidden" name="_subject" value="New portfolio contact submission" />
+          <input type="hidden" name="_captcha" value="false" />
+          <div class="form-grid" style="margin-top:1rem">
+            <div>
+              <label for="fullName">Full Name</label>
+              <input id="fullName" name="fullName" type="text" placeholder="Your name" />
+            </div>
+            <div>
+              <label for="email">Email Address</label>
+              <input id="email" name="email" type="email" placeholder="you@example.com" />
+            </div>
+            <div>
+              <label for="service">Service Needed</label>
+              <select id="service" name="service">
+                <option>Graphic Design</option>
+                <option>Web Development</option>
+                <option>IT Support</option>
+                <option>Brand Strategy</option>
+              </select>
+            </div>
+            <div>
+              <label for="timeline">Project Timeline</label>
+              <input id="timeline" name="timeline" type="text" placeholder="e.g. 2-4 weeks" />
+            </div>
+          </div>
+          <div style="margin-top:1rem">
+            <label for="message">Project Details</label>
+            <textarea id="message" name="message" placeholder="Tell me about your project goals..."></textarea>
+          </div>
+          <div class="actions">
+            <button type="submit" class="btn btn-primary">Send Message</button>
+            <a class="btn btn-secondary" href="portfolio.html">Explore Portfolio</a>
+          </div>
+        </form>
+
+        <div class="contact-info">
+          <div class="info-card">
+            <strong><i class="fas fa-envelope"></i>Email</strong>
+            <p class="muted" style="margin:.35rem 0 0">mpuwezimanaelie@gmail.com</p>
+          </div>
+          <div class="info-card">
+            <strong><i class="fas fa-phone"></i>Phone</strong>
+            <p class="muted" style="margin:.35rem 0 0">+250 788 123 456</p>
+          </div>
+          <div class="info-card">
+            <strong><i class="fas fa-map-marker-alt"></i>Location</strong>
+            <p class="muted" style="margin:.35rem 0 0">Kigali, Rwanda</p>
+          </div>
+        </div>
+        </div>
+        <section class="panel hero">
+          <h1>Let’s Build Something Meaningful</h1>
+          <p class="lead">Share your goals, timeline, and challenges. I’ll respond with a clear plan to deliver modern design and reliable digital solutions.</p>
+          <div class="actions">
+            <a class="btn btn-primary" href="https://calendar.google.com/" target="_blank" rel="noopener noreferrer">Schedual Meeting</a>
+            <a class="btn btn-secondary" href="blog.html">View My Blog</a>
+          </div>
+        </section>
+      </div>
+
+      <aside class="panel testimonials">
+        <div class="testimonials-inner">
+          <h3>Client &amp; Manager Testimonies</h3>
+          <p class="muted" style="margin-top:.4rem">A few notes from collaborators and partners.</p>
+          <div id="commentList" class="comment-list"></div>
+          <div class="testimonial">
+            <strong>Brand Strategy Lead</strong>
+            <p>“Elie delivered a clean visual system that made our campaign feel cohesive and premium.”</p>
+          </div>
+          <div class="testimonial">
+            <strong>Startup Founder</strong>
+            <p>“Fast communication and excellent execution. The final product exceeded our expectations.”</p>
+          </div>
+          <div class="testimonial">
+            <strong>IT Coordinator</strong>
+            <p>“Responsive, organized, and professional. The support process was smooth and reliable.”</p>
+          </div>
+          <div class="suggestions-form">
+            <h4>Suggestions</h4>
+            <label for="skillField">Select Skill/Field</label>
+            <select id="skillField">
+              <option>Graphic Design</option>
+              <option>Web Development</option>
+              <option>IT Support</option>
+              <option>Brand Strategy</option>
+            </select>
+            <label for="commentRole" style="margin-top:.6rem">Role (Client/Manager)</label>
+            <input id="commentRole" type="text" placeholder="e.g. Marketing Manager" />
+            <label for="commentPhone" style="margin-top:.6rem">Phone Number</label>
+            <input id="commentPhone" type="tel" placeholder="+250 7xx xxx xxx" />
+            <label for="commentText" style="margin-top:.6rem">Add Comment</label>
+            <textarea id="commentText" placeholder="Share a suggestion or testimony..."></textarea>
+            <div class="actions">
+              <button id="addComment" type="button" class="btn btn-primary">Add Comment</button>
+            </div>
+          </div>
+        </div>
+      </aside>
+    </section>
+  </main>
+  <script>
+    const commentList = document.getElementById("commentList");
+    const commentKey = "contactTestimonials";
+    const defaultComments = [
+      { field: "Graphic Design", role: "Brand Manager", phone: "+250 788 123 456", text: "Outstanding attention to detail and quick turnaround." },
+      { field: "Web Development", role: "Project Lead", phone: "+250 790 555 111", text: "Clean build, responsive layout, and helpful support." }
+    ];
+
+    function getComments() {
+      const raw = localStorage.getItem(commentKey);
+      if (!raw) {
+        localStorage.setItem(commentKey, JSON.stringify(defaultComments));
+        return defaultComments;
+      }
+      try { return JSON.parse(raw); } catch { return defaultComments; }
+    }
+
+    function setComments(comments) {
+      localStorage.setItem(commentKey, JSON.stringify(comments));
+    }
+
+    function renderComments() {
+      const comments = getComments();
+      commentList.innerHTML = comments.map((comment) => `
+        <div class="comment-card">
+          <span>${comment.field}</span>
+          <p><strong>${comment.role || "Client"}</strong> · ${comment.phone || "N/A"}</p>
+          <p>${comment.text}</p>
+        </div>
+      `).join("");
+    }
+
+    document.getElementById("addComment").addEventListener("click", () => {
+      const field = document.getElementById("skillField").value;
+      const role = document.getElementById("commentRole").value.trim();
+      const phone = document.getElementById("commentPhone").value.trim();
+      const text = document.getElementById("commentText").value.trim();
+      if (!text) return;
+      const comments = getComments();
+      comments.unshift({ field, role, phone, text });
+      setComments(comments);
+      document.getElementById("commentRole").value = "";
+      document.getElementById("commentPhone").value = "";
+      document.getElementById("commentText").value = "";
+      renderComments();
+    });
+
+    renderComments();
+  </script>
+</body>
+</html>
