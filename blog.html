@@ -67,15 +67,12 @@
     .list{margin:.45rem 0 0;padding-left:1.1rem;color:var(--muted)}
     .attachment-preview{margin-top:.45rem;border-radius:12px;border:1px solid var(--border);overflow:hidden;background:#f8fafc;cursor:pointer;position:relative}
     .attachment-media{width:100%;height:180px;object-fit:cover;display:block}
-    .video-preview-icon{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:2.2rem;color:#fff;text-shadow:0 8px 20px rgba(0,0,0,.55);pointer-events:none}
-    .video-preview-icon i{background:rgba(15,23,42,.45);border:1px solid rgba(255,255,255,.4);width:58px;height:58px;border-radius:999px;display:flex;align-items:center;justify-content:center;padding-left:4px}
     .attachment-video{background:#000;object-fit:contain}
     .attachment-frame{width:100%;height:180px;border:0;display:block;background:#fff}
     .attachment-doc{display:flex;align-items:center;gap:.75rem;padding:.9rem}
     .attachment-icon{width:40px;height:40px;border-radius:10px;background:#dbeafe;color:#1e3a8a;display:flex;align-items:center;justify-content:center;font-size:1.1rem}
     .attachment-label{font-weight:700;color:var(--ink)}
     .attachment-sub{font-size:.8rem;color:var(--muted)}
-    .expand-chip{position:absolute;bottom:8px;right:8px;background:rgba(15,23,42,.85);color:#fff;border-radius:999px;padding:.25rem .6rem;font-size:.7rem;font-weight:700;border:0;cursor:pointer}
     
     .modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:1rem;z-index:99}
     .modal.show{display:flex}
@@ -284,7 +281,6 @@
         return `
           <div class="attachment-preview" data-full-src="${src}" data-type="image" data-name="${safeName}">
             <img class="attachment-media" src="${src}" alt="${safeName}" />
-            <button type="button" class="expand-chip" data-expand="true">Expand</button>
             </div>
         `;
       }
@@ -301,7 +297,6 @@
         return `
           <div class="attachment-preview" data-full-src="${src}" data-type="pdf" data-name="${safeName}">
             <canvas class="attachment-frame attachment-canvas" data-src="${src}" aria-label="${safeName}"></canvas>
-            <button type="button" class="expand-chip" data-expand="true">Expand</button>
             </div>
         `;
       }
@@ -889,7 +884,7 @@
           </div>
         `;
       }).join('');
-      list.innerHTML = entries;
+      list.innerHTML = tools + entries;
     }
 
     render();
