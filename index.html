@@ -5,20 +5,20 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Elie Mpuhwezimana | Creative Technology Portfolio</title>
   <meta name="description" content="Professional portfolio showcasing Elie's diverse skills in design, programming, athletics and more"/>
-  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"/>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@500;700;800&display=swap" rel="stylesheet"/>
   <style>
     :root {
       --bg: #f4f7fb;
       --surface: #ffffff;
-      --primary: #1e3a8a;
-      --primary-dark: #172554;
+      --primary: #1d4ed8;
+      --primary-dark: #1e3a8a;
       --accent: #0f766e;
       --ink: #0f172a;
       --muted: #475569;
       --border: #dbe4f0;
     }
-    body { font-family: "Inter", sans-serif; background: var(--bg); color: var(--ink); overflow-x: hidden; }
+    body { font-family: "Inter", sans-serif; background: var(--bg); color: var(--ink); }
     h1,h2,h3,h4 { font-family: "Manrope", sans-serif; }
     a { text-decoration: none; }
 
@@ -38,12 +38,10 @@
 
     .layout-shell { max-width: 1320px; margin: 0 auto; padding: .65rem .7rem .9rem; }
     .home-grid { display: grid; grid-template-columns: 400px 1fr; gap: .8rem; align-items: start; }
-    .layout-shell { max-width: 1320px; width: 100%; margin: .4rem auto; padding: .4rem; box-sizing: border-box; }
-    .home-grid { display: grid; grid-template-columns: 400px 1fr; gap: .35rem; align-items: start; }
     .phone-stick { position: sticky; top: 10px; }
 
     .phone-frame {
-      width: 362px; height: min(95vh, 820px); margin: 0 auto; position: relative;
+      width: 362px; height: min(93vh, 805px); margin: 0 auto; position: relative;
       background: #0b1220; border-radius: 34px; border: 8px solid #0f172a;
       box-shadow: 0 28px 60px rgba(15, 23, 42, 0.35); overflow: hidden;
       display: flex; flex-direction: column;
@@ -52,16 +50,14 @@
     .phone-body { flex: 1; background: radial-gradient(circle at top, #1e3a8a, #0f172a 60%); color: #fff; padding: 2.7rem .75rem 4rem; text-align: center; }
     .social-icons { display: flex; justify-content: center; gap: .55rem; margin-bottom: .55rem; }
     .social-icon { width: 2.5rem; height: 2.5rem; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; color: #dbeafe; background: rgba(255,255,255,.12); transition: .2s; }
-    .social-icon:hover { background: #1e3a8a; color: #fff; transform: translateY(-2px); }
+    .social-icon:hover { background: #1d4ed8; color: #fff; transform: translateY(-2px); }
     .mini-link { background: #1e293b; color: #cbd5e1; border-radius: .7rem; padding: .65rem .2rem; font-size: .72rem; font-weight: 600; display:flex; flex-direction:column; align-items:center; gap:.35rem; }
 
     .phone-nav { position: absolute; left: 0; right: 0; bottom: 0; background: linear-gradient(to top, rgba(2,6,23,.95), rgba(2,6,23,.7)); border-top: 1px solid #334155; padding: .32rem .5rem .4rem; }
     .phone-nav-grid { display: grid; grid-template-columns: repeat(3,1fr); align-items: center; }
-    .nav-btn { width: 100%; display: flex; justify-content: center; align-items: center; color: #e2e8f0; opacity: .97; background: transparent; border: 0; padding: .02rem 0; margin: 0; height: 1.05rem; }
-    .nav-btn i { font-size: 1.02rem; line-height: 1; font-weight: 400; }
-    .nav-triangle { font-size: 1rem; line-height: 1; }
+    .nav-btn { width: 100%; display: flex; justify-content: center; align-items: center; color: #e2e8f0; opacity: .97; background: transparent; border: 0; padding: .1rem 0; margin: 0; }
+    .nav-btn i { font-size: 1.22rem; line-height: 1; }
     .nav-btn:hover { color: #ffffff; opacity: 1; }
-    .nav-btn:active { transform: scale(.96); }
 
     .about-img-container {
       width: 100%; max-width: 448px; height: 400px;
@@ -79,22 +75,6 @@
     .text-red-500,.hover\:text-red-500:hover { color: var(--primary) !important; }
     .bg-gray-900,.bg-gray-800,.bg-gray-700,.bg-gray-950,.bg-\[\#111\],.bg-\[\#222\],.bg-\[\#333\] { background-color: var(--surface) !important; }
     .text-gray-300,.text-gray-400,.text-gray-500 { color: var(--muted) !important; }
-    .loading-screen { position: fixed; inset: 0; background: radial-gradient(circle at 20% 20%, #1d4ed8 0%, transparent 45%), radial-gradient(circle at 80% 80%, #0f766e 0%, transparent 40%), linear-gradient(140deg, #020617, #0f172a 55%, #1e3a8a); display: flex; align-items: center; justify-content: center; z-index: 9999; overflow: hidden; }
-    .loading-screen::before, .loading-screen::after { content: ""; position: absolute; width: 60vmax; height: 60vmax; border-radius: 50%; border: 1px solid rgba(148, 163, 184, 0.2); animation: floatPulse 7s ease-in-out infinite; }
-    .loading-screen::after { animation-delay: -3.5s; width: 46vmax; height: 46vmax; }
-    .loading-card { background: rgba(15, 23, 42, 0.58); border: 1px solid rgba(148, 163, 184, 0.35); color: #e2e8f0; padding: 2.4rem 2.8rem; border-radius: 1.2rem; text-align: center; box-shadow: 0 24px 70px rgba(2,6,23,.55); backdrop-filter: blur(8px); position: relative; z-index: 1; min-width: 320px; }
-    .loading-ring { width: 82px; height: 82px; border-radius: 999px; border: 4px solid rgba(148,163,184,.35); border-top-color: #67e8f9; margin: 0 auto 1.2rem; animation: spin 1s linear infinite; position: relative; }
-    .loading-ring::after { content: ""; position: absolute; inset: 12px; border-radius: 999px; border: 3px solid rgba(125, 211, 252, 0.35); border-bottom-color: #38bdf8; animation: spin 1.4s linear infinite reverse; }
-    .loading-text { font-weight: 800; letter-spacing: .22em; text-transform: uppercase; font-size: .88rem; color: #e0f2fe; }
-    .loading-subtext { margin-top: .55rem; font-size: .72rem; letter-spacing: .08em; color: #bae6fd; text-transform: uppercase; opacity: .9; }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    @keyframes floatPulse { 0%,100% { transform: scale(0.85); opacity: .4; } 50% { transform: scale(1); opacity: .8; } }
-    .hero-panel { padding-bottom: 0; height: 700px; display: flex; flex-direction: column; justify-content: center; }
-    .hero-title { margin-bottom: 4px; }
-    .about-panel { padding: .45rem; }
-    .about-body { width: 980px; max-width: 100%; height: 320px; overflow: hidden; box-sizing: border-box; }
-    .about-grid { height: 100%; }
-    .about-photo { width: 100%; height: 100%; object-fit: cover; }
 
     * { box-sizing: border-box; }
     body { margin: 0; }
@@ -125,8 +105,7 @@
     .gap-8 { gap: 2rem; }
     .space-y-2 > * + * { margin-top: .5rem; }
     .space-y-3 > * + * { margin-top: .75rem; }
-    .space-y-8 > * + * { margin-top: .35rem; }
-    .footer-contact a { word-break: break-all; }
+    .space-y-8 > * + * { margin-top: .8rem; }
     .p-5 { padding: 1.25rem; }
     .p-6 { padding: 1.5rem; }
     .p-8 { padding: 1rem; }
@@ -187,7 +166,7 @@
     .tracking-\[\.22em\] { letter-spacing: .22em; }
     .text-white { color: #fff; }
     .text-blue-300 { color: #93c5fd; }
-    .text-blue-700 { color: #1e3a8a; }
+    .text-blue-700 { color: #1d4ed8; }
     .text-cyan-200 { color: #a5f3fc; }
     .text-cyan-300 { color: #67e8f9; }
     .text-slate-200 { color: #e2e8f0; }
@@ -198,7 +177,7 @@
     .bg-slate-700 { background: #334155; }
     .bg-slate-800 { background: #1e293b; }
     .bg-slate-900 { background: #0f172a; }
-    .bg-blue-600 { background: #1e3a8a; }
+    .bg-blue-600 { background: #2563eb; }
     .bg-opacity-70 { background-color: rgba(0,0,0,.7); }
     .shadow-lg { box-shadow: 0 10px 25px rgba(15, 23, 42, 0.18); }
     .shadow-xl { box-shadow: 0 14px 32px rgba(15, 23, 42, 0.22); }
@@ -210,13 +189,13 @@
     .list-inside { list-style-position: inside; }
     .mr-2 { margin-right: .5rem; }
     .hover\:opacity-100:hover { opacity: 1; }
-    .hover\:bg-blue-700:hover { background: #172554; }
+    .hover\:bg-blue-700:hover { background: #1d4ed8; }
     .hover\:bg-slate-600:hover { background: #475569; }
     .hover\:bg-slate-700:hover { background: #334155; }
-    .hover\:text-blue-700:hover { color: #1e3a8a; }
+    .hover\:text-blue-700:hover { color: #1d4ed8; }
     .focus\:outline-none:focus { outline: none; }
     .focus\:ring-2:focus { box-shadow: 0 0 0 2px rgba(29,78,216,.25); }
-    .focus\:ring-blue-500:focus { border-color: #1e3a8a; }
+    .focus\:ring-blue-500:focus { border-color: #3b82f6; }
 
     @media (min-width: 640px) {
       .sm\:grid-cols-3 { grid-template-columns: repeat(3,minmax(0,1fr)); }
@@ -235,14 +214,8 @@
 
     @media (max-width: 1024px) {
       .home-grid { grid-template-columns: 1fr; }
-      .phone-frame { width: 332px; height: min(90vh, 760px); }
+      .phone-frame { width: 332px; height: min(88vh, 740px); }
       .phone-stick { position: static; }
-    }
-    @media (min-width: 768px) {
-      .about-panel { padding: .6rem; }
-    }
-    @media (max-width: 900px) {
-      .hero-panel { height: 70vh; }
     }
   </style>
 </head>
@@ -252,13 +225,6 @@
     <div class="loader-text">PREPARING EXPERIENCE</div>
   </div>
 
-  <div class="loading-screen" id="loadingScreen" aria-live="polite">
-    <div class="loading-card">
-      <div class="loading-ring"></div>
-      <div class="loading-text">LOADING PORTFOLIO</div>
-      <div class="loading-subtext">Preparing creative experiences</div>
-    </div>
-  </div>
   <div class="layout-shell">
     <div class="home-grid">
       <aside class="phone-stick" aria-label="Profile preview phone">
@@ -275,10 +241,10 @@
             <h3 class="text-2xl font-extrabold tracking-wide">Elie Mpuhwezimana</h3>
             <p class="text-sm uppercase tracking-[.18em] text-cyan-200 mb-6">Graphic Design & IT Professional</p>
             <div class="social-icons">
-              <a href="https://twitter.com/" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-              <a href="https://www.linkedin.com/messaging/thread/2-NDk5YjU4Y2MtMmIzNy00NDM5LWJlMWEtNDRmNTM4OGJhNWU1XzEwMA==/" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-              <a href="https://github.com/dashboard" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="GitHub"><i class="fab fa-github"></i></a>
-              <a href="https://www.instagram.com/" target="_blank" rel="noopener noreferrer" class="social-icon" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+              <a href="https://twitter.com/" target="_blank" class="social-icon" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+              <a href="https://www.linkedin.com/messaging/thread/2-NDk5YjU4Y2MtMmIzNy00NDM5LWJlMWEtNDRmNTM4OGJhNWU1XzEwMA==/" target="_blank" class="social-icon" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+              <a href="https://github.com/dashboard" target="_blank" class="social-icon" aria-label="GitHub"><i class="fab fa-github"></i></a>
+              <a href="https://www.instagram.com/" target="_blank" class="social-icon" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
             </div>
             <div class="grid grid-cols-4 gap-2 text-xs mt-2" style="margin-top: 1.6rem;">
               <a href="portfolio.html#documents" class="mini-link"><i class="fas fa-trophy text-cyan-300"></i>Awards</a>
@@ -297,18 +263,17 @@
               </button>
               <button type="button" aria-label="Back" class="nav-btn transition" title="Back">
                 <span style="font-size: 1.5rem; color: #fff; line-height: 1;">▷</span>
-                <span class="nav-triangle">▷</span>
               </button>
             </div>
           </div>
         </div>
       </aside>
 
-      <main class="space-y-2">
-        <section class="panel p-8 md:p-12 hero-panel">
-          <p class="uppercase tracking-[.22em] text-sm text-slate-500 mb-1">Digital Portfolio Experience</p>
-          <h1 class="text-4xl md:text-5xl font-extrabold leading-tight hero-title">Transform <span class="text-blue-700">design, code, and sport.</span></h1>
-          <h2 class="text-xl md:text-2xl text-slate-600 mb-6">I’m Elie Mpuhwezimana — a graphic design and IT professional focused on brand communication, user experience, and practical digital solutions.</h2>
+      <main class="space-y-8">
+        <section class="panel p-8 md:p-12">
+          <p class="uppercase tracking-[.22em] text-sm text-slate-500 mb-4">Digital Portfolio Experience</p>
+          <h1 class="text-4xl md:text-5xl font-extrabold leading-tight mb-5">Transform <span class="text-blue-700">design, code, and sport.</span></h1>
+          <h2 class="text-xl md:text-2xl text-slate-600 mb-8">I’m Elie Mpuhwezimana — a graphic design and IT professional focused on brand communication, user experience, and practical digital solutions.</h2>
           <div class="flex flex-wrap gap-3 mb-8">
             <span class="chip px-4 py-2 rounded-full text-sm font-semibold">Graphic Design</span>
             <span class="chip px-4 py-2 rounded-full text-sm font-semibold">Programming</span>
@@ -318,7 +283,7 @@
           </div>
           <div class="grid sm:grid-cols-2 gap-4 max-w-3xl" style="grid-auto-flow: column; margin-bottom: 7px;">
             <a href="portfolio.html" class="btn-primary px-6 py-4 rounded-lg font-bold text-center transition">Explore Portfolio Hub</a>
-            <a href="contact.html" class="bg-slate-900 text-white px-6 py-4 rounded-lg font-bold text-center hover:bg-slate-700 transition">Connect Me</a>
+            <a href="mailto:mpuwezimanaelie@gmail.com?subject=Project%20Discussion&body=Hello%20Elie,%20I%20would%20like%20to%20discuss%20a%20task%20or%20deal." class="bg-slate-900 text-white px-6 py-4 rounded-lg font-bold text-center hover:bg-slate-700 transition">Connect Me</a>
           </div>
         </section>
 
@@ -334,18 +299,6 @@
               <div class="flex gap-4" style="flex-wrap: nowrap;">
                 <a href="blog.html" class="btn-primary px-7 py-3 rounded-lg font-semibold">View My Blog</a>
                 <a href="https://calendar.google.com/" target="_blank" rel="noopener noreferrer" class="btn-secondary px-7 py-3 rounded-lg font-semibold">Book My Collaboration</a>
-        <section id="about" class="panel about-panel">
-          <h2 class="text-3xl font-extrabold mb-1">About Me</h2>
-          <div class="about-body">
-            <div class="grid md:grid-cols-2 gap-8 items-center about-grid">
-              <img id="aboutProfileImage" src="mpover pic.jpg" alt="Professional portrait of Elie Mpuhwezimana, smiling confidently, wearing a smart casual shirt, studio background" class="rounded-xl shadow-xl about-photo"/>
-              <div>
-                <p class="text-slate-600 mb-4">I'm a focused creative professional with strong expertise in graphic design, visual communication, and IT implementation. I translate ideas into high-quality digital experiences that support organizational goals.</p>
-                <p class="text-slate-600 mb-6">Athletics remains a long-term personal passion, while my professional value-add is strategic creative contribution: combining design thinking, digital execution, and clear communication to strengthen team outcomes.</p>
-                <div class="flex gap-4" style="flex-wrap: nowrap;">
-                  <a href="blog.html" class="btn-primary px-7 py-3 rounded-lg font-semibold">View My Blog</a>
-                  <a href="https://calendar.google.com/" target="_blank" rel="noopener noreferrer" class="btn-secondary px-7 py-3 rounded-lg font-semibold">Book My Collaboration</a>
-                </div>
               </div>
             </div>
           </div>
@@ -395,7 +348,7 @@
             </div>
             <div>
               <h3 class="text-xl font-extrabold mb-3 text-blue-700">Direct Contact</h3>
-              <ul class="space-y-3 text-slate-600 footer-contact"><li><i class="fas fa-envelope text-blue-700 mr-2"></i><a href="mailto:mpuwezimanaelie@gmail.com" class="hover:text-blue-700">mpuwezimanaelie@gmail.com</a></li><li><i class="fas fa-phone text-blue-700 mr-2"></i><a href="tel:+250790737511" class="hover:text-blue-700">+250 790 737 511</a></li><li><i class="fas fa-map-marker-alt text-blue-700 mr-2"></i>Kigali, Rwanda</li></ul>
+              <ul class="space-y-3 text-slate-600"><li><i class="fas fa-envelope text-blue-700 mr-2"></i><a href="mailto:mpuwezimanaelie@gmail.com" class="hover:text-blue-700">mpuwezimanaelie@gmail.com</a></li><li><i class="fas fa-phone text-blue-700 mr-2"></i><a href="tel:+250790737511" class="hover:text-blue-700">+250 790 737 511</a></li><li><i class="fas fa-map-marker-alt text-blue-700 mr-2"></i>Kigali, Rwanda</li></ul>
             </div>
           </div>
           <div class="border-t border-slate-200 mt-8 pt-6 text-sm text-slate-500">© 2025 Elie Mpuhwezimana. All rights reserved.</div>
@@ -409,7 +362,7 @@
       <h3 class="text-2xl font-extrabold mb-6 text-blue-300" id="adminPanelTitle">Admin Controls</h3>
       <div id="passwordVerify" class="mb-8">
         <label for="adminPassword" class="block text-white mb-3 font-semibold text-lg">Enter Admin Password</label>
-        <input id="adminPassword" type="password" autocomplete="current-password" placeholder="Enter Your Password" maxlength="32" class="w-full px-5 py-3 bg-slate-800 border border-slate-700 rounded-lg text-white text-lg focus:outline-none focus:ring-2 focus:ring-blue-500"/>
+        <input id="adminPassword" type="password" autocomplete="current-password" placeholder="Enter Your Password" class="w-full px-5 py-3 bg-slate-800 border border-slate-700 rounded-lg text-white text-lg focus:outline-none focus:ring-2 focus:ring-blue-500"/>
         <button id="verifyPassword" class="btn-primary mt-6 px-6 py-3 rounded-lg w-full font-bold text-lg">Verify</button>
       </div>
       <div id="adminActions" class="hidden space-y-8">
@@ -422,7 +375,7 @@
         </div>
         <div class="p-6 border border-slate-700 rounded-lg">
           <h4 class="font-bold mb-5 text-xl">Change Password</h4>
-          <div class="mb-6"><label for="newAdminPassword" class="block mb-2 text-lg font-semibold">New Password</label><input id="newAdminPassword" type="password" autocomplete="new-password" maxlength="32" class="w-full px-5 py-3 bg-slate-800 border border-slate-700 rounded-lg text-lg focus:outline-none focus:ring-2 focus:ring-blue-500"/></div>
+          <div class="mb-6"><label for="newAdminPassword" class="block mb-2 text-lg font-semibold">New Password</label><input id="newAdminPassword" type="password" autocomplete="new-password" class="w-full px-5 py-3 bg-slate-800 border border-slate-700 rounded-lg text-lg focus:outline-none focus:ring-2 focus:ring-blue-500"/></div>
           <button id="changePassword" class="btn-primary px-6 py-3 rounded-lg w-full font-bold text-lg flex items-center justify-center gap-3"><i class="fas fa-key"></i>Update Password</button>
         </div>
       </div>
@@ -450,6 +403,19 @@
     const profileImage = document.getElementById("profileImage");
     const aboutProfileImage = document.getElementById("aboutProfileImage");
     const savedImage = localStorage.getItem("profileImage");
+
+    const ADMIN_PASSWORD_KEY = "homeAdminPassword";
+    const DEFAULT_ADMIN_PASSWORD = "elie";
+
+    function getAdminPassword() {
+      return localStorage.getItem(ADMIN_PASSWORD_KEY) || DEFAULT_ADMIN_PASSWORD;
+    }
+
+    function closeAdminPanel() {
+      document.getElementById("adminPanel").classList.add("hidden");
+      document.getElementById("adminPassword").value = "";
+      document.getElementById("newAdminPassword").value = "";
+    }
     if (savedImage) {
       profileImage.src = savedImage;
       if (aboutProfileImage) aboutProfileImage.src = savedImage;
@@ -460,10 +426,11 @@
       document.getElementById("passwordVerify").classList.remove("hidden");
       document.getElementById("adminActions").classList.add("hidden");
       document.getElementById("adminPassword").value = "";
+      document.getElementById("newAdminPassword").value = "";
     });
 
     document.getElementById("verifyPassword").addEventListener("click", function () {
-      if (document.getElementById("adminPassword").value === "elie") {
+      if (document.getElementById("adminPassword").value === getAdminPassword()) {
         document.getElementById("passwordVerify").classList.add("hidden");
         document.getElementById("adminActions").classList.remove("hidden");
       } else {
@@ -476,10 +443,34 @@
         const defaultImage = "mpover pic.jpg";
         profileImage.src = defaultImage;
         localStorage.removeItem("profileImage");
-        location.reload(); 
+        location.reload();
       }
     });
 
+
+
+    document.getElementById("changePassword").addEventListener("click", function () {
+      const nextPassword = document.getElementById("newAdminPassword").value.trim();
+      if (!nextPassword) {
+        alert("Please enter a new password.");
+        return;
+      }
+      if (nextPassword.length < 4) {
+        alert("Password must be at least 4 characters.");
+        return;
+      }
+      localStorage.setItem(ADMIN_PASSWORD_KEY, nextPassword);
+      document.getElementById("newAdminPassword").value = "";
+      alert("Admin password updated successfully.");
+    });
+
+    document.getElementById("adminPassword").addEventListener("keydown", function (e) {
+      if (e.key === "Enter") document.getElementById("verifyPassword").click();
+    });
+
+    document.getElementById("newAdminPassword").addEventListener("keydown", function (e) {
+      if (e.key === "Enter") document.getElementById("changePassword").click();
+    });
     document.getElementById("newProfileImage").addEventListener("change", function (e) {
       const file = e.target.files[0];
       if (file) {
@@ -487,26 +478,21 @@
         reader.onload = function (e) {
           const newImage = e.target.result;
           localStorage.setItem("profileImage", newImage);
-          location.reload(); 
+          profileImage.src = newImage;
+          if (aboutProfileImage) aboutProfileImage.src = newImage;
+          closeAdminPanel();
         };
         reader.readAsDataURL(file);
       }
     });
 
     document.getElementById("adminPanel").addEventListener("click", function (e) {
-      if (e.target === this) this.classList.add("hidden");
+      if (e.target === this) closeAdminPanel();
     });
 
-    window.addEventListener("load", () => {
-      const loader = document.getElementById("loadingScreen");
-      if (!loader) return;
-      setTimeout(() => {
-        loader.style.opacity = "0";
-        loader.style.transition = "opacity .45s ease";
-        setTimeout(() => { loader.style.display = "none"; }, 450);
-      }, 900);
+    document.addEventListener("keydown", function (e) {
+      if (e.key === "Escape") closeAdminPanel();
     });
-
   </script>
 </body>
 </html>
