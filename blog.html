@@ -6,12 +6,14 @@
   <title>Blog | Elie Mpuhwezimana</title>
   <meta name="description" content="Stories, achievements, documents, books, and discussions by Elie Mpuhwezimana." />
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" />
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@500;700;800&display=swap" rel="stylesheet" />
   <style>
-    :root{--bg:#f4f7fb;--surface:#fff;--ink:#0f172a;--muted:#475569;--primary:#1d4ed8;--border:#dbe4f0}
+    :root{--bg:#f4f7fb;--surface:#fff;--ink:#0f172a;--muted:#475569;--primary:#1e3a8a;--border:#dbe4f0}
     *{box-sizing:border-box} body{margin:0;font-family:Inter,sans-serif;background:var(--bg);color:var(--ink)} h1,h2,h3{font-family:Manrope,sans-serif}
     a{text-decoration:none}
     .container{width:min(1150px,92%);margin:0 auto}
+    .hidden{display:none !important}
     .header{position:sticky;top:0;background:rgba(255,255,255,.92);backdrop-filter:blur(6px);border-bottom:1px solid var(--border);z-index:10}
     .header .inner{display:flex;justify-content:space-between;align-items:center;padding:.9rem 0}
     .nav{display:flex;gap:1rem}.nav a{color:var(--muted);font-weight:600}.nav a.active,.nav a:hover{color:var(--primary)}
@@ -19,26 +21,72 @@
     .hero{margin:1rem 0;padding:1.2rem;display:grid;grid-template-columns:220px 1fr;gap:1rem;align-items:center}
     .hero img{width:100%;height:220px;object-fit:cover;border-radius:12px;border:2px solid var(--border)}
     .lead{color:var(--muted);line-height:1.65}
-    .btn{display:inline-block;padding:.72rem 1rem;border-radius:10px;font-weight:700;border:2px solid transparent;cursor:pointer}
+    .btn{display:inline-block;padding:.72rem 1rem;border-radius:10px;font-weight:700;border:2px solid transparent;cursor:pointer;transition:all .2s ease}
     .btn-primary{background:var(--primary);color:#fff}.btn-secondary{border-color:var(--primary);color:var(--primary);background:#fff}
+    .btn:hover{transform:translateY(-1px);box-shadow:0 8px 16px rgba(15,23,42,.12)}
+    .btn:active{transform:translateY(0)}
     .toolbar{display:flex;justify-content:space-between;align-items:center;gap:.8rem;margin:.8rem 0}
-    .filters{display:flex;flex-wrap:wrap;gap:.45rem}
+    .filters{display:flex;flex-wrap:wrap;gap:.45rem;margin-bottom:.8rem}
     .filter-btn{border:1px solid var(--border);background:#fff;padding:.4rem .65rem;border-radius:999px;font-weight:600;color:var(--muted);cursor:pointer}
-    .filter-btn.active{background:#dbeafe;border-color:#93c5fd;color:#1e40af}
-    .layout{display:grid;grid-template-columns:2fr 1fr;gap:.9rem}
-    .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.8rem}
-    .card{padding:1rem;border:1px solid var(--border);border-radius:12px;background:#fff}
-    .badge{display:inline-block;font-size:.75rem;font-weight:700;color:#1e40af;background:#dbeafe;padding:.2rem .55rem;border-radius:999px}
+    .filter-btn.active{background:#dbeafe;border-color:#93c5fd;color:#1e3a8a}
+    .layout{display:grid;grid-template-columns:2fr 1fr;gap:.9rem;align-items:start}
+    .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:.8rem;align-items:start}
+    .card{padding:1rem;border:1px solid var(--border);border-radius:12px;background:#fff;align-self:start;display:flex;flex-direction:column;gap:.6rem;height:420px;overflow:hidden}
+    .post-content{max-height:240px;overflow:hidden}
+    .post-content.expanded{max-height:340px;overflow:auto;padding-right:.35rem}
+    .badge{display:inline-block;font-size:.75rem;font-weight:700;color:#1e3a8a;background:#dbeafe;padding:.2rem .55rem;border-radius:999px}
     .tags{display:flex;flex-wrap:wrap;gap:.35rem;margin:.55rem 0}
     .tag{font-size:.7rem;font-weight:700;color:#0f172a;background:#e2e8f0;padding:.2rem .5rem;border-radius:999px}
     .muted{color:var(--muted)}
     .actions{display:flex;gap:.45rem;flex-wrap:wrap;margin-top:.5rem}
-    .side-card{padding:1rem}
+    .post-actions{display:flex;align-items:center;gap:.6rem;margin-top:.8rem;flex-wrap:wrap}
+    .action-btn{border:1px solid var(--border);background:#fff;padding:.35rem .65rem;border-radius:999px;font-weight:700;color:var(--muted);cursor:pointer;transition:all .2s ease}
+    .action-btn:hover{border-color:#93c5fd;color:#1e3a8a;box-shadow:0 6px 12px rgba(15,23,42,.08)}
+    .like-btn{color:#166534;border-color:#bbf7d0}
+    .like-btn:hover{color:#14532d;border-color:#86efac}
+    .action-btn:active{transform:scale(.97)}
+    .delete-btn{border-color:#fecaca;color:#dc2626}
+    .delete-btn:hover{border-color:#fca5a5;color:#b91c1c}
+    .comment-box{margin-top:.2rem;border-top:1px solid var(--border);padding-top:.6rem}
+    .comment-list{max-height:220px;overflow-y:auto;padding-right:.35rem}
+    .comment-form textarea{min-height:70px;background:#fff;color:var(--ink);border:1px solid var(--border)}
+    .comment{padding:.6rem;border:1px solid var(--border);border-radius:10px;margin-top:.6rem;background:#f8fafc}
+    .comment-meta{display:flex;justify-content:space-between;align-items:center;margin-bottom:.35rem}
+    .reply-box{margin-top:.5rem;padding-left:.75rem;border-left:2px solid #e2e8f0}
+    .reply{margin-top:.4rem;padding:.45rem;border-radius:8px;background:#fff;border:1px solid var(--border)}
+    .reply-form{margin-top:.5rem}
+    .comment-text{display:block}
+    .read-more{margin-top:.35rem}
+    .post-more{margin-top:.4rem}
+    .upload-progress{margin-top:.6rem;display:none;align-items:center;gap:.75rem}
+    .upload-cube{width:26px;height:26px;border-radius:6px;background:linear-gradient(145deg,#16a34a,#22c55e);box-shadow:0 6px 14px rgba(22,163,74,.35);position:relative;overflow:hidden}
+    .upload-cube::after{content:"";position:absolute;inset:0;background:linear-gradient(0deg,rgba(255,255,255,.3),transparent);animation:liquid 1.2s ease-in-out infinite}
+    .upload-progress span{font-weight:700;color:#166534}
+    @keyframes liquid{0%{transform:translateY(100%)}50%{transform:translateY(40%)}100%{transform:translateY(100%)}}
+    .side-card{padding:1rem;position:sticky;top:88px;height:fit-content;align-self:start}
     .list{margin:.45rem 0 0;padding-left:1.1rem;color:var(--muted)}
+    .attachment-preview{margin-top:.45rem;border-radius:12px;border:1px solid var(--border);overflow:hidden;background:#f8fafc;cursor:pointer;position:relative}
+    .attachment-media{width:100%;height:180px;object-fit:cover;display:block}
+    .video-preview-icon{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:2.2rem;color:#fff;text-shadow:0 8px 20px rgba(0,0,0,.55);pointer-events:none}
+    .video-preview-icon i{background:rgba(15,23,42,.45);border:1px solid rgba(255,255,255,.4);width:58px;height:58px;border-radius:999px;display:flex;align-items:center;justify-content:center;padding-left:4px}
+    .attachment-frame{width:100%;height:180px;border:0;display:block;background:#fff}
+    .attachment-doc{display:flex;align-items:center;gap:.75rem;padding:.9rem}
+    .attachment-icon{width:40px;height:40px;border-radius:10px;background:#dbeafe;color:#1e3a8a;display:flex;align-items:center;justify-content:center;font-size:1.1rem}
+    .attachment-label{font-weight:700;color:var(--ink)}
+    .attachment-sub{font-size:.8rem;color:var(--muted)}
+    .expand-chip{position:absolute;bottom:8px;right:8px;background:rgba(15,23,42,.85);color:#fff;border-radius:999px;padding:.25rem .6rem;font-size:.7rem;font-weight:700}
 
     .modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:1rem;z-index:99}
     .modal.show{display:flex}
     .modal-box{width:min(720px,100%);background:#0f172a;color:#fff;border-radius:14px;padding:1rem}
+    .attachment-modal-box{width:min(920px,100%);background:#0f172a;color:#fff;border-radius:14px;padding:1rem}
+    .attachment-modal-content{max-height:75vh;overflow:auto}
+    .attachment-modal-content img,.attachment-modal-content iframe,.attachment-modal-content video,.attachment-modal-content canvas{width:100%;height:auto;border-radius:12px}
+    .attachment-rotatable{transition:transform .2s ease}
+    .rotate-btn{background:#1e293b;border:1px solid #334155;color:#e2e8f0;border-radius:999px;padding:.35rem .8rem;font-size:.8rem;font-weight:700;cursor:pointer}
+    .modal-header{display:flex;justify-content:space-between;align-items:center;margin-bottom:.5rem}
+    .modal-close{background:transparent;border:0;color:#e2e8f0;font-size:1.2rem;cursor:pointer}
+    .modal-content{max-height:60vh;overflow-y:auto;padding-right:.35rem}
     .row{display:grid;grid-template-columns:1fr 1fr;gap:.65rem}
     input,select,textarea{width:100%;padding:.62rem;border-radius:8px;border:1px solid #334155;background:#111827;color:#fff}
     textarea{min-height:88px}
@@ -54,7 +102,7 @@
         <a href="index.html">Home</a>
         <a class="active" href="blog.html">Blog</a>
         <a href="portfolio.html">Portfolio</a>
-        <a href="mailto:mpuwezimanaelie@gmail.com?subject=Project%20Discussion&body=Hello%20Elie,%20I%20would%20like%20to%20discuss%20a%20task%20or%20deal.">Hire Me</a>
+        <a href="contact.html">Hire Me</a>
       </nav>
     </div>
   </header>
@@ -83,21 +131,8 @@
       <section id="blogGrid" class="grid"></section>
 
       <aside class="panel side-card">
-        <h3>Tools of the Trade</h3>
-        <ul class="list">
-          <li>Notion</li>
-          <li>Trello</li>
-          <li>Canva</li>
-          <li>Figma</li>
-          <li>VS Code</li>
-        </ul>
-
-        <h3 style="margin-top:1.1rem">Recent Milestones</h3>
-        <ul class="list">
-          <li>New 400m training PR</li>
-          <li>Launched portfolio refresh</li>
-          <li>Completed IT office setup</li>
-        </ul>
+        <h3>Trending &amp; Opportunities</h3>
+        <div id="trendingList" class="list"></div>
       </aside>
     </div>
 
@@ -108,36 +143,85 @@
     <div class="modal-box">
       <h3 style="margin:.1rem 0 .6rem">Blog Admin</h3>
       <div id="authWrap">
-        <input id="adminPassword" type="password" placeholder="Enter admin password" />
+        <input id="adminPassword" type="password" placeholder="Enter admin password" maxlength="32" />
         <div class="actions"><button id="verifyAdmin" class="btn btn-primary">Verify</button><button id="closeAdmin" class="btn btn-secondary">Close</button></div>
       </div>
       <div id="uploadWrap" style="display:none">
         <div class="row">
-          <select id="itemCategory">
-            <option value="Case Studies">Case Studies</option>
-            <option value="How-To Guides">How-To Guides</option>
-            <option value="Behind-the-Scenes">Behind-the-Scenes</option>
-            <option value="Insights">Insights</option>
-            <option value="Milestones">Milestones</option>
-          </select>
-          <input id="itemTitle" type="text" placeholder="Title" />
-        </div>
-        <div class="row">
-          <input id="itemTags" type="text" placeholder="Tags (comma separated)" />
-          <select id="itemType">
-            <option value="Post">Post</option>
-            <option value="Announcement">Announcement</option>
-            <option value="Education">Education</option>
-            <option value="Discussion">Discussion</option>
-          </select>
-        </div>
-        <textarea id="itemBody" placeholder="Description"></textarea>
-        <input id="itemFiles" type="file" multiple accept="image/*,video/*,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" />
-        <div class="actions">
-          <button id="saveItem" class="btn btn-primary">Publish</button>
-          <button id="closeAdmin2" class="btn btn-secondary">Close</button>
+          <div>
+            <h4 style="margin:.2rem 0 .6rem">Current Post</h4>
+            <select id="itemCategory">
+              <option value="Track Lesson">Track Lesson</option>
+              <option value="General Post">General Post</option>
+              <option value="Quick Announcement">Quick Announcement</option>
+              <option value="Normal Update">Normal Update</option>
+            </select>
+            <input id="itemTitle" type="text" placeholder="Title" style="margin-top:.5rem" maxlength="72" />
+            <textarea id="itemBody" placeholder="Description" style="margin-top:.5rem"></textarea>
+            <input id="itemFiles" type="file" multiple accept="image/*,video/*,application/pdf,application/msword,application/vnd.openxmlformats-officedocument.wordprocessingml.document" />
+            <p class="muted" style="margin:.35rem 0 0">You can upload images, videos, or PDFs to appear in the post.</p>
+            <div id="uploadProgress" class="upload-progress">
+              <div class="upload-cube"></div>
+              <span id="uploadPercent">0%</span>
+            </div>
+            <div class="actions">
+              <button id="saveItem" class="btn btn-primary">Publish</button>
+              <button id="closeAdmin2" class="btn btn-secondary">Close</button>
+            </div>
+          </div>
+          <div>
+            <h4 style="margin:.2rem 0 .6rem">Trending &amp; Opportunities</h4>
+            <input id="trendTitle" type="text" placeholder="Title" maxlength="72" />
+            <select id="trendType" style="margin-top:.5rem">
+              <option value="Trending Tool">Trending Tool</option>
+              <option value="New Version">New Version</option>
+              <option value="Job Link">Job Link</option>
+              <option value="Scholarship Link">Scholarship Link</option>
+            </select>
+            <input id="trendLink" type="url" placeholder="Link (optional)" style="margin-top:.5rem" maxlength="160" />
+            <textarea id="trendDesc" placeholder="Short description" style="margin-top:.5rem"></textarea>
+            <div class="actions">
+              <button id="addTrend" class="btn btn-primary">Add Item</button>
+              <button id="clearTrends" class="btn btn-secondary">Clear All</button>
+            </div>
+          </div>
         </div>
       </div>
+    </div>
+  </div>
+
+  <div id="deleteModal" class="modal" aria-hidden="true">
+    <div class="modal-box">
+      <h3 style="margin:.1rem 0 .6rem">Confirm Delete</h3>
+      <p class="muted" style="margin:0 0 .6rem">Enter admin password to delete this post.</p>
+      <input id="deletePassword" type="password" placeholder="Admin password" maxlength="32" />
+      <div class="actions">
+        <button id="confirmDelete" class="btn btn-primary">Delete</button>
+        <button id="cancelDelete" class="btn btn-secondary">Cancel</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="commentModal" class="modal" aria-hidden="true">
+    <div class="modal-box">
+      <div class="modal-header">
+        <h3 id="commentModalTitle" style="margin:0">Post Comments</h3>
+        <button type="button" class="modal-close" id="closeCommentModal" aria-label="Close comments">✕</button>
+      </div>
+      <div id="commentModalContent" class="modal-content"></div>
+    </div>
+  </div>
+
+  <div id="attachmentModal" class="modal" aria-hidden="true">
+    <div class="attachment-modal-box">
+      <div class="modal-header">
+        <h3 id="attachmentModalTitle" style="margin:0">Attachment Preview</h3>
+        <div class="actions" style="margin:0">
+          <button type="button" class="rotate-btn" id="rotateAttachment" aria-label="Rotate attachment">Rotate</button>
+          <button type="button" class="modal-close" id="closeAttachmentModal" aria-label="Close attachment preview">✕</button>
+        </div>
+      </div>
+      <div id="attachmentModalContent" class="attachment-modal-content"></div>
     </div>
   </div>
 
@@ -145,12 +229,17 @@
     const blogGrid = document.getElementById('blogGrid');
     const filterBar = document.getElementById('filterBar');
     const KEY = 'blogItems';
+    const ADMIN_KEY = 'blogAdmin';
+    const TREND_KEY = 'blogTrends';
+    const FILE_DB = 'blogFiles';
+    const TITLE_LIMIT = 72;
+    const LINK_LIMIT = 160;
+    let fileDb;
     const categories = [
-      'Case Studies',
-      'How-To Guides',
-      'Behind-the-Scenes',
-      'Insights',
-      'Milestones'
+      'Track Lesson',
+      'General Post',
+      'Quick Announcement',
+      'Normal Update'
     ];
     let activeCategory = 'All';
 
@@ -158,18 +247,73 @@
     if (profileImage) document.getElementById('blogProfileImage').src = profileImage;
 
     const defaults = [
-      { id: 1, category: 'Behind-the-Scenes', title: "The Athlete’s Mindset in Debugging", body: 'How athletics discipline improves problem-solving in development work.', tags: ['Athletics','IT'], type: 'Post', attachments: [] },
-      { id: 2, category: 'Case Studies', title: 'Deep Dive: Building a High-Performance Training App', body: 'A full-stack breakdown combining athletics data and web performance.', tags: ['Athletics','Web Dev','IT'], type: 'Case Study', attachments: [] },
-      { id: 3, category: 'How-To Guides', title: 'IT Guide: Setting up the Ultimate Home Office', body: 'Hardware, ergonomics, and productivity tooling for creators.', tags: ['IT'], type: 'Guide', attachments: [] },
-      { id: 4, category: 'Case Studies', title: 'Visualizing Speed: Graphic Design for Athletic Data', body: 'Turning training metrics into clear visual systems and dashboards.', tags: ['Graphic Design','Athletics'], type: 'Case Study', attachments: [] }
+      { id: 1, category: 'Track Lesson', title: "The Athlete’s Mindset in Debugging", body: 'How athletics discipline improves problem-solving in development work.', attachments: [], likes: 0, comments: [] },
+      { id: 2, category: 'General Post', title: 'Deep Dive: Building a High-Performance Training App', body: 'A full-stack breakdown combining athletics data and web performance.', attachments: [], likes: 0, comments: [] },
+      { id: 3, category: 'Quick Announcement', title: 'IT Guide: Setting up the Ultimate Home Office', body: 'Hardware, ergonomics, and productivity tooling for creators.', attachments: [], likes: 0, comments: [] },
+      { id: 4, category: 'Normal Update', title: 'Visualizing Speed: Graphic Design for Athletic Data', body: 'Turning training metrics into clear visual systems and dashboards.', attachments: [], likes: 0, comments: [] }
     ];
+
+    function normalizeItem(item){
+      return {
+        ...item,
+        likes: Number(item.likes || 0),
+        comments: Array.isArray(item.comments) ? item.comments : [],
+        attachments: Array.isArray(item.attachments) ? item.attachments : []
+      };
+    }
 
     function getItems(){
       const raw = localStorage.getItem(KEY);
       if (!raw) { localStorage.setItem(KEY, JSON.stringify(defaults)); return defaults; }
-      try { return JSON.parse(raw); } catch { return defaults; }
+      try { return JSON.parse(raw).map(normalizeItem); } catch { return defaults; }
     }
     function setItems(items){ localStorage.setItem(KEY, JSON.stringify(items)); }
+
+    function clampText(text, limit){
+      if (!text) return '';
+      return text.length > limit ? `${text.slice(0, limit)}…` : text;
+    }
+
+    function getAttachmentPreview({ type = '', src = '', name = 'Attachment' }){
+      const safeName = name || 'Attachment';
+      if (type.startsWith('image')) {
+        return `
+          <div class="attachment-preview" data-full-src="${src}" data-type="image" data-name="${safeName}">
+            <img class="attachment-media" src="${src}" alt="${safeName}" />
+            <span class="expand-chip">Click to Expand</span>
+          </div>
+        `;
+      }
+      if (type.startsWith('video')) {
+        return `
+          <div class="attachment-preview" data-full-src="${src}" data-type="video" data-name="${safeName}">
+            <video class="attachment-media" src="${src}" muted></video>
+            <span class="video-preview-icon" aria-hidden="true"><i class="fas fa-play"></i></span>
+            <span class="expand-chip">Click to Expand</span>
+          </div>
+        `;
+      }
+      if (type === 'application/pdf') {
+        return `
+          <div class="attachment-preview" data-full-src="${src}" data-type="pdf" data-name="${safeName}">
+            <canvas class="attachment-frame attachment-canvas" data-src="${src}" aria-label="${safeName}"></canvas>
+            <span class="expand-chip">Click to Expand</span>
+          </div>
+        `;
+      }
+      return `
+        <div class="attachment-preview" data-full-src="${src}" data-type="doc" data-name="${safeName}">
+          <div class="attachment-doc">
+            <div class="attachment-icon"><i class="fas fa-file-alt"></i></div>
+            <div>
+              <div class="attachment-label">${safeName}</div>
+              <div class="attachment-sub">Click to Expand</div>
+            </div>
+          </div>
+          <span class="expand-chip">Click to Expand</span>
+        </div>
+      `;
+    }
 
     function renderFilters(){
       const buttons = ['All', ...categories].map(cat => {
@@ -184,23 +328,357 @@
 
     function render(){
       renderFilters();
+      const isAdmin = localStorage.getItem(ADMIN_KEY) === 'true';
       const items = getItems().filter(it => activeCategory === 'All' || it.category === activeCategory).reverse();
       blogGrid.innerHTML = items.map(it => {
         const tags = (it.tags || []).map(t => `<span class="tag">${t}</span>`).join('');
-        const attachments = (it.attachments || []).map(a => `<a class="btn btn-secondary" href="${a.data}" download="${a.name}" style="margin-top:.45rem">Download ${a.name}</a>`).join('');
+        const attachments = (it.attachments || []).map(a => {
+          if (a.data && a.data.startsWith('data:video')) {
+            return getAttachmentPreview({ type: 'video', src: a.data, name: a.name });
+          }
+          if (a.data && a.data.startsWith('data:image')) {
+            return getAttachmentPreview({ type: 'image', src: a.data, name: a.name });
+          }
+          if (a.blobId) {
+            const dataType = a.type || 'file';
+            return `<div class="attachment-slot" data-blob-id="${a.blobId}" data-type="${dataType}" data-name="${a.name}"></div>`;
+          }
+          return getAttachmentPreview({ type: a.type || 'doc', src: a.data, name: a.name });
+        }).join('');
+        const safeTitle = clampText(it.title || '', TITLE_LIMIT);
+        const comments = (it.comments || []).map(comment => {
+          const fullText = comment.text || '';
+          const isLong = fullText.length > 140;
+          const shortText = isLong ? `${fullText.slice(0, 140)}...` : fullText;
+          const replies = (comment.replies || []).map(reply => `<div class="reply"><p class="muted">${reply.text}</p></div>`).join('');
+          return `
+            <div class="comment">
+              <div class="comment-meta">
+                <strong>Viewer</strong>
+                <button type="button" class="action-btn reply-toggle" data-id="${it.id}" data-comment="${comment.id}">Reply</button>
+              </div>
+              <p class="muted">
+                <span class="comment-text" data-full="${fullText.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}" data-short="${shortText.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}">${shortText.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</span>
+              </p>
+              ${isLong ? `<button type="button" class="action-btn read-more" data-state="short">Read more</button>` : ''}
+              <div class="reply-box">
+                ${replies}
+                <div class="reply-form hidden" data-id="${it.id}" data-comment="${comment.id}">
+                  <textarea placeholder="Write a reply..." aria-label="Reply to comment"></textarea>
+                  <button type="button" class="action-btn reply-submit" data-id="${it.id}" data-comment="${comment.id}">Send Reply</button>
+                </div>
+              </div>
+            </div>
+          `;
+        }).join('');
         return `
           <article class="card">
             <span class="badge">${it.category}</span>
-            <h3 style="margin:.45rem 0">${it.title}</h3>
-            <div class="tags">${tags}</div>
-            <p class="muted">${it.body}</p>
-            ${attachments}
+            <h3 style="margin:.45rem 0" title="${it.title || ''}">${safeTitle}</h3>
+            <div class="post-content">
+              <p class="muted">
+                <span class="comment-text" data-full="${it.body.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}" data-short="${(it.body.length > 180 ? `${it.body.slice(0, 180)}...` : it.body).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}">${(it.body.length > 180 ? `${it.body.slice(0, 180)}...` : it.body).replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</span>
+              </p>
+              ${it.body.length > 180 ? `<button type="button" class="action-btn post-more" data-state="short">More</button>` : ''}
+              ${attachments}
+              <div class="comment-box hidden" data-id="${it.id}">
+                <div class="comment-form">
+                  <textarea placeholder="Share a comment..." aria-label="Comment"></textarea>
+                  <button type="button" class="action-btn comment-submit" data-id="${it.id}">Post Comment</button>
+                </div>
+                <div class="comment-list">
+                  ${comments || ''}
+                </div>
+              </div>
+            </div>
+            <div class="post-actions">
+              <button type="button" class="action-btn like-btn" data-id="${it.id}">
+                <i class="fas fa-heart"></i> Like <span>(${it.likes || 0})</span>
+              </button>
+              <button type="button" class="action-btn comment-toggle" data-id="${it.id}">
+                <i class="fas fa-comment"></i> Comment <span>(${(it.comments || []).length})</span>
+              </button>
+              ${isAdmin ? `<button type="button" class="action-btn delete-btn" data-id="${it.id}"><i class="fas fa-trash"></i> Delete</button>` : ''}
+            </div>
           </article>
         `;
       }).join('');
+
+      blogGrid.querySelectorAll('.like-btn').forEach(btn => {
+        btn.onclick = () => handleLike(Number(btn.dataset.id));
+      });
+      blogGrid.querySelectorAll('.comment-toggle').forEach(btn => {
+        btn.onclick = () => openCommentModal(Number(btn.dataset.id));
+      });
+      blogGrid.querySelectorAll('.comment-submit').forEach(btn => {
+        btn.onclick = () => submitComment(Number(btn.dataset.id), btn);
+      });
+      blogGrid.querySelectorAll('.reply-toggle').forEach(btn => {
+        btn.onclick = () => toggleReplyForm(Number(btn.dataset.id), Number(btn.dataset.comment));
+      });
+      blogGrid.querySelectorAll('.reply-submit').forEach(btn => {
+        btn.onclick = () => submitReply(Number(btn.dataset.id), Number(btn.dataset.comment), btn);
+      });
+      blogGrid.querySelectorAll('.delete-btn').forEach(btn => {
+        btn.onclick = () => requestDeletePassword(Number(btn.dataset.id));
+      });
+      blogGrid.querySelectorAll('.read-more').forEach(btn => {
+        btn.onclick = () => toggleReadMore(btn);
+      });
+      blogGrid.querySelectorAll('.post-more').forEach(btn => {
+        btn.onclick = () => togglePostMore(btn);
+      });
+      wireAttachmentPreviews();
+      renderPdfPreviews();
+      hydrateAttachments();
+    }
+
+    function handleLike(id){
+      const items = getItems();
+      const target = items.find(item => item.id === id);
+      if (!target) return;
+      target.likes = Number(target.likes || 0) + 1;
+      setItems(items);
+      render();
+    }
+
+    function openCommentModal(id){
+      const modal = document.getElementById('commentModal');
+      const content = document.getElementById('commentModalContent');
+      const title = document.getElementById('commentModalTitle');
+      const items = getItems();
+      const target = items.find(item => item.id === id);
+      if (!target || !modal || !content) return;
+      title.textContent = target.title;
+      const commentList = (target.comments || []).map(comment => {
+        const replies = (comment.replies || []).map(reply => `<div class="reply"><p class="muted">${reply.text}</p></div>`).join('');
+        return `
+          <div class="comment">
+            <div class="comment-meta">
+              <strong>Viewer</strong>
+              <button type="button" class="action-btn reply-toggle" data-id="${target.id}" data-comment="${comment.id}">Reply</button>
+            </div>
+            <p class="muted">${comment.text}</p>
+            <div class="reply-box">
+              ${replies}
+              <div class="reply-form hidden" data-id="${target.id}" data-comment="${comment.id}">
+                <textarea placeholder="Write a reply..." aria-label="Reply to comment"></textarea>
+                <button type="button" class="action-btn reply-submit" data-id="${target.id}" data-comment="${comment.id}">Send Reply</button>
+              </div>
+            </div>
+          </div>
+        `;
+      }).join('');
+      content.innerHTML = `
+        <div class="comment-form">
+          <textarea placeholder="Share a comment..." aria-label="Comment"></textarea>
+          <button type="button" class="action-btn comment-submit" data-id="${target.id}">Post Comment</button>
+        </div>
+        <div class="comment-list">
+          ${commentList || '<p class="muted">No comments yet.</p>'}
+        </div>
+      `;
+      modal.classList.add('show');
+      content.querySelectorAll('.reply-toggle').forEach(btn => {
+        btn.onclick = () => toggleReplyForm(Number(btn.dataset.id), Number(btn.dataset.comment));
+      });
+      content.querySelectorAll('.reply-submit').forEach(btn => {
+        btn.onclick = () => submitReply(Number(btn.dataset.id), Number(btn.dataset.comment), btn);
+      });
+      content.querySelectorAll('.comment-submit').forEach(btn => {
+        btn.onclick = () => submitComment(Number(btn.dataset.id), btn);
+      });
+    }
+
+    let attachmentRotation = 0;
+
+    function openAttachmentModal({ src, type, name }){
+      const modal = document.getElementById('attachmentModal');
+      const content = document.getElementById('attachmentModalContent');
+      const title = document.getElementById('attachmentModalTitle');
+      if (!modal || !content) return;
+      title.textContent = name || 'Attachment Preview';
+      attachmentRotation = 0;
+      if (type === 'image') {
+        content.innerHTML = `<div class="attachment-rotatable"><img src="${src}" alt="${name || 'Attachment'}" /></div>`;
+      } else if (type === 'video') {
+        content.innerHTML = `<div class="attachment-rotatable"><video controls src="${src}"></video></div>`;
+      } else if (type === 'pdf') {
+        content.innerHTML = `<div class="attachment-rotatable"><iframe title="${name || 'Document'}" src="${src}" style="height:70vh"></iframe></div>`;
+      } else {
+        content.innerHTML = `
+          <div class="attachment-rotatable">
+            <div class="attachment-doc">
+              <div class="attachment-icon"><i class="fas fa-file-alt"></i></div>
+              <div>
+                <div class="attachment-label">${name || 'Document'}</div>
+                <div class="attachment-sub">This file cannot be previewed. Use the link below to download.</div>
+                <a class="btn btn-secondary" href="${src}" download="${name || 'document'}" style="margin-top:.75rem">Download</a>
+              </div>
+            </div>
+          </div>
+        `;
+      }
+      modal.classList.add('show');
+      applyAttachmentRotation();
+    }
+
+    function wireAttachmentPreviews(){
+      blogGrid.querySelectorAll('.attachment-preview').forEach(preview => {
+        preview.onclick = () => {
+          const src = preview.dataset.fullSrc;
+          const type = preview.dataset.type;
+          const name = preview.dataset.name;
+          openAttachmentModal({ src, type, name });
+        };
+      });
+    }
+
+    function applyAttachmentRotation(){
+      const content = document.getElementById('attachmentModalContent');
+      const rotatable = content ? content.querySelector('.attachment-rotatable') : null;
+      if (rotatable) rotatable.style.transform = `rotate(${attachmentRotation}deg)`;
+    }
+
+    function renderPdfPreviews(){
+      if (!window.pdfjsLib) return;
+      pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
+      const canvases = Array.from(document.querySelectorAll('.attachment-canvas'));
+      canvases.forEach(canvas => {
+        if (canvas.dataset.rendered === 'true') return;
+        const src = canvas.dataset.src;
+        if (!src) return;
+        canvas.dataset.rendered = 'true';
+        pdfjsLib.getDocument(src).promise.then(pdf => pdf.getPage(1)).then(page => {
+          const viewport = page.getViewport({ scale: 1 });
+          const ctx = canvas.getContext('2d');
+          canvas.width = viewport.width;
+          canvas.height = viewport.height;
+          page.render({ canvasContext: ctx, viewport });
+        });
+      });
+    }
+
+    function submitComment(id, button){
+      const form = button.closest('.comment-form');
+      const textarea = form ? form.querySelector('textarea') : null;
+      if (!textarea || !textarea.value.trim()) return;
+      const items = getItems();
+      const target = items.find(item => item.id === id);
+      if (!target) return;
+      target.comments = target.comments || [];
+      target.comments.push({ id: Date.now(), text: textarea.value.trim(), replies: [] });
+      setItems(items);
+      render();
+    }
+
+    function toggleReplyForm(id, commentId){
+      const form = blogGrid.querySelector(`.reply-form[data-id="${id}"][data-comment="${commentId}"]`);
+      if (form) form.classList.toggle('hidden');
+    }
+
+    function submitReply(id, commentId, button){
+      const form = button.closest('.reply-form');
+      const textarea = form ? form.querySelector('textarea') : null;
+      if (!textarea || !textarea.value.trim()) return;
+      const items = getItems();
+      const target = items.find(item => item.id === id);
+      if (!target) return;
+      const comment = (target.comments || []).find(entry => entry.id === commentId);
+      if (!comment) return;
+      comment.replies = comment.replies || [];
+      comment.replies.push({ id: Date.now(), text: textarea.value.trim() });
+      setItems(items);
+      render();
+    }
+
+    function requestDeletePassword(id){
+      const deleteModal = document.getElementById('deleteModal');
+      const deletePassword = document.getElementById('deletePassword');
+      const confirmDelete = document.getElementById('confirmDelete');
+      const cancelDelete = document.getElementById('cancelDelete');
+
+      deletePassword.value = '';
+      deleteModal.classList.add('show');
+
+      const cleanup = () => {
+        deleteModal.classList.remove('show');
+        confirmDelete.onclick = null;
+        cancelDelete.onclick = null;
+      };
+
+      cancelDelete.onclick = () => cleanup();
+      confirmDelete.onclick = () => {
+        if (deletePassword.value !== 'elie') {
+          alert('Incorrect password.');
+          return;
+        }
+        const items = getItems().filter(item => item.id !== id);
+        setItems(items);
+        cleanup();
+        render();
+      };
+    }
+
+    function toggleReadMore(button){
+      const comment = button.closest('.comment');
+      const textEl = comment ? comment.querySelector('.comment-text') : null;
+      if (!textEl) return;
+      const state = button.dataset.state;
+      if (state === 'short') {
+        textEl.textContent = textEl.dataset.full;
+        button.textContent = 'Show less';
+        button.dataset.state = 'full';
+      } else {
+        textEl.textContent = textEl.dataset.short;
+        button.textContent = 'Read more';
+        button.dataset.state = 'short';
+      }
+    }
+
+    function togglePostMore(button){
+      const card = button.closest('.card');
+      const textEl = card ? card.querySelector('.comment-text') : null;
+      const content = card ? card.querySelector('.post-content') : null;
+      if (!textEl || !content) return;
+      const state = button.dataset.state;
+      if (state === 'short') {
+        textEl.textContent = textEl.dataset.full;
+        button.textContent = 'Less';
+        button.dataset.state = 'full';
+        content.classList.add('expanded');
+      } else {
+        textEl.textContent = textEl.dataset.short;
+        button.textContent = 'More';
+        button.dataset.state = 'short';
+        content.classList.remove('expanded');
+      }
     }
 
     const adminModal = document.getElementById('adminModal');
+    const commentModal = document.getElementById('commentModal');
+    const attachmentModal = document.getElementById('attachmentModal');
+    const closeCommentModal = document.getElementById('closeCommentModal');
+    const closeAttachmentModal = document.getElementById('closeAttachmentModal');
+    const rotateAttachment = document.getElementById('rotateAttachment');
+    if (closeCommentModal) {
+      closeCommentModal.onclick = () => commentModal.classList.remove('show');
+    }
+    if (closeAttachmentModal) {
+      closeAttachmentModal.onclick = () => attachmentModal.classList.remove('show');
+    }
+    if (rotateAttachment) {
+      rotateAttachment.onclick = () => {
+        attachmentRotation = (attachmentRotation + 90) % 360;
+        applyAttachmentRotation();
+      };
+    }
+    if (commentModal) {
+      commentModal.addEventListener('click', e => { if (e.target === commentModal) commentModal.classList.remove('show'); });
+    }
+    if (attachmentModal) {
+      attachmentModal.addEventListener('click', e => { if (e.target === attachmentModal) attachmentModal.classList.remove('show'); });
+    }
     document.getElementById('openAdmin').onclick = () => adminModal.classList.add('show');
     document.getElementById('closeAdmin').onclick = () => adminModal.classList.remove('show');
     document.getElementById('closeAdmin2').onclick = () => adminModal.classList.remove('show');
@@ -208,23 +686,24 @@
 
     document.getElementById('verifyAdmin').onclick = () => {
       if (document.getElementById('adminPassword').value === 'elie') {
+        localStorage.setItem(ADMIN_KEY, 'true');
         document.getElementById('authWrap').style.display = 'none';
         document.getElementById('uploadWrap').style.display = 'block';
+        render();
       } else alert('Incorrect password');
     };
 
-    document.getElementById('saveItem').onclick = () => {
+    document.getElementById('saveItem').onclick = async () => {
       const category = document.getElementById('itemCategory').value;
       const title = document.getElementById('itemTitle').value.trim();
       const body = document.getElementById('itemBody').value.trim();
-      const tags = document.getElementById('itemTags').value.split(',').map(t => t.trim()).filter(Boolean);
-      const type = document.getElementById('itemType').value;
       const files = Array.from(document.getElementById('itemFiles').files || []);
       if (!title || !body) return alert('Title and description are required');
+      if (title.length > TITLE_LIMIT) return alert(`Title must be ${TITLE_LIMIT} characters or less.`);
 
       const pushItem = (attachments=[]) => {
         const items = getItems();
-        items.push({ id: Date.now(), category, title, body, tags, type, attachments });
+        items.push({ id: Date.now(), category, title, body, attachments, likes: 0, comments: [] });
         setItems(items);
         render();
         adminModal.classList.remove('show');
@@ -233,28 +712,165 @@
         document.getElementById('adminPassword').value = '';
         document.getElementById('itemTitle').value = '';
         document.getElementById('itemBody').value = '';
-        document.getElementById('itemTags').value = '';
         document.getElementById('itemFiles').value = '';
+        toggleProgress(false, 0);
       };
 
       if (files.length) {
+        toggleProgress(true, 0);
         const attachments = [];
-        let remaining = files.length;
-        files.forEach(file => {
-          const reader = new FileReader();
-          reader.onload = e => {
-            attachments.push({ name: file.name, data: e.target.result });
-            remaining -= 1;
-            if (remaining === 0) pushItem(attachments);
-          };
-          reader.readAsDataURL(file);
-        });
+        let uploaded = 0;
+        for (const file of files) {
+          const blobId = `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+          const progress = await saveFileWithProgress(file, blobId, (percent) => {
+            toggleProgress(true, Math.min(100, Math.round((uploaded + percent) / files.length)));
+          });
+          attachments.push({ name: file.name, type: file.type, blobId });
+          uploaded += 100;
+        }
+        toggleProgress(true, 100);
+        pushItem(attachments);
       } else {
         pushItem();
       }
     };
 
+    document.getElementById('addTrend').onclick = () => {
+      const title = document.getElementById('trendTitle').value.trim();
+      if (!title) return;
+      if (title.length > TITLE_LIMIT) return alert(`Title must be ${TITLE_LIMIT} characters or less.`);
+      const type = document.getElementById('trendType').value;
+      const link = document.getElementById('trendLink').value.trim();
+      if (link.length > LINK_LIMIT) return alert(`Link must be ${LINK_LIMIT} characters or less.`);
+      const desc = document.getElementById('trendDesc').value.trim();
+      const trends = getTrends();
+      trends.unshift({ id: Date.now(), title, type, link, desc });
+      setTrends(trends);
+      document.getElementById('trendTitle').value = '';
+      document.getElementById('trendLink').value = '';
+      document.getElementById('trendDesc').value = '';
+      renderTrends();
+    };
+
+    document.getElementById('clearTrends').onclick = () => {
+      if (!confirm('Clear all trending items?')) return;
+      setTrends([]);
+      renderTrends();
+    };
+
+    function toggleProgress(show, value){
+      const wrap = document.getElementById('uploadProgress');
+      const percent = document.getElementById('uploadPercent');
+      if (!wrap || !percent) return;
+      wrap.style.display = show ? 'flex' : 'none';
+      percent.textContent = `${value}%`;
+    }
+
+    function openFileDb(){
+      if (fileDb) return Promise.resolve(fileDb);
+      return new Promise((resolve, reject) => {
+        const request = indexedDB.open(FILE_DB, 1);
+        request.onupgradeneeded = (e) => {
+          const db = e.target.result;
+          if (!db.objectStoreNames.contains('files')) {
+            db.createObjectStore('files', { keyPath: 'id' });
+          }
+        };
+        request.onsuccess = () => {
+          fileDb = request.result;
+          resolve(fileDb);
+        };
+        request.onerror = () => reject(request.error);
+      });
+    }
+
+    async function saveFileWithProgress(file, id, onProgress){
+      return new Promise((resolve) => {
+        const reader = new FileReader();
+        reader.onprogress = (e) => {
+          if (e.lengthComputable) {
+            const percent = (e.loaded / e.total) * 100;
+            onProgress(percent);
+          }
+        };
+        reader.onloadend = async () => {
+          const db = await openFileDb();
+          const tx = db.transaction('files', 'readwrite');
+          tx.objectStore('files').put({ id, blob: file, name: file.name, type: file.type });
+          tx.oncomplete = () => resolve(true);
+        };
+        reader.readAsArrayBuffer(file);
+      });
+    }
+
+    async function fetchBlob(id){
+      const db = await openFileDb();
+      return new Promise((resolve) => {
+        const tx = db.transaction('files', 'readonly');
+        const req = tx.objectStore('files').get(id);
+        req.onsuccess = () => resolve(req.result);
+        req.onerror = () => resolve(null);
+      });
+    }
+
+    async function hydrateAttachments(){
+      const slots = Array.from(document.querySelectorAll('.attachment-slot'));
+      if (!slots.length) return;
+      for (const slot of slots) {
+        const id = slot.dataset.blobId;
+        const type = slot.dataset.type || '';
+        const file = await fetchBlob(id);
+        if (!file || !file.blob) continue;
+        const url = URL.createObjectURL(file.blob);
+        if (type.startsWith('video')) {
+          slot.innerHTML = getAttachmentPreview({ type: 'video', src: url, name: file.name });
+        } else if (type.startsWith('image')) {
+          slot.innerHTML = getAttachmentPreview({ type: 'image', src: url, name: file.name });
+        } else if (type === 'application/pdf') {
+          slot.innerHTML = getAttachmentPreview({ type: 'application/pdf', src: url, name: file.name });
+        } else {
+          slot.innerHTML = getAttachmentPreview({ type: 'doc', src: url, name: file.name });
+        }
+      }
+      wireAttachmentPreviews();
+      renderPdfPreviews();
+    }
+
+    function getTrends(){
+      const raw = localStorage.getItem(TREND_KEY);
+      if (!raw) return [];
+      try { return JSON.parse(raw); } catch { return []; }
+    }
+
+    function setTrends(items){
+      localStorage.setItem(TREND_KEY, JSON.stringify(items));
+    }
+
+    function renderTrends(){
+      const list = document.getElementById('trendingList');
+      if (!list) return;
+      const items = getTrends();
+      if (!items.length) {
+        list.innerHTML = '<p class="muted">No trending items yet.</p>';
+        return;
+      }
+      const entries = items.map(item => {
+        const safeTitle = clampText(item.title || '', TITLE_LIMIT);
+        const safeLink = clampText(item.link || '', LINK_LIMIT);
+        const link = item.link ? `<div><a href="${item.link}" target="_blank" rel="noopener noreferrer">${safeLink}</a></div>` : '';
+        return `
+          <div style="margin-bottom:.8rem">
+            <strong>${safeTitle}</strong>
+            ${link}
+            <div class="muted">${item.type}${item.desc ? ` · ${item.desc}` : ''}</div>
+          </div>
+        `;
+      }).join('');
+      list.innerHTML = entries;
+    }
+
     render();
+    renderTrends();
   </script>
 </body>
 </html>
