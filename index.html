@@ -426,6 +426,17 @@
       }
     });
 
+
+
+    document.getElementById("changePassword").addEventListener("click", function () {
+      const nextPassword = document.getElementById("newAdminPassword").value.trim();
+      if (!nextPassword) return alert("Please enter a new password.");
+      if (nextPassword.length < 4) return alert("Password must be at least 4 characters.");
+      localStorage.setItem(HOME_ADMIN_KEY, nextPassword);
+      document.getElementById("newAdminPassword").value = "";
+      alert("Admin password updated successfully.");
+    });
+
     document.getElementById("deleteProfileImage").addEventListener("click", function () {
       if (confirm("Are you sure you want to delete your profile image?")) {
         const defaultImage = "mpover pic.jpg";
