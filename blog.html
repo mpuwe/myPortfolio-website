@@ -260,15 +260,6 @@
       };
     }
 
-    function normalizeItem(item){
-      return {
-        ...item,
-        likes: Number(item.likes || 0),
-        comments: Array.isArray(item.comments) ? item.comments : [],
-        attachments: Array.isArray(item.attachments) ? item.attachments : []
-      };
-    }
-
     function getItems(){
       const raw = localStorage.getItem(KEY);
       if (!raw) { return []; }
@@ -689,7 +680,12 @@
     if (attachmentModal) {
       attachmentModal.addEventListener('click', e => { if (e.target === attachmentModal) attachmentModal.classList.remove('show'); });
     }
-    document.getElementById('openAdmin').onclick = () => adminModal.classList.add('show');
+    document.getElementById('openAdmin').onclick = () => {
+      adminModal.classList.add('show');
+      const isAdmin = localStorage.getItem(ADMIN_KEY) === 'true';
+      document.getElementById('authWrap').style.display = isAdmin ? 'none' : 'block';
+      document.getElementById('uploadWrap').style.display = isAdmin ? 'block' : 'none';
+    };
     document.getElementById('closeAdmin').onclick = () => adminModal.classList.remove('show');
     document.getElementById('closeAdmin2').onclick = () => adminModal.classList.remove('show');
     adminModal.addEventListener('click', e => { if (e.target === adminModal) adminModal.classList.remove('show'); });
@@ -711,7 +707,7 @@
       if (!title || !body) return alert('Title and description are required');
       if (title.length > TITLE_LIMIT) return alert(`Title must be ${TITLE_LIMIT} characters or less.`);
 
-      const pushItem = (attachments=[]) => {
+      const pushItem = (attachments = []) => {
         const items = getItems();
         items.push({ id: Date.now(), category, title, body, attachments, likes: 0, comments: [] });
         setItems(items);
@@ -726,22 +722,28 @@
         toggleProgress(false, 0);
       };
 
-      if (files.length) {
-        toggleProgress(true, 0);
-        const attachments = [];
-        let uploaded = 0;
-        for (const file of files) {
-          const blobId = `${Date.now()}-${Math.random().toString(16).slice(2)}`;
-          const progress = await saveFileWithProgress(file, blobId, (percent) => {
-            toggleProgress(true, Math.min(100, Math.round((uploaded + percent) / files.length)));
-          });
-          attachments.push({ name: file.name, type: file.type, blobId });
-          uploaded += 100;
+      try {
+        if (files.length) {
+          toggleProgress(true, 0);
+          const attachments = [];
+          let uploaded = 0;
+          for (const file of files) {
+            const blobId = `${Date.now()}-${Math.random().toString(16).slice(2)}`;
+            await saveFileWithProgress(file, blobId, (percent) => {
+              toggleProgress(true, Math.min(100, Math.round((uploaded + percent) / files.length)));
+            });
+            attachments.push({ name: file.name, type: file.type, blobId });
+            uploaded += 100;
+          }
+          toggleProgress(true, 100);
+          pushItem(attachments);
+        } else {
+          pushItem();
         }
-        toggleProgress(true, 100);
-        pushItem(attachments);
-      } else {
-        pushItem();
+      } catch (error) {
+        console.error(error);
+        toggleProgress(false, 0);
+        alert('Upload failed. Please try again with smaller files or different format.');
       }
     };
 
@@ -795,7 +797,7 @@
     }
 
     async function saveFileWithProgress(file, id, onProgress){
-      return new Promise((resolve) => {
+      return new Promise((resolve, reject) => {
         const reader = new FileReader();
         reader.onprogress = (e) => {
           if (e.lengthComputable) {
@@ -803,11 +805,17 @@
             onProgress(percent);
           }
         };
+        reader.onerror = () => reject(new Error('Failed to read selected file.'));
         reader.onloadend = async () => {
-          const db = await openFileDb();
-          const tx = db.transaction('files', 'readwrite');
-          tx.objectStore('files').put({ id, blob: file, name: file.name, type: file.type });
-          tx.oncomplete = () => resolve(true);
+          try {
+            const db = await openFileDb();
+            const tx = db.transaction('files', 'readwrite');
+            tx.objectStore('files').put({ id, blob: file, name: file.name, type: file.type });
+            tx.oncomplete = () => resolve(true);
+            tx.onerror = () => reject(tx.error || new Error('Failed to store uploaded file.'));
+          } catch (error) {
+            reject(error);
+          }
         };
         reader.readAsArrayBuffer(file);
       });
@@ -864,18 +872,6 @@
         list.innerHTML = '<p class="muted">No trending items yet.</p>';
         return;
       }
-      const tools = `
-        <div style="margin-bottom:.9rem">
-          <strong>Tools of the Trade</strong>
-          <ul class="list" style="margin-top:.4rem">
-            <li>Notion</li>
-            <li>Trello</li>
-            <li>Canva</li>
-            <li>Figma</li>
-            <li>VS Code</li>
-          </ul>
-        </div>
-      `;
       const entries = items.map(item => {
         const safeTitle = clampText(item.title || '', TITLE_LIMIT);
         const safeLink = clampText(item.link || '', LINK_LIMIT);
