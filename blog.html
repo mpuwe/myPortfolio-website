@@ -260,6 +260,15 @@
       };
     }
 
+    function normalizeItem(item){
+      return {
+        ...item,
+        likes: Number(item.likes || 0),
+        comments: Array.isArray(item.comments) ? item.comments : [],
+        attachments: Array.isArray(item.attachments) ? item.attachments : []
+      };
+    }
+
     function getItems(){
       const raw = localStorage.getItem(KEY);
       if (!raw) { return []; }
