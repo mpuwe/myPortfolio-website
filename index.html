@@ -22,22 +22,6 @@
     h1,h2,h3,h4 { font-family: "Manrope", sans-serif; }
     a { text-decoration: none; }
 
-    /* Decorative Loader Styles */
-    #page-loader {
-      position: fixed; inset: 0; background: #0f172a; z-index: 9999;
-      display: flex; flex-direction: column; align-items: center; justify-content: center;
-      transition: opacity 0.5s ease, visibility 0.5s;
-    }
-    .loader-circle {
-      width: 50px; height: 50px; border: 3px solid rgba(29, 78, 216, 0.2);
-      border-top-color: #3b82f6; border-radius: 50%;
-      animation: spin 1s linear infinite; margin-bottom: 15px;
-    }
-    @keyframes spin { to { transform: rotate(360deg); } }
-    .loader-text { color: #fff; font-family: 'Manrope', sans-serif; font-weight: 700; letter-spacing: 2px; font-size: 14px; }
-
-    .layout-shell { max-width: 1320px; margin: 0 auto; padding: .65rem .7rem .9rem; }
-    .home-grid { display: grid; grid-template-columns: 400px 1fr; gap: .8rem; align-items: start; }
     .layout-shell { max-width: 1320px; width: 100%; margin: .4rem auto; padding: .4rem; box-sizing: border-box; }
     .home-grid { display: grid; grid-template-columns: 400px 1fr; gap: .35rem; align-items: start; }
     .phone-stick { position: sticky; top: 10px; }
@@ -62,12 +46,6 @@
     .nav-triangle { font-size: 1rem; line-height: 1; }
     .nav-btn:hover { color: #ffffff; opacity: 1; }
     .nav-btn:active { transform: scale(.96); }
-
-    .about-img-container {
-      width: 100%; max-width: 448px; height: 400px;
-      overflow: hidden; border-radius: .75rem; display: flex; align-items: center; justify-content: center;
-    }
-    .about-img-container img { width: 100%; height: 100%; object-fit: cover; object-position: center top; transition: 0.3s; }
 
     .panel { background: var(--surface); border: 1px solid var(--border); border-radius: 1rem; box-shadow: 0 12px 35px rgba(15, 23, 42, 0.08); }
     .btn-primary { background: var(--primary); color:#fff; }
@@ -96,6 +74,8 @@
     .about-grid { height: 100%; }
     .about-photo { width: 100%; height: 100%; object-fit: cover; }
 
+
+    /* Local utility classes (Tailwind-free implementation) */
     * { box-sizing: border-box; }
     body { margin: 0; }
     .hidden { display: none !important; }
@@ -247,11 +227,6 @@
   </style>
 </head>
 <body>
-  <div id="page-loader">
-    <div class="loader-circle"></div>
-    <div class="loader-text">PREPARING EXPERIENCE</div>
-  </div>
-
   <div class="loading-screen" id="loadingScreen" aria-live="polite">
     <div class="loading-card">
       <div class="loading-ring"></div>
@@ -269,7 +244,7 @@
           </div>
           <div class="phone-body">
             <div class="relative w-36 h-36 mb-5 mx-auto">
-              <img id="profileImage" src="mpover pic.jpg" alt="Portrait of Elie Mpuhwezimana" class="w-full h-full rounded-full object-cover border-4 border-blue-400 shadow-xl"/>
+              <img id="profileImage" src="mpover pic.jpg" alt="Portrait of Elie Mpuhwezimana, a professional man with a confident smile, wearing a smart casual outfit, studio background" class="w-full h-full rounded-full object-cover border-4 border-blue-400 shadow-xl"/>
               <button id="editProfileBtn" aria-label="Edit Profile Image" class="absolute bottom-0 right-0 bg-blue-600 hover:bg-blue-700 text-white rounded-full w-10 h-10 flex items-center justify-center shadow-lg transition"><i class="fas fa-pencil-alt"></i></button>
             </div>
             <h3 class="text-2xl font-extrabold tracking-wide">Elie Mpuhwezimana</h3>
@@ -296,7 +271,6 @@
                 <i class="far fa-circle"></i>
               </button>
               <button type="button" aria-label="Back" class="nav-btn transition" title="Back">
-                <span style="font-size: 1.5rem; color: #fff; line-height: 1;">▷</span>
                 <span class="nav-triangle">▷</span>
               </button>
             </div>
@@ -316,24 +290,12 @@
             <span class="chip px-4 py-2 rounded-full text-sm font-semibold">Brand Strategy</span>
             <span class="chip px-4 py-2 rounded-full text-sm font-semibold">Creative Direction</span>
           </div>
-          <div class="grid sm:grid-cols-2 gap-4 max-w-3xl" style="grid-auto-flow: column; margin-bottom: 7px;">
+          <div class="grid sm:grid-cols-2 gap-4 max-w-3xl" style="grid-auto-flow: column;">
             <a href="portfolio.html" class="btn-primary px-6 py-4 rounded-lg font-bold text-center transition">Explore Portfolio Hub</a>
             <a href="contact.html" class="bg-slate-900 text-white px-6 py-4 rounded-lg font-bold text-center hover:bg-slate-700 transition">Connect Me</a>
           </div>
         </section>
 
-        <section id="about" class="panel p-8 md:p-12">
-          <div class="grid md:grid-cols-2 gap-8 items-center">
-            <div class="about-img-container shadow-xl mx-auto md:mx-0">
-               <img id="aboutProfileImage" src="mpover pic.jpg" alt="Professional portrait of Elie Mpuhwezimana"/>
-            </div>
-            <div>
-              <h2 class="text-3xl font-extrabold mb-4">About Me</h2>
-              <p class="text-slate-600 mb-4">I'm a focused creative professional with strong expertise in graphic design, visual communication, and IT implementation. I translate ideas into high-quality digital experiences that support organizational goals.</p>
-              <p class="text-slate-600 mb-6">Athletics remains a long-term personal passion, while my professional value-add is strategic creative contribution: combining design thinking, digital execution, and clear communication to strengthen team outcomes.</p>
-              <div class="flex gap-4" style="flex-wrap: nowrap;">
-                <a href="blog.html" class="btn-primary px-7 py-3 rounded-lg font-semibold">View My Blog</a>
-                <a href="https://calendar.google.com/" target="_blank" rel="noopener noreferrer" class="btn-secondary px-7 py-3 rounded-lg font-semibold">Book My Collaboration</a>
         <section id="about" class="panel about-panel">
           <h2 class="text-3xl font-extrabold mb-1">About Me</h2>
           <div class="about-body">
@@ -375,9 +337,9 @@
         <section class="panel p-8 md:p-12">
           <h2 class="text-3xl font-extrabold mb-8">Featured Work</h2>
           <div class="grid md:grid-cols-3 gap-6">
-            <article class="rounded-xl overflow-hidden border border-slate-200"><img src="https://storage.googleapis.com/a1aa/image/9733d964-34d8-4e51-38ee-2871da64431f.jpg" class="w-full h-48 object-cover" alt="Graphic design project"/><div class="p-5"><h3 class="text-xl font-bold mb-2">Graphic Design Portfolio</h3><p class="text-slate-600 mb-3">Collection of logos and flyer designs.</p><a href="portfolio.html#design" class="text-blue-700 font-semibold">Open Design Projects →</a></div></article>
-            <article class="rounded-xl overflow-hidden border border-slate-200"><img src="https://storage.googleapis.com/a1aa/image/42382e8b-d25c-44f7-9e79-bdff505f6a4f.jpg" class="w-full h-48 object-cover" alt="Programming project"/><div class="p-5"><h3 class="text-xl font-bold mb-2">Web Development</h3><p class="text-slate-600 mb-3">Custom websites and web applications.</p><a href="portfolio.html#programming" class="text-blue-700 font-semibold">Open Dev Projects →</a></div></article>
-            <article class="rounded-xl overflow-hidden border border-slate-200"><img src="https://storage.googleapis.com/a1aa/image/815c3dd6-8d68-47f0-2b6c-d4efcee2e0f2.jpg" class="w-full h-48 object-cover" alt="Athletics project"/><div class="p-5"><h3 class="text-xl font-bold mb-2">Athletics Achievements</h3><p class="text-slate-600 mb-3">Competitions and training highlights.</p><a href="portfolio.html#athletics" class="text-blue-700 font-semibold">Open Highlights →</a></div></article>
+            <article class="rounded-xl overflow-hidden border border-slate-200"><img src="https://storage.googleapis.com/a1aa/image/9733d964-34d8-4e51-38ee-2871da64431f.jpg" class="w-full h-48 object-cover" alt="Graphic design project showing a collection of logos, business cards, and flyer designs with vibrant colors and modern style"/><div class="p-5"><h3 class="text-xl font-bold mb-2">Graphic Design Portfolio</h3><p class="text-slate-600 mb-3">Collection of logos, business cards, and flyer designs.</p><a href="portfolio.html#design" class="text-blue-700 font-semibold">Open Design Projects →</a></div></article>
+            <article class="rounded-xl overflow-hidden border border-slate-200"><img src="https://storage.googleapis.com/a1aa/image/42382e8b-d25c-44f7-9e79-bdff505f6a4f.jpg" class="w-full h-48 object-cover" alt="Programming project showing a developer working on a laptop with code on screen, modern web development environment"/><div class="p-5"><h3 class="text-xl font-bold mb-2">Web Development</h3><p class="text-slate-600 mb-3">Custom websites and web applications.</p><a href="portfolio.html#programming" class="text-blue-700 font-semibold">Open Dev Projects →</a></div></article>
+            <article class="rounded-xl overflow-hidden border border-slate-200"><img src="https://storage.googleapis.com/a1aa/image/815c3dd6-8d68-47f0-2b6c-d4efcee2e0f2.jpg" class="w-full h-48 object-cover" alt="Athletics project showing a runner sprinting on a track during a competition, dynamic and energetic"/><div class="p-5"><h3 class="text-xl font-bold mb-2">Athletics Achievements</h3><p class="text-slate-600 mb-3">Competitions and training highlights.</p><a href="portfolio.html#athletics" class="text-blue-700 font-semibold">Open Highlights →</a></div></article>
           </div>
           <div class="mt-8"><a href="portfolio.html" class="btn-primary inline-block px-8 py-4 rounded-lg font-semibold">Browse Complete Work Archive</a></div>
         </section>
@@ -386,7 +348,7 @@
           <div class="grid md:grid-cols-4 gap-8">
             <div class="md:col-span-2">
               <h3 class="text-2xl font-extrabold mb-3 text-blue-700">Elie Mpuhwezimana</h3>
-              <p class="text-slate-600 mb-4">Graphic design and IT professional creating high-impact digital experiences.</p>
+              <p class="text-slate-600 mb-4">Graphic design and IT professional creating high-impact digital experiences with strategic creative support for organizations.</p>
               <div class="flex gap-4"><a href="#" class="text-slate-500 hover:text-blue-700 text-xl"><i class="fab fa-twitter"></i></a><a href="#" class="text-slate-500 hover:text-blue-700 text-xl"><i class="fab fa-linkedin-in"></i></a><a href="#" class="text-slate-500 hover:text-blue-700 text-xl"><i class="fab fa-github"></i></a></div>
             </div>
             <div>
@@ -430,15 +392,6 @@
   </div>
 
   <script>
-    // Handle Page Loader Removal
-    window.addEventListener('load', function() {
-      const loader = document.getElementById('page-loader');
-      setTimeout(() => {
-        loader.style.opacity = '0';
-        setTimeout(() => loader.style.visibility = 'hidden', 500);
-      }, 800); // Artificial delay to ensure visibility
-    });
-
     document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
       anchor.addEventListener("click", function (e) {
         e.preventDefault();
@@ -460,6 +413,7 @@
       document.getElementById("passwordVerify").classList.remove("hidden");
       document.getElementById("adminActions").classList.add("hidden");
       document.getElementById("adminPassword").value = "";
+      document.getElementById("newAdminPassword").value = "";
     });
 
     document.getElementById("verifyPassword").addEventListener("click", function () {
@@ -471,12 +425,23 @@
       }
     });
 
+    document.getElementById("changePassword").addEventListener("click", function () {
+      const newPass = document.getElementById("newAdminPassword").value;
+      if (newPass) {
+        alert("Password changed successfully!");
+        document.getElementById("adminPanel").classList.add("hidden");
+      } else {
+        alert("Please enter a new password");
+      }
+    });
+
     document.getElementById("deleteProfileImage").addEventListener("click", function () {
       if (confirm("Are you sure you want to delete your profile image?")) {
-        const defaultImage = "mpover pic.jpg";
+        const defaultImage = "https://placehold.co/300x300/png?text=Default+Profile+Image";
         profileImage.src = defaultImage;
-        localStorage.removeItem("profileImage");
-        location.reload(); 
+        localStorage.setItem("profileImage", defaultImage);
+        alert("Profile image deleted!");
+        document.getElementById("adminPanel").classList.add("hidden");
       }
     });
 
@@ -486,8 +451,10 @@
         const reader = new FileReader();
         reader.onload = function (e) {
           const newImage = e.target.result;
+          profileImage.src = newImage;
           localStorage.setItem("profileImage", newImage);
-          location.reload(); 
+          alert("Profile image updated!");
+          document.getElementById("adminPanel").classList.add("hidden");
         };
         reader.readAsDataURL(file);
       }

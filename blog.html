@@ -75,8 +75,7 @@
     .attachment-icon{width:40px;height:40px;border-radius:10px;background:#dbeafe;color:#1e3a8a;display:flex;align-items:center;justify-content:center;font-size:1.1rem}
     .attachment-label{font-weight:700;color:var(--ink)}
     .attachment-sub{font-size:.8rem;color:var(--muted)}
-    .expand-chip{position:absolute;bottom:8px;right:8px;background:rgba(15,23,42,.85);color:#fff;border-radius:999px;padding:.25rem .6rem;font-size:.7rem;font-weight:700}
-
+    .expand-chip{position:absolute;bottom:8px;right:8px;background:rgba(15,23,42,.85);color:#fff;border-radius:999px;padding:.25rem .6rem;font-size:.7rem;font-weight:700;border:0;cursor:pointer}
     
     .modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:1rem;z-index:99}
     .modal.show{display:flex}
@@ -248,12 +247,6 @@
     const profileImage = localStorage.getItem('profileImage');
     if (profileImage) document.getElementById('blogProfileImage').src = profileImage;
 
-    const defaults = [
-      { id: 1, category: 'Track Lesson', title: "The Athlete’s Mindset in Debugging", body: 'How athletics discipline improves problem-solving in development work.', attachments: [], likes: 0, comments: [] },
-      { id: 2, category: 'General Post', title: 'Deep Dive: Building a High-Performance Training App', body: 'A full-stack breakdown combining athletics data and web performance.', attachments: [], likes: 0, comments: [] },
-      { id: 3, category: 'Quick Announcement', title: 'IT Guide: Setting up the Ultimate Home Office', body: 'Hardware, ergonomics, and productivity tooling for creators.', attachments: [], likes: 0, comments: [] },
-      { id: 4, category: 'Normal Update', title: 'Visualizing Speed: Graphic Design for Athletic Data', body: 'Turning training metrics into clear visual systems and dashboards.', attachments: [], likes: 0, comments: [] }
-    ];
     const legacyDefaultTitles = new Set([
       "The Athlete’s Mindset in Debugging",
       'Deep Dive: Building a High-Performance Training App',
@@ -270,19 +263,8 @@
       };
     }
 
-    function normalizeItem(item){
-      return {
-        ...item,
-        likes: Number(item.likes || 0),
-        comments: Array.isArray(item.comments) ? item.comments : [],
-        attachments: Array.isArray(item.attachments) ? item.attachments : []
-      };
-    }
-
     function getItems(){
       const raw = localStorage.getItem(KEY);
-      if (!raw) { localStorage.setItem(KEY, JSON.stringify(defaults)); return defaults; }
-      try { return JSON.parse(raw).map(normalizeItem); } catch { return defaults; }
       if (!raw) { return []; }
       try {
         const parsed = JSON.parse(raw).map(normalizeItem);
@@ -302,19 +284,16 @@
         return `
           <div class="attachment-preview" data-full-src="${src}" data-type="image" data-name="${safeName}">
             <img class="attachment-media" src="${src}" alt="${safeName}" />
-            <span class="expand-chip">Click to Expand</span>
-          </div>
+            <button type="button" class="expand-chip" data-expand="true">Expand</button>
             </div>
         `;
       }
       if (type.startsWith('video')) {
         return `
           <div class="attachment-preview" data-full-src="${src}" data-type="video" data-name="${safeName}">
-            <video class="attachment-media" src="${src}" muted></video>
-            <span class="video-preview-icon" aria-hidden="true"><i class="fas fa-play"></i></span>
-            <span class="expand-chip">Click to Expand</span>
-          </div>
             <video class="attachment-media attachment-video" src="${src}" controls playsinline preload="metadata"></video>
+            <span class="video-preview-icon" aria-hidden="true"><i class="fas fa-play"></i></span>
+            <button type="button" class="expand-chip" data-expand="true">Expand</button>
             </div>
         `;
       }
@@ -322,8 +301,7 @@
         return `
           <div class="attachment-preview" data-full-src="${src}" data-type="pdf" data-name="${safeName}">
             <canvas class="attachment-frame attachment-canvas" data-src="${src}" aria-label="${safeName}"></canvas>
-            <span class="expand-chip">Click to Expand</span>
-          </div>
+            <button type="button" class="expand-chip" data-expand="true">Expand</button>
             </div>
         `;
       }
@@ -333,13 +311,10 @@
             <div class="attachment-icon"><i class="fas fa-file-alt"></i></div>
             <div>
               <div class="attachment-label">${safeName}</div>
-              <div class="attachment-sub">Click to Expand</div>
-            </div>
-          </div>
-          <span class="expand-chip">Click to Expand</span>
               <div class="attachment-sub">Open file preview</div>
             </div>
           </div>
+          <button type="button" class="expand-chip" data-expand="true">Expand</button>
         </div>
       `;
     }
@@ -554,12 +529,10 @@
 
     function wireAttachmentPreviews(){
       blogGrid.querySelectorAll('.attachment-preview').forEach(preview => {
-        preview.onclick = () => {
-          const src = preview.dataset.fullSrc;
-          const type = preview.dataset.type;
         preview.onclick = (event) => {
           const type = preview.dataset.type;
-          if (type === 'video' || event.target.closest('video')) return;
+          const expandTrigger = event.target.closest('[data-expand="true"]');
+          if (!expandTrigger && event.target.closest('video')) return;
           const src = preview.dataset.fullSrc;
           const name = preview.dataset.name;
           openAttachmentModal({ src, type, name });
@@ -911,7 +884,6 @@
           </div>
         `;
       }).join('');
-      list.innerHTML = entries;
       list.innerHTML = tools + entries;
     }
 
