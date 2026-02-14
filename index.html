@@ -391,6 +391,19 @@
     const profileImage = document.getElementById("profileImage");
     const aboutProfileImage = document.getElementById("aboutProfileImage");
     const savedImage = localStorage.getItem("profileImage");
+
+    const ADMIN_PASSWORD_KEY = "homeAdminPassword";
+    const DEFAULT_ADMIN_PASSWORD = "elie";
+
+    function getAdminPassword() {
+      return localStorage.getItem(ADMIN_PASSWORD_KEY) || DEFAULT_ADMIN_PASSWORD;
+    }
+
+    function closeAdminPanel() {
+      document.getElementById("adminPanel").classList.add("hidden");
+      document.getElementById("adminPassword").value = "";
+      document.getElementById("newAdminPassword").value = "";
+    }
     if (savedImage) {
       profileImage.src = savedImage;
       if (aboutProfileImage) aboutProfileImage.src = savedImage;
@@ -401,10 +414,11 @@
       document.getElementById("passwordVerify").classList.remove("hidden");
       document.getElementById("adminActions").classList.add("hidden");
       document.getElementById("adminPassword").value = "";
+      document.getElementById("newAdminPassword").value = "";
     });
 
     document.getElementById("verifyPassword").addEventListener("click", function () {
-      if (document.getElementById("adminPassword").value === "elie") {
+      if (document.getElementById("adminPassword").value === getAdminPassword()) {
         document.getElementById("passwordVerify").classList.add("hidden");
         document.getElementById("adminActions").classList.remove("hidden");
       } else {
@@ -419,8 +433,22 @@
         localStorage.removeItem("profileImage");
         location.reload();
       }
+      if (nextPassword.length < 4) {
+        alert("Password must be at least 4 characters.");
+        return;
+      }
+      localStorage.setItem(ADMIN_PASSWORD_KEY, nextPassword);
+      document.getElementById("newAdminPassword").value = "";
+      alert("Admin password updated successfully.");
     });
 
+    document.getElementById("adminPassword").addEventListener("keydown", function (e) {
+      if (e.key === "Enter") document.getElementById("verifyPassword").click();
+    });
+
+    document.getElementById("newAdminPassword").addEventListener("keydown", function (e) {
+      if (e.key === "Enter") document.getElementById("changePassword").click();
+    });
     document.getElementById("newProfileImage").addEventListener("change", function (e) {
       const file = e.target.files[0];
       if (file) {
@@ -435,7 +463,7 @@
     });
 
     document.getElementById("adminPanel").addEventListener("click", function (e) {
-      if (e.target === this) this.classList.add("hidden");
+      if (e.target === this) closeAdminPanel();
     });
   </script>
 </body>
