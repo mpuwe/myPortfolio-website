@@ -288,6 +288,8 @@
         return `
           <div class="attachment-preview" data-full-src="${src}" data-type="video" data-name="${safeName}">
             <video class="attachment-media attachment-video" src="${src}" controls playsinline preload="metadata"></video>
+            <span class="video-preview-icon" aria-hidden="true"><i class="fas fa-play"></i></span>
+            <button type="button" class="expand-chip" data-expand="true">Expand</button>
             </div>
         `;
       }
@@ -307,6 +309,7 @@
               <div class="attachment-sub">Open file preview</div>
             </div>
           </div>
+          <button type="button" class="expand-chip" data-expand="true">Expand</button>
         </div>
       `;
     }
@@ -523,7 +526,8 @@
       blogGrid.querySelectorAll('.attachment-preview').forEach(preview => {
         preview.onclick = (event) => {
           const type = preview.dataset.type;
-          if (type === 'video' || event.target.closest('video')) return;
+          const expandTrigger = event.target.closest('[data-expand="true"]');
+          if (!expandTrigger && event.target.closest('video')) return;
           const src = preview.dataset.fullSrc;
           const name = preview.dataset.name;
           openAttachmentModal({ src, type, name });
