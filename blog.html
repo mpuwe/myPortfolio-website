@@ -69,6 +69,7 @@
     .attachment-media{width:100%;height:180px;object-fit:cover;display:block}
     .video-preview-icon{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-size:2.2rem;color:#fff;text-shadow:0 8px 20px rgba(0,0,0,.55);pointer-events:none}
     .video-preview-icon i{background:rgba(15,23,42,.45);border:1px solid rgba(255,255,255,.4);width:58px;height:58px;border-radius:999px;display:flex;align-items:center;justify-content:center;padding-left:4px}
+    .attachment-video{background:#000;object-fit:contain}
     .attachment-frame{width:100%;height:180px;border:0;display:block;background:#fff}
     .attachment-doc{display:flex;align-items:center;gap:.75rem;padding:.9rem}
     .attachment-icon{width:40px;height:40px;border-radius:10px;background:#dbeafe;color:#1e3a8a;display:flex;align-items:center;justify-content:center;font-size:1.1rem}
@@ -76,6 +77,7 @@
     .attachment-sub{font-size:.8rem;color:var(--muted)}
     .expand-chip{position:absolute;bottom:8px;right:8px;background:rgba(15,23,42,.85);color:#fff;border-radius:999px;padding:.25rem .6rem;font-size:.7rem;font-weight:700}
 
+    
     .modal{position:fixed;inset:0;background:rgba(0,0,0,.6);display:none;align-items:center;justify-content:center;padding:1rem;z-index:99}
     .modal.show{display:flex}
     .modal-box{width:min(720px,100%);background:#0f172a;color:#fff;border-radius:14px;padding:1rem}
@@ -252,6 +254,21 @@
       { id: 3, category: 'Quick Announcement', title: 'IT Guide: Setting up the Ultimate Home Office', body: 'Hardware, ergonomics, and productivity tooling for creators.', attachments: [], likes: 0, comments: [] },
       { id: 4, category: 'Normal Update', title: 'Visualizing Speed: Graphic Design for Athletic Data', body: 'Turning training metrics into clear visual systems and dashboards.', attachments: [], likes: 0, comments: [] }
     ];
+    const legacyDefaultTitles = new Set([
+      "The Athlete’s Mindset in Debugging",
+      'Deep Dive: Building a High-Performance Training App',
+      'IT Guide: Setting up the Ultimate Home Office',
+      'Visualizing Speed: Graphic Design for Athletic Data'
+    ]);
+
+    function normalizeItem(item){
+      return {
+        ...item,
+        likes: Number(item.likes || 0),
+        comments: Array.isArray(item.comments) ? item.comments : [],
+        attachments: Array.isArray(item.attachments) ? item.attachments : []
+      };
+    }
 
     function normalizeItem(item){
       return {
@@ -266,6 +283,11 @@
       const raw = localStorage.getItem(KEY);
       if (!raw) { localStorage.setItem(KEY, JSON.stringify(defaults)); return defaults; }
       try { return JSON.parse(raw).map(normalizeItem); } catch { return defaults; }
+      if (!raw) { return []; }
+      try {
+        const parsed = JSON.parse(raw).map(normalizeItem);
+        return parsed.filter(item => !legacyDefaultTitles.has(item.title));
+      } catch { return []; }
     }
     function setItems(items){ localStorage.setItem(KEY, JSON.stringify(items)); }
 
@@ -282,6 +304,7 @@
             <img class="attachment-media" src="${src}" alt="${safeName}" />
             <span class="expand-chip">Click to Expand</span>
           </div>
+            </div>
         `;
       }
       if (type.startsWith('video')) {
@@ -291,6 +314,8 @@
             <span class="video-preview-icon" aria-hidden="true"><i class="fas fa-play"></i></span>
             <span class="expand-chip">Click to Expand</span>
           </div>
+            <video class="attachment-media attachment-video" src="${src}" controls playsinline preload="metadata"></video>
+            </div>
         `;
       }
       if (type === 'application/pdf') {
@@ -299,6 +324,7 @@
             <canvas class="attachment-frame attachment-canvas" data-src="${src}" aria-label="${safeName}"></canvas>
             <span class="expand-chip">Click to Expand</span>
           </div>
+            </div>
         `;
       }
       return `
@@ -311,6 +337,9 @@
             </div>
           </div>
           <span class="expand-chip">Click to Expand</span>
+              <div class="attachment-sub">Open file preview</div>
+            </div>
+          </div>
         </div>
       `;
     }
@@ -528,6 +557,10 @@
         preview.onclick = () => {
           const src = preview.dataset.fullSrc;
           const type = preview.dataset.type;
+        preview.onclick = (event) => {
+          const type = preview.dataset.type;
+          if (type === 'video' || event.target.closest('video')) return;
+          const src = preview.dataset.fullSrc;
           const name = preview.dataset.name;
           openAttachmentModal({ src, type, name });
         };
@@ -854,6 +887,18 @@
         list.innerHTML = '<p class="muted">No trending items yet.</p>';
         return;
       }
+      const tools = `
+        <div style="margin-bottom:.9rem">
+          <strong>Tools of the Trade</strong>
+          <ul class="list" style="margin-top:.4rem">
+            <li>Notion</li>
+            <li>Trello</li>
+            <li>Canva</li>
+            <li>Figma</li>
+            <li>VS Code</li>
+          </ul>
+        </div>
+      `;
       const entries = items.map(item => {
         const safeTitle = clampText(item.title || '', TITLE_LIMIT);
         const safeLink = clampText(item.link || '', LINK_LIMIT);
@@ -867,6 +912,7 @@
         `;
       }).join('');
       list.innerHTML = entries;
+      list.innerHTML = tools + entries;
     }
 
     render();

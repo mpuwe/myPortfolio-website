@@ -50,8 +50,18 @@
     .portfolio-item {
       transition: all 0.3s ease;
     }
-    .portfolio-item img {
+    .portfolio-item img,
+    .portfolio-item video {
       width: 100%;
+    }
+    .project-media {
+      width: 100%;
+      height: 12rem;
+      object-fit: cover;
+      background: #000;
+    }
+    .project-media.video {
+      object-fit: contain;
     }
 
     /* Project delete buttons */
@@ -513,7 +523,7 @@
               <input
                 type="file"
                 id="projectImage"
-                accept="image/*"
+                accept="image/*,video/*"
                 class="w-full mb-2"
               />
               <label for="projectTitle" class="sr-only">Project Title</label>
@@ -921,8 +931,13 @@
         projectDiv.dataset.doctype = project.doctype || "";
         projectDiv.dataset.id = project.id;
         
+        const mediaType = project.mediaType || (project.image && project.image.startsWith('data:video') ? 'video' : 'image');
+        const mediaMarkup = mediaType === 'video'
+          ? `<video class="project-media video" src="${project.image}" controls playsinline preload="metadata" aria-label="${project.alt || project.title}"></video>`
+          : `<img src="${project.image}" alt="${project.alt || project.title}" class="project-media" />`;
+
         projectDiv.innerHTML = `
-          <img src="${project.image}" alt="${project.alt || project.title}" class="w-full h-48 object-cover" />
+          ${mediaMarkup}
           <button class="delete-doc" 
             aria-label="Delete project ${project.title}"
             data-id="${project.id}">
@@ -937,7 +952,7 @@
               )}</span>
             </div>
           </div>
-          <a href="${isProgramming ? "https://buying-pied.vercel.app/" : "#"}" target="${isProgramming ? "_blank" : "_self"}" class="action-button" aria-label="${
+          <a href="#" target="_self" class="action-button" aria-label="${
             isProgramming ? "Live demo" : "View"
           } of ${project.title} project" data-id="${project.id}" data-type="project">${isProgramming ? "Live Demo" : "View"} ${
           isProgramming
@@ -970,7 +985,7 @@
           if (project.demoLink) {
             window.open(project.demoLink, "_blank", "noopener");
           } else if (project.image) {
-            // fallback open image in new tab
+            // fallback open uploaded media in new tab
             window.open(project.image, "_blank", "noopener");
           } else {
             alert("No preview available.");
@@ -1243,6 +1258,7 @@
 
         reader.onload = function (e) {
           const projects = loadProjects();
+          const mediaType = imageFile.type.startsWith("video/") ? "video" : "image";
 
           const newProject = {
             id: generateId(),
@@ -1251,8 +1267,11 @@
             title,
             desc,
             image: e.target.result,
-            alt: `${title} project image showing ${title}`,
-            demoLink: "https://buying-pied.vercel.app/"
+            mediaType,
+            alt:
+              mediaType === "video"
+                ? `${title} project video showcasing ${title}`
+                : `${title} project image showing ${title}`,
           };
 
           projects.unshift(newProject);
