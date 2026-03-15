@@ -114,31 +114,27 @@
       margin: 0;
       padding: 0;
       box-sizing: border-box;
-      display: flex;
-      justify-content: flex-start;
-      align-items: stretch;
+      position: relative;
       overflow: hidden;
     }
     .home-grid {
       width: 100%;
       min-height: 100vh;
-      display: flex;
-      align-items: stretch;
-      background: transparent;
+      display: block;
       box-sizing: border-box;
+      padding-left: 400px;
     }
     .phone-aside {
-      position: sticky;
+      position: fixed;
       top: 0;
       left: 0;
       width: 380px;
-      min-height: 100vh;
+      height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 1rem;
       z-index: 20;
-      pointer-events: auto;
       box-sizing: border-box;
       background: #f8fafc;
       border-right: 1px solid #e2e8f0;
@@ -146,17 +142,15 @@
       -webkit-overflow-scrolling: touch;
     }
     .phone-stick {
-      pointer-events: auto;
       width: 100%;
       max-width: 360px;
     }
     .main-content {
-      flex: 1;
-      overflow-y: auto;
-      margin: 0;
-      padding: 1rem;
+      margin-left: 400px;
       min-height: 100vh;
       box-sizing: border-box;
+      padding: 1rem;
+      overflow-y: auto;
       scroll-behavior: smooth;
     }
 
@@ -344,27 +338,21 @@
     }
 
     @media (max-width: 1024px) {
-      .layout-shell {
-        display: block;
-      }
-      .home-grid {
-        display: block;
-        width: 100%;
-        min-height: auto;
-        margin: 0;
-        padding: 0;
+      .layout-shell, .home-grid {
+        padding-left: 0;
       }
       .phone-aside {
         position: static;
         width: 100%;
-        min-height: auto;
+        height: auto;
         border-right: none;
         border-bottom: 1px solid #e2e8f0;
         background: #f9fafb;
       }
       .main-content {
-        overflow-y: visible;
+        margin-left: 0;
         padding: 1rem;
+        overflow-y: visible;
       }
       .phone-frame {
         width: 100%;
