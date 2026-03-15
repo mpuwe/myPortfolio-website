@@ -18,19 +18,138 @@
       --muted: #475569;
       --border: #dbe4f0;
     }
+    html, body {
+      overflow-x: hidden;
+      max-width: 100vw;
+    }
     body { font-family: "Inter", sans-serif; background: var(--bg); color: var(--ink); }
     h1,h2,h3,h4 { font-family: "Manrope", sans-serif; }
     a { text-decoration: none; }
 
-    .layout-shell { max-width: 1320px; width: 100%; margin: .4rem auto; padding: .4rem; box-sizing: border-box; }
-    .home-grid { display: grid; grid-template-columns: 400px 1fr; gap: .35rem; align-items: start; }
-    .phone-stick { position: sticky; top: 10px; }
+    /* Professional Preloader Styles */
+    .loading-screen {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      z-index: 9999;
+      transition: opacity 0.5s ease, visibility 0.5s ease;
+    }
+    .loading-screen.hidden {
+      opacity: 0;
+      visibility: hidden;
+    }
+    .loading-card {
+      text-align: center;
+      color: white;
+    }
+    .loading-ring {
+      width: 80px;
+      height: 80px;
+      border: 4px solid rgba(255,255,255,0.1);
+      border-top-color: #60a5fa;
+      border-radius: 50%;
+      margin: 0 auto 24px;
+      animation: spin 1s linear infinite;
+    }
+    @keyframes spin {
+      to { transform: rotate(360deg); }
+    }
+    .loading-text {
+      font-family: "Manrope", sans-serif;
+      font-size: 1.25rem;
+      font-weight: 800;
+      letter-spacing: 0.2em;
+      margin-bottom: 8px;
+      animation: pulse 1.5s ease-in-out infinite;
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+    .loading-subtext {
+      font-size: 0.875rem;
+      color: #93c5fd;
+      font-weight: 500;
+    }
+    .loading-bar-container {
+      width: 200px;
+      height: 4px;
+      background: rgba(255,255,255,0.1);
+      border-radius: 2px;
+      margin: 20px auto 0;
+      overflow: hidden;
+    }
+    .loading-bar {
+      height: 100%;
+      background: linear-gradient(90deg, #60a5fa, #3b82f6);
+      width: 0%;
+      animation: loading 2s ease-in-out forwards;
+    }
+    @keyframes loading {
+      0% { width: 0%; }
+      100% { width: 100%; }
+    }
+
+    /* Layout logic */
+    .layout-shell { 
+      max-width: 1320px; 
+      width: 100%; 
+      margin: 0 auto; 
+      padding: .65rem .7rem .9rem; 
+      box-sizing: border-box; 
+    }
+    
+    .home-grid { 
+      display: grid; 
+      /* Significantly reduced gap */
+      grid-template-columns: 400px 1fr; 
+      gap: .1rem; 
+      align-items: start; 
+    }
+    
+    /* Fixed Phone Aside */
+    .phone-aside {
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 400px;
+      height: 100vh;
+      display: flex;
+      align-items: center; 
+      justify-content: center;
+      /* Further increased left padding to match right margin */
+      padding: .65rem .7rem .65rem 3.5rem; 
+      z-index: 10;
+      pointer-events: none; 
+      box-sizing: border-box;
+    }
+    .phone-stick {
+      pointer-events: auto;
+    }
+
+    /* Main content takes up full width of the right column */
+    .main-content {
+      grid-column: 2;
+    }
 
     .phone-frame {
-      width: 362px; height: min(93vh, 805px); margin: 0 auto; position: relative;
-      background: #0b1220; border-radius: 34px; border: 8px solid #0f172a;
-      box-shadow: 0 28px 60px rgba(15, 23, 42, 0.35); overflow: hidden;
-      display: flex; flex-direction: column;
+      width: 362px; 
+      height: min(96vh, 840px); 
+      margin: 0 auto; 
+      position: relative;
+      background: #0b1220; 
+      border-radius: 34px; 
+      border: 8px solid #0f172a;
+      box-shadow: 0 28px 60px rgba(15, 23, 42, 0.35); 
+      overflow: hidden;
+      display: flex; 
+      flex-direction: column;
     }
     .phone-head { background: linear-gradient(90deg, #1e293b, #0f172a); color: #e2e8f0; font-weight: 600; font-size: .8rem; padding: .45rem .8rem; display: flex; justify-content: space-between; }
     .phone-body { flex: 1; background: radial-gradient(circle at top, #1e3a8a, #0f172a 60%); color: #fff; padding: 2.7rem .75rem 4rem; text-align: center; }
@@ -104,6 +223,7 @@
     .py-3 { padding-top: .75rem; padding-bottom: .75rem; }
     .py-4 { padding-top: 1rem; padding-bottom: 1rem; }
     .pt-6 { padding-top: 1.5rem; }
+    .mb-1 { margin-bottom: .25rem; }
     .mb-2 { margin-bottom: .5rem; }
     .mb-3 { margin-bottom: .75rem; }
     .mb-4 { margin-bottom: 1rem; }
@@ -183,6 +303,9 @@
     .focus\:ring-2:focus { box-shadow: 0 0 0 2px rgba(29,78,216,.25); }
     .focus\:ring-blue-500:focus { border-color: #3b82f6; }
 
+    /* Utility for text overflow */
+    .break-all { word-break: break-all; }
+
     @media (min-width: 640px) {
       .sm\:grid-cols-3 { grid-template-columns: repeat(3,minmax(0,1fr)); }
       .sm\:flex-row { flex-direction: row; }
@@ -199,65 +322,115 @@
     }
 
     @media (max-width: 1024px) {
+      /* Revert to scrolling layout for tablet/mobile */
       .home-grid { grid-template-columns: 1fr; }
-      .phone-frame { width: 332px; height: min(88vh, 740px); }
-      .phone-stick { position: static; }
+      .phone-aside {
+        position: static;
+        width: 100%;
+        height: auto;
+        padding: 0;
+        pointer-events: auto;
+        display: block;
+      }
+      .phone-stick { 
+        position: static; 
+      }
+      .main-content {
+        margin-left: 0;
+        grid-column: 1;
+      }
+      .phone-frame { width: 100%; max-width: 362px; height: min(88vh, 740px); }
+      
+      /* Adjust footer grid on tablets */
+      .footer-grid {
+        grid-template-columns: 1fr 1fr;
+      }
+    }
+
+    /* Mobile Responsiveness */
+    @media (max-width: 640px) {
+      .home-grid { gap: .5rem; }
+      .phone-frame { 
+        height: 85vh; 
+        width: 100%;
+        max-width: 340px; 
+      }
+      .panel { padding: 1rem; } 
+      .footer-grid {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+      .footer-contact-list {
+        align-items: center;
+      }
+      .footer-social-icons {
+        justify-content: center;
+      }
     }
   </style>
 </head>
 <body>
+  <!-- Professional Preloader -->
   <div class="loading-screen" id="loadingScreen" aria-live="polite">
     <div class="loading-card">
       <div class="loading-ring"></div>
       <div class="loading-text">LOADING PORTFOLIO</div>
       <div class="loading-subtext">Preparing creative experiences</div>
+      <div class="loading-bar-container">
+        <div class="loading-bar"></div>
+      </div>
     </div>
   </div>
+
   <div class="layout-shell">
     <div class="home-grid">
-      <aside class="phone-stick" aria-label="Profile preview phone">
-        <div class="phone-frame">
-          <div class="phone-head">
-            <span>9:41 AM</span>
-            <div class="flex gap-3"><i class="fas fa-signal"></i><i class="fas fa-wifi"></i><i class="fas fa-battery-full"></i></div>
-          </div>
-          <div class="phone-body">
-            <div class="relative w-36 h-36 mb-5 mx-auto">
-              <img id="profileImage" src="mpover pic.jpg" alt="Portrait of Elie Mpuhwezimana" class="w-full h-full rounded-full object-cover border-4 border-blue-400 shadow-xl"/>
-              <button id="editProfileBtn" aria-label="Edit Profile Image" class="absolute bottom-0 right-0 bg-blue-600 hover:bg-blue-700 text-white rounded-full w-10 h-10 flex items-center justify-center shadow-lg transition"><i class="fas fa-pencil-alt"></i></button>
+      <!-- Fixed Phone Aside -->
+      <aside class="phone-aside" aria-label="Profile preview phone">
+        <div class="phone-stick">
+          <div class="phone-frame">
+            <div class="phone-head">
+              <span>9:41 AM</span>
+              <div class="flex gap-3"><i class="fas fa-signal"></i><i class="fas fa-wifi"></i><i class="fas fa-battery-full"></i></div>
             </div>
-            <h3 class="text-2xl font-extrabold tracking-wide">Elie Mpuhwezimana</h3>
-            <p class="text-sm uppercase tracking-[.18em] text-cyan-200 mb-6">Graphic Design & IT Professional</p>
-            <div class="social-icons">
-              <a href="https://twitter.com/" target="_blank" class="social-icon" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-              <a href="https://www.linkedin.com/messaging/thread/2-NDk5YjU4Y2MtMmIzNy00NDM5LWJlMWEtNDRmNTM4OGJhNWU1XzEwMA==/" target="_blank" class="social-icon" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-              <a href="https://github.com/dashboard" target="_blank" class="social-icon" aria-label="GitHub"><i class="fab fa-github"></i></a>
-              <a href="https://www.instagram.com/" target="_blank" class="social-icon" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+            <div class="phone-body">
+              <div class="relative w-36 h-36 mb-5 mx-auto">
+                <img id="profileImage" src="mpover pic.jpg" alt="Portrait of Elie Mpuhwezimana" class="w-full h-full rounded-full object-cover border-4 border-blue-400 shadow-xl"/>
+                <button id="editProfileBtn" aria-label="Edit Profile Image" class="absolute bottom-0 right-0 bg-blue-600 hover:bg-blue-700 text-white rounded-full w-10 h-10 flex items-center justify-center shadow-lg transition"><i class="fas fa-pencil-alt"></i></button>
+              </div>
+              <h3 class="text-2xl font-extrabold tracking-wide">Elie Mpuhwezimana</h3>
+              <p class="text-sm uppercase tracking-[.18em] text-cyan-200 mb-6">Graphic Design & IT Professional</p>
+              <div class="social-icons">
+                <a href="https://twitter.com/" target="_blank" class="social-icon" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                <a href="https://www.linkedin.com/messaging/thread/2-NDk5YjU4Y2MtMmIzNy00NDM5LWJlMWEtNDRmNTM4OGJhNWU1XzEwMA==/" target="_blank" class="social-icon" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                <a href="https://github.com/dashboard" target="_blank" class="social-icon" aria-label="GitHub"><i class="fab fa-github"></i></a>
+                <a href="https://www.instagram.com/" target="_blank" class="social-icon" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+              </div>
+              <div class="grid grid-cols-4 gap-2 text-xs mt-2" style="margin-top: 1.6rem;">
+                <a href="portfolio.html#documents" class="mini-link"><i class="fas fa-trophy text-cyan-300"></i>Awards</a>
+                <a href="portfolio.html#documents" class="mini-link"><i class="fas fa-heart text-cyan-300"></i>Hobbies</a>
+                <a href="portfolio.html#documents" class="mini-link"><i class="fas fa-running text-cyan-300"></i>Talents</a>
+                <a href="portfolio.html#documents" class="mini-link"><i class="fas fa-external-link-alt text-cyan-300"></i>Portfolio</a>
+              </div>
             </div>
-            <div class="grid grid-cols-4 gap-2 text-xs mt-2" style="margin-top: 1.6rem;">
-              <a href="portfolio.html#documents" class="mini-link"><i class="fas fa-trophy text-cyan-300"></i>Awards</a>
-              <a href="portfolio.html#documents" class="mini-link"><i class="fas fa-heart text-cyan-300"></i>Hobbies</a>
-              <a href="portfolio.html#documents" class="mini-link"><i class="fas fa-running text-cyan-300"></i>Talents</a>
-              <a href="portfolio.html#documents" class="mini-link"><i class="fas fa-external-link-alt text-cyan-300"></i>Portfolio</a>
-            </div>
-          </div>
-          <div class="phone-nav">
-            <div class="phone-nav-grid">
-              <button type="button" aria-label="Recent apps" class="nav-btn transition" title="Recent apps">
-                <i class="far fa-square"></i>
-              </button>
-              <button type="button" aria-label="Home" class="nav-btn transition" title="Home">
-                <i class="far fa-circle"></i>
-              </button>
-              <button type="button" aria-label="Back" class="nav-btn transition" title="Back">
-                <span class="nav-triangle">▷</span>
-              </button>
+            <div class="phone-nav">
+              <div class="phone-nav-grid">
+                <button type="button" aria-label="Recent apps" class="nav-btn transition" title="Recent apps">
+                  <i class="far fa-square"></i>
+                </button>
+                <button type="button" aria-label="Home" class="nav-btn transition" title="Home">
+                  <i class="far fa-circle"></i>
+                </button>
+                <button type="button" aria-label="Back" class="nav-btn transition" title="Back">
+                  <span style="font-size: 1.5rem; color: #fff; line-height: 1;">▷</span>
+                </button>
+              </div>
             </div>
           </div>
         </div>
       </aside>
 
-      <main class="space-y-8">
+      <!-- Scrollable Main Content -->
+      <main class="main-content space-y-8">
         <section class="panel p-8 md:p-12">
           <p class="uppercase tracking-[.22em] text-sm text-slate-500 mb-4">Digital Portfolio Experience</p>
           <h1 class="text-4xl md:text-5xl font-extrabold leading-tight mb-5">Transform <span class="text-blue-700">design, code, and sport.</span></h1>
@@ -271,22 +444,22 @@
           </div>
           <div class="grid sm:grid-cols-2 gap-4 max-w-3xl" style="grid-auto-flow: column; margin-bottom: 7px;">
             <a href="portfolio.html" class="btn-primary px-6 py-4 rounded-lg font-bold text-center transition">Explore Portfolio Hub</a>
-            <a href="mailto:mpuwezimanaelie@gmail.com?subject=Project%20Discussion&body=Hello%20Elie,%20I%20would%20like%20to%20discuss%20a%20task%20or%20deal." class="bg-slate-900 text-white px-6 py-4 rounded-lg font-bold text-center hover:bg-slate-700 transition">Connect Me</a>
+            <a href="contact.html" class="bg-slate-900 text-white px-6 py-4 rounded-lg font-bold text-center hover:bg-slate-700 transition">Connect Me</a>
           </div>
         </section>
 
-        <section id="about" class="panel about-panel">
-          <h2 class="text-3xl font-extrabold mb-1">About Me</h2>
-          <div class="about-body">
-            <div class="grid md:grid-cols-2 gap-8 items-center about-grid">
-              <img id="aboutProfileImage" src="mpover pic.jpg" alt="Professional portrait of Elie Mpuhwezimana, smiling confidently, wearing a smart casual shirt, studio background" class="rounded-xl shadow-xl about-photo"/>
-              <div>
-                <p class="text-slate-600 mb-4">I'm a focused creative professional with strong expertise in graphic design, visual communication, and IT implementation. I translate ideas into high-quality digital experiences that support organizational goals.</p>
-                <p class="text-slate-600 mb-6">Athletics remains a long-term personal passion, while my professional value-add is strategic creative contribution: combining design thinking, digital execution, and clear communication to strengthen team outcomes.</p>
-                <div class="flex gap-4" style="flex-wrap: nowrap;">
-                  <a href="blog.html" class="btn-primary px-7 py-3 rounded-lg font-semibold">View My Blog</a>
-                  <a href="https://calendar.google.com/" target="_blank" rel="noopener noreferrer" class="btn-secondary px-7 py-3 rounded-lg font-semibold">Book My Collaboration</a>
-                </div>
+        <section id="about" class="panel p-8 md:p-12">
+          <div class="grid md:grid-cols-2 gap-8 items-center">
+            <div class="about-img-container shadow-xl mx-auto md:mx-0">
+               <img id="aboutProfileImage" src="mpover pic.jpg" alt="Professional portrait of Elie Mpuhwezimana"/>
+            </div>
+            <div>
+              <h2 class="text-3xl font-extrabold mb-4">About Me</h2>
+              <p class="text-slate-600 mb-4">I'm a focused creative professional with strong expertise in graphic design, visual communication, and IT implementation. I translate ideas into high-quality digital experiences that support organizational goals.</p>
+              <p class="text-slate-600 mb-6">Athletics remains a long-term personal passion, while my professional value-add is strategic creative contribution: combining design thinking, digital execution, and clear communication to strengthen team outcomes.</p>
+              <div class="flex gap-4" style="flex-wrap: nowrap;">
+                <a href="blog.html" class="btn-primary px-7 py-3 rounded-lg font-semibold">View My Blog</a>
+                <a href="https://calendar.google.com/" target="_blank" rel="noopener noreferrer" class="btn-secondary px-7 py-3 rounded-lg font-semibold">Book My Collaboration</a>
               </div>
             </div>
           </div>
@@ -324,11 +497,11 @@
         </section>
 
         <footer class="panel p-8 md:p-10">
-          <div class="grid md:grid-cols-4 gap-8">
+          <div class="grid md:grid-cols-4 gap-8 footer-grid">
             <div class="md:col-span-2">
               <h3 class="text-2xl font-extrabold mb-3 text-blue-700">Elie Mpuhwezimana</h3>
               <p class="text-slate-600 mb-4">Graphic design and IT professional creating high-impact digital experiences.</p>
-              <div class="flex gap-4"><a href="#" class="text-slate-500 hover:text-blue-700 text-xl"><i class="fab fa-twitter"></i></a><a href="#" class="text-slate-500 hover:text-blue-700 text-xl"><i class="fab fa-linkedin-in"></i></a><a href="#" class="text-slate-500 hover:text-blue-700 text-xl"><i class="fab fa-github"></i></a></div>
+              <div class="flex gap-4 footer-social-icons"><a href="#" class="text-slate-500 hover:text-blue-700 text-xl"><i class="fab fa-twitter"></i></a><a href="#" class="text-slate-500 hover:text-blue-700 text-xl"><i class="fab fa-linkedin-in"></i></a><a href="#" class="text-slate-500 hover:text-blue-700 text-xl"><i class="fab fa-github"></i></a></div>
             </div>
             <div>
               <h3 class="text-xl font-extrabold mb-3 text-blue-700">Navigate</h3>
@@ -336,10 +509,23 @@
             </div>
             <div>
               <h3 class="text-xl font-extrabold mb-3 text-blue-700">Direct Contact</h3>
-              <ul class="space-y-3 text-slate-600"><li><i class="fas fa-envelope text-blue-700 mr-2"></i><a href="mailto:mpuwezimanaelie@gmail.com" class="hover:text-blue-700">mpuwezimanaelie@gmail.com</a></li><li><i class="fas fa-phone text-blue-700 mr-2"></i><a href="tel:+250790737511" class="hover:text-blue-700">+250 790 737 511</a></li><li><i class="fas fa-map-marker-alt text-blue-700 mr-2"></i>Kigali, Rwanda</li></ul>
+              <ul class="space-y-3 text-slate-600 footer-contact-list" style="list-style: none; padding: 0;">
+                <li class="flex items-start gap-2">
+                  <i class="fas fa-envelope text-blue-700 mt-1"></i>
+                  <a href="mailto:mpuwezimanaelie@gmail.com" class="hover:text-blue-700 break-all">mpuwezimanaelie@gmail.com</a>
+                </li>
+                <li class="flex items-center gap-2">
+                  <i class="fas fa-phone text-blue-700"></i>
+                  <a href="tel:+250790737511" class="hover:text-blue-700">+250 790 737 511</a>
+                </li>
+                <li class="flex items-center gap-2">
+                  <i class="fas fa-map-marker-alt text-blue-700"></i>
+                  <span>Kigali, Rwanda</span>
+                </li>
+              </ul>
             </div>
           </div>
-          <div class="border-t border-slate-200 mt-8 pt-6 text-sm text-slate-500">© 2025 Elie Mpuhwezimana. All rights reserved.</div>
+          <div class="border-t border-slate-200 mt-8 pt-6 text-sm text-slate-500 text-center">© 2025 Elie Mpuhwezimana. All rights reserved.</div>
         </footer>
       </main>
     </div>
@@ -371,13 +557,14 @@
   </div>
 
   <script>
-    // Handle Page Loader Removal
+    // Professional Preloader Handler
     window.addEventListener('load', function() {
-      const loader = document.getElementById('page-loader');
+      const loadingScreen = document.getElementById('loadingScreen');
+      
+      // Minimum display time for better UX
       setTimeout(() => {
-        loader.style.opacity = '0';
-        setTimeout(() => loader.style.visibility = 'hidden', 500);
-      }, 800); // Artificial delay to ensure visibility
+        loadingScreen.classList.add('hidden');
+      }, 2000);
     });
 
     document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
@@ -391,19 +578,6 @@
     const profileImage = document.getElementById("profileImage");
     const aboutProfileImage = document.getElementById("aboutProfileImage");
     const savedImage = localStorage.getItem("profileImage");
-
-    const ADMIN_PASSWORD_KEY = "homeAdminPassword";
-    const DEFAULT_ADMIN_PASSWORD = "elie";
-
-    function getAdminPassword() {
-      return localStorage.getItem(ADMIN_PASSWORD_KEY) || DEFAULT_ADMIN_PASSWORD;
-    }
-
-    function closeAdminPanel() {
-      document.getElementById("adminPanel").classList.add("hidden");
-      document.getElementById("adminPassword").value = "";
-      document.getElementById("newAdminPassword").value = "";
-    }
     if (savedImage) {
       profileImage.src = savedImage;
       if (aboutProfileImage) aboutProfileImage.src = savedImage;
@@ -414,11 +588,10 @@
       document.getElementById("passwordVerify").classList.remove("hidden");
       document.getElementById("adminActions").classList.add("hidden");
       document.getElementById("adminPassword").value = "";
-      document.getElementById("newAdminPassword").value = "";
     });
 
     document.getElementById("verifyPassword").addEventListener("click", function () {
-      if (document.getElementById("adminPassword").value === getAdminPassword()) {
+      if (document.getElementById("adminPassword").value === "elie") {
         document.getElementById("passwordVerify").classList.add("hidden");
         document.getElementById("adminActions").classList.remove("hidden");
       } else {
@@ -426,40 +599,15 @@
       }
     });
 
-
-
-    document.getElementById("changePassword").addEventListener("click", function () {
-      const nextPassword = document.getElementById("newAdminPassword").value.trim();
-      if (!nextPassword) return alert("Please enter a new password.");
-      if (nextPassword.length < 4) return alert("Password must be at least 4 characters.");
-      localStorage.setItem(HOME_ADMIN_KEY, nextPassword);
-      document.getElementById("newAdminPassword").value = "";
-      alert("Admin password updated successfully.");
-    });
-
     document.getElementById("deleteProfileImage").addEventListener("click", function () {
       if (confirm("Are you sure you want to delete your profile image?")) {
         const defaultImage = "mpover pic.jpg";
         profileImage.src = defaultImage;
         localStorage.removeItem("profileImage");
-        location.reload();
+        location.reload(); 
       }
-      if (nextPassword.length < 4) {
-        alert("Password must be at least 4 characters.");
-        return;
-      }
-      localStorage.setItem(ADMIN_PASSWORD_KEY, nextPassword);
-      document.getElementById("newAdminPassword").value = "";
-      alert("Admin password updated successfully.");
     });
 
-    document.getElementById("adminPassword").addEventListener("keydown", function (e) {
-      if (e.key === "Enter") document.getElementById("verifyPassword").click();
-    });
-
-    document.getElementById("newAdminPassword").addEventListener("keydown", function (e) {
-      if (e.key === "Enter") document.getElementById("changePassword").click();
-    });
     document.getElementById("newProfileImage").addEventListener("change", function (e) {
       const file = e.target.files[0];
       if (file) {
@@ -467,14 +615,17 @@
         reader.onload = function (e) {
           const newImage = e.target.result;
           localStorage.setItem("profileImage", newImage);
-          location.reload();
+          location.reload(); 
         };
         reader.readAsDataURL(file);
       }
     });
 
+    // Close admin panel when clicking outside
     document.getElementById("adminPanel").addEventListener("click", function (e) {
-      if (e.target === this) closeAdminPanel();
+      if (e.target === this) {
+        this.classList.add("hidden");
+      }
     });
   </script>
 </body>
