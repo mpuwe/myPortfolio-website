@@ -123,20 +123,22 @@
       margin: 0;
       padding: 0;
       display: block;
+      position: relative;
     }
     .phone-aside {
       position: fixed;
       top: 0;
       left: 0;
       width: 380px;
-      height: 100%;
+      height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;
       padding: 1rem;
-      z-index: 20;
+      z-index: 50;
       box-sizing: border-box;
       background: #0f172a;
+      border-right: 1px solid #111827;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
     }
@@ -145,9 +147,11 @@
       max-width: 360px;
     }
     .main-content {
-      margin-left: 380px;
-      width: calc(100% - 380px);
-      height: 100%;
+      position: absolute;
+      top: 0;
+      left: 380px;
+      right: 0;
+      bottom: 0;
       overflow-y: auto;
       padding: 1rem;
       box-sizing: border-box;
