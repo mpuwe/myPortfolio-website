@@ -5,7 +5,7 @@
   <meta name="viewport" content="width=device-width, initial-scale=1"/>
   <title>Elie Mpuhwezimana | Creative Technology Portfolio</title>
   <meta name="description" content="Professional portfolio showcasing Elie's diverse skills in design, programming, athletics and more"/>
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"/>
+  <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css" rel="stylesheet"/>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@500;700;800&display=swap" rel="stylesheet"/>
   <style>
     :root {
@@ -17,614 +17,331 @@
       --ink: #0f172a;
       --muted: #475569;
       --border: #dbe4f0;
+      /* Spacing Variables */
+      --phone-width: 510px; /* Increased by 100px from previous 410px */
+      --phone-y-margin: 15px;
     }
-    html, body {
-      overflow-x: hidden;
-      max-width: 100vw;
-    }
-    body { font-family: "Inter", sans-serif; background: var(--bg); color: var(--ink); }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html, body { overflow-x: hidden; max-width: 100vw; }
+    body { font-family: "Inter", sans-serif; background: var(--bg); color: var(--ink); min-height: 100vh; }
     h1,h2,h3,h4 { font-family: "Manrope", sans-serif; }
     a { text-decoration: none; }
 
-    /* Professional Preloader Styles */
+    /* Professional Preloader */
     .loading-screen {
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      position: fixed; inset: 0;
       background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 100%);
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      z-index: 9999;
-      transition: opacity 0.5s ease, visibility 0.5s ease;
+      display: flex; justify-content: center; align-items: center;
+      z-index: 9999; transition: opacity 0.5s ease, visibility 0.5s ease;
     }
-    .loading-screen.hidden {
-      opacity: 0;
-      visibility: hidden;
-    }
-    .loading-card {
-      text-align: center;
-      color: white;
-    }
+    .loading-screen.hidden { opacity: 0; visibility: hidden; }
     .loading-ring {
-      width: 80px;
-      height: 80px;
-      border: 4px solid rgba(255,255,255,0.1);
-      border-top-color: #60a5fa;
-      border-radius: 50%;
-      margin: 0 auto 24px;
-      animation: spin 1s linear infinite;
+      width: 80px; height: 80px; border: 4px solid rgba(255,255,255,0.1);
+      border-top-color: #60a5fa; border-radius: 50%; animation: spin 1s linear infinite; margin: 0 auto 20px;
     }
-    @keyframes spin {
-      to { transform: rotate(360deg); }
-    }
-    .loading-text {
-      font-family: "Manrope", sans-serif;
-      font-size: 1.25rem;
-      font-weight: 800;
-      letter-spacing: 0.2em;
-      margin-bottom: 8px;
-      animation: pulse 1.5s ease-in-out infinite;
-    }
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50% { opacity: 0.5; }
-    }
-    .loading-subtext {
-      font-size: 0.875rem;
-      color: #93c5fd;
-      font-weight: 500;
-    }
-    .loading-bar-container {
-      width: 200px;
-      height: 4px;
-      background: rgba(255,255,255,0.1);
-      border-radius: 2px;
-      margin: 20px auto 0;
-      overflow: hidden;
-    }
-    .loading-bar {
-      height: 100%;
-      background: linear-gradient(90deg, #60a5fa, #3b82f6);
-      width: 0%;
-      animation: loading 2s ease-in-out forwards;
-    }
-    @keyframes loading {
-      0% { width: 0%; }
-      100% { width: 100%; }
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    /* Layout Shell */
+    .layout-shell { width: 100%; display: flex; }
+
+    /* FIXED LEFT SIDE - Widened by 100px */
+    .phone-aside {
+      position: fixed;
+      top: 0; left: 0;
+      width: var(--phone-width);
+      height: 100vh;
+      background: #f8fafc;
+      border-right: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 5px; /* Strict 5px side margin */
+      z-index: 100;
     }
 
-    /* Layout logic */
-    html, body {
-      margin: 0;
-      width: 100%;
-      min-height: 100%;
-      height: 100%;
-      font-family: "Inter", sans-serif;
-      background: var(--bg);
-      color: var(--ink);
-      overflow: hidden;
-    }
-    .layout-shell {
-      width: 100%;
-      min-height: 100vh;
-      display: flex;
-      align-items: stretch;
-      box-sizing: border-box;
-      padding: 1rem;
-      gap: 1rem;
-    }
-    .phone-aside {
-      width: 360px;
-      min-height: calc(100vh - 2rem);
-      display: flex;
-      align-items: flex-start;
-      justify-content: center;
-      padding: 1rem;
-      background: #f8fafc;
-      border-radius: 0.8rem;
-      border: 1px solid #e2e8f0;
-      box-sizing: border-box;
-      overflow: hidden;
-      position: sticky;
-      top: 1rem;
-    }
     .phone-stick {
       width: 100%;
-      max-width: 360px;
-    }
-    .main-content {
-      flex: 1;
-      min-height: calc(100vh - 2rem);
-      overflow-y: auto;
-      box-sizing: border-box;
-      padding: 1rem 0 1rem 0;
-    }
-    .main-content .panel:first-of-type {
-      margin-top: 0.6rem;
-    }
-    .main-content .panel:first-of-type {
-      margin-top: 0.2rem;
-    }
-    @media (max-width: 1024px) {
-      html, body { overflow: auto; height: auto; }
-      .layout-shell { flex-direction: column; height: auto; padding: 1rem; }
-      .phone-aside { width: 100%; min-height: auto; border-radius: 0.8rem; }
-      .main-content { width: 100%; height: auto; overflow: visible; margin-top: 1rem; }
+      height: calc(100vh - (var(--phone-y-margin) * 2));
+      display: flex;
+      justify-content: center;
     }
 
     .phone-frame {
-      width: 362px; 
-      height: min(96vh, 840px); 
-      margin: 0 auto; 
-      position: relative;
-      background: #0b1220; 
-      border-radius: 34px; 
-      border: 8px solid #0f172a;
-      box-shadow: 0 28px 60px rgba(15, 23, 42, 0.35); 
+      width: 100%;
+      max-width: 480px; /* Mockup grows to fill the new 510px space */
+      height: 100%;
+      background: #0b1220;
+      border-radius: 40px;
+      border: 10px solid #0f172a;
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.4);
       overflow: hidden;
-      display: flex; 
+      display: flex;
       flex-direction: column;
-    }
-    .phone-head { background: linear-gradient(90deg, #1e293b, #0f172a); color: #e2e8f0; font-weight: 600; font-size: .8rem; padding: .45rem .8rem; display: flex; justify-content: space-between; }
-    .phone-body { flex: 1; background: radial-gradient(circle at top, #1e3a8a, #0f172a 60%); color: #fff; padding: 2.7rem .75rem 4rem; text-align: center; }
-    .social-icons { display: flex; justify-content: center; gap: .55rem; margin-bottom: .55rem; }
-    .social-icon { width: 2.5rem; height: 2.5rem; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; color: #dbeafe; background: rgba(255,255,255,.12); transition: .2s; }
-    .social-icon:hover { background: #1d4ed8; color: #fff; transform: translateY(-2px); }
-    .mini-link { background: #1e293b; color: #cbd5e1; border-radius: .7rem; padding: .65rem .2rem; font-size: .72rem; font-weight: 600; display:flex; flex-direction:column; align-items:center; gap:.35rem; }
-
-    .phone-nav { position: absolute; left: 0; right: 0; bottom: 0; background: linear-gradient(to top, rgba(2,6,23,.95), rgba(2,6,23,.7)); border-top: 1px solid #334155; padding: .32rem .5rem .4rem; }
-    .phone-nav-grid { display: grid; grid-template-columns: repeat(3,1fr); align-items: center; }
-    .nav-btn { width: 100%; display: flex; justify-content: center; align-items: center; color: #e2e8f0; opacity: .97; background: transparent; border: 0; padding: .1rem 0; margin: 0; }
-    .nav-btn i { font-size: 1.22rem; line-height: 1; }
-    .nav-btn:hover { color: #ffffff; opacity: 1; }
-
-    .about-img-container {
-      width: 100%; max-width: 448px; height: 400px;
-      overflow: hidden; border-radius: .75rem; display: flex; align-items: center; justify-content: center;
-    }
-    .about-img-container img { width: 100%; height: 100%; object-fit: cover; object-position: center top; transition: 0.3s; }
-
-    .panel { background: var(--surface); border: 1px solid var(--border); border-radius: 1rem; box-shadow: 0 12px 35px rgba(15, 23, 42, 0.08); }
-    .btn-primary { background: var(--primary); color:#fff; }
-    .btn-primary:hover { background: var(--primary-dark); }
-    .btn-secondary { border: 2px solid var(--primary); color: var(--primary); }
-    .btn-secondary:hover { background: #dbeafe; }
-    .chip { background: #dbeafe; color: #1e3a8a; }
-
-    .text-red-500,.hover\:text-red-500:hover { color: var(--primary) !important; }
-    .bg-gray-900,.bg-gray-800,.bg-gray-700,.bg-gray-950,.bg-\[\#111\],.bg-\[\#222\],.bg-\[\#333\] { background-color: var(--surface) !important; }
-    .text-gray-300,.text-gray-400,.text-gray-500 { color: var(--muted) !important; }
-
-    * { box-sizing: border-box; }
-    body { margin: 0; }
-    .hidden { display: none !important; }
-    .block { display: block; }
-    .inline-block { display: inline-block; }
-    .fixed { position: fixed; }
-    .absolute { position: absolute; }
-    .relative { position: relative; }
-    .inset-0 { inset: 0; }
-    .right-0 { right: 0; }
-    .bottom-0 { bottom: 0; }
-    .z-50 { z-index: 50; }
-    .flex { display: flex; }
-    .grid { display: grid; }
-    .flex-col { flex-direction: column; }
-    .flex-wrap { flex-wrap: wrap; }
-    .flex-1 { flex: 1; }
-    .items-center { align-items: center; }
-    .justify-center { justify-content: center; }
-    .place-items-center { place-items: center; }
-    .grid-cols-3 { grid-template-columns: repeat(3,minmax(0,1fr)); }
-    .grid-cols-4 { grid-template-columns: repeat(4,minmax(0,1fr)); }
-    .gap-2 { gap: .5rem; }
-    .gap-3 { gap: .75rem; }
-    .gap-4 { gap: 1rem; }
-    .gap-6 { gap: 1.5rem; }
-    .gap-8 { gap: 2rem; }
-    .space-y-2 > * + * { margin-top: .5rem; }
-    .space-y-3 > * + * { margin-top: .75rem; }
-    .space-y-8 > * + * { margin-top: .8rem; }
-    .p-5 { padding: 1.25rem; }
-    .p-6 { padding: 1.5rem; }
-    .p-8 { padding: 1rem; }
-    .px-4 { padding-left: 1rem; padding-right: 1rem; }
-    .px-5 { padding-left: 1.25rem; padding-right: 1.25rem; }
-    .px-6 { padding-left: 1.5rem; padding-right: 1.5rem; }
-    .px-7 { padding-left: 1.75rem; padding-right: 1.75rem; }
-    .px-8 { padding-left: 2rem; padding-right: 2rem; }
-    .py-2 { padding-top: .5rem; padding-bottom: .5rem; }
-    .py-3 { padding-top: .75rem; padding-bottom: .75rem; }
-    .py-4 { padding-top: 1rem; padding-bottom: 1rem; }
-    .pt-6 { padding-top: 1.5rem; }
-    .mb-1 { margin-bottom: .25rem; }
-    .mb-2 { margin-bottom: .5rem; }
-    .mb-3 { margin-bottom: .75rem; }
-    .mb-4 { margin-bottom: 1rem; }
-    .mb-5 { margin-bottom: 1.25rem; }
-    .mb-6 { margin-bottom: 1.5rem; }
-    .mb-8 { margin-bottom: .8rem; }
-    .mt-2 { margin-top: .5rem; }
-    .mt-6 { margin-top: 1.5rem; }
-    .mt-8 { margin-top: .8rem; }
-    .mx-auto { margin-left: auto; margin-right: auto; }
-    .w-full { width: 100%; }
-    .w-10 { width: 2.5rem; }
-    .w-36 { width: 9rem; }
-    .h-full { height: 100%; }
-    .h-10 { height: 2.5rem; }
-    .h-36 { height: 9rem; }
-    .h-48 { height: 12rem; }
-    .max-w-md { max-width: 28rem; }
-    .max-w-3xl { max-width: 48rem; }
-    .rounded-full { border-radius: 9999px; }
-    .rounded-lg { border-radius: .5rem; }
-    .rounded-xl { border-radius: .75rem; }
-    .border { border: 1px solid var(--border); }
-    .border-4 { border-width: 4px; border-style: solid; }
-    .border-t { border-top: 1px solid var(--border); }
-    .border-blue-400 { border-color: #60a5fa; }
-    .border-slate-200 { border-color: #e2e8f0; }
-    .border-slate-700 { border-color: #334155; }
-    .overflow-hidden { overflow: hidden; }
-    .object-cover { object-fit: cover; }
-    .text-center { text-align: center; }
-    .text-xs { font-size: .75rem; }
-    .text-sm { font-size: .875rem; }
-    .text-lg { font-size: 1.125rem; }
-    .text-xl { font-size: 1.25rem; }
-    .text-2xl { font-size: 1.5rem; }
-    .text-3xl { font-size: 1.875rem; }
-    .text-4xl { font-size: 2.25rem; }
-    .font-semibold { font-weight: 600; }
-    .font-bold { font-weight: 700; }
-    .font-extrabold { font-weight: 800; }
-    .leading-tight { line-height: 1.2; }
-    .uppercase { text-transform: uppercase; }
-    .tracking-wide { letter-spacing: .03em; }
-    .tracking-\[\.18em\] { letter-spacing: .18em; }
-    .tracking-\[\.22em\] { letter-spacing: .22em; }
-    .text-white { color: #fff; }
-    .text-blue-300 { color: #93c5fd; }
-    .text-blue-700 { color: #1d4ed8; }
-    .text-cyan-200 { color: #a5f3fc; }
-    .text-cyan-300 { color: #67e8f9; }
-    .text-slate-200 { color: #e2e8f0; }
-    .text-slate-500 { color: #64748b; }
-    .text-slate-600 { color: #475569; }
-    .bg-black { background: #000; }
-    .bg-black\/80 { background: rgba(0,0,0,.8); }
-    .bg-slate-700 { background: #334155; }
-    .bg-slate-800 { background: #1e293b; }
-    .bg-slate-900 { background: #0f172a; }
-    .bg-blue-600 { background: #2563eb; }
-    .bg-opacity-70 { background-color: rgba(0,0,0,.7); }
-    .shadow-lg { box-shadow: 0 10px 25px rgba(15, 23, 42, 0.18); }
-    .shadow-xl { box-shadow: 0 14px 32px rgba(15, 23, 42, 0.22); }
-    .shadow-2xl { box-shadow: 0 24px 48px rgba(15, 23, 42, 0.35); }
-    .transition { transition: all .2s ease; }
-    .opacity-90 { opacity: .9; }
-    .cursor-pointer { cursor: pointer; }
-    .list-disc { list-style-type: disc; }
-    .list-inside { list-style-position: inside; }
-    .mr-2 { margin-right: .5rem; }
-    .hover\:opacity-100:hover { opacity: 1; }
-    .hover\:bg-blue-700:hover { background: #1d4ed8; }
-    .hover\:bg-slate-600:hover { background: #475569; }
-    .hover\:bg-slate-700:hover { background: #334155; }
-    .hover\:text-blue-700:hover { color: #1d4ed8; }
-    .focus\:outline-none:focus { outline: none; }
-    .focus\:ring-2:focus { box-shadow: 0 0 0 2px rgba(29,78,216,.25); }
-    .focus\:ring-blue-500:focus { border-color: #3b82f6; }
-
-    /* Utility for text overflow */
-    .break-all { word-break: break-all; }
-
-    @media (min-width: 640px) {
-      .sm\:grid-cols-3 { grid-template-columns: repeat(3,minmax(0,1fr)); }
-      .sm\:flex-row { flex-direction: row; }
-    }
-    @media (min-width: 768px) {
-      .md\:grid-cols-2 { grid-template-columns: repeat(2,minmax(0,1fr)); }
-      .md\:grid-cols-3 { grid-template-columns: repeat(3,minmax(0,1fr)); }
-      .md\:grid-cols-4 { grid-template-columns: repeat(4,minmax(0,1fr)); }
-      .md\:col-span-2 { grid-column: span 2 / span 2; }
-      .md\:text-2xl { font-size: 1.5rem; }
-      .md\:text-5xl { font-size: 3rem; }
-      .md\:p-10 { padding: 1.1rem; }
-      .md\:p-12 { padding: 1.25rem; }
+      position: relative;
     }
 
-    @media (max-width: 1024px) {
-      html, body { overflow: auto; height: auto; }
-      .layout-shell { position: static; width: 100%; height: auto; }
-      .phone-aside { position: static; width: 100%; height: auto; border-right: none; border-bottom: 1px solid #e2e8f0; background: #f9fafb; }
-      .main-content { margin-left: 0; width: 100%; height: auto; overflow: visible; padding: 1rem; }
-      .phone-frame { width: 100%; max-width: 420px; height: min(88vh, 740px); }
-      .footer-grid { grid-template-columns: 1fr 1fr; }
+    /* Phone Internal Content */
+    .phone-head { background: #0f172a; color: #e2e8f0; font-size: .8rem; padding: 12px 20px; display: flex; justify-content: space-between; }
+    .phone-body { 
+      flex: 1; 
+      background: radial-gradient(circle at top, #1e3a8a, #0f172a 75%); 
+      color: #fff; padding: 40px 20px; text-align: center; overflow-y: auto; 
+    }
+    .profile-img { width: 150px; height: 150px; border-radius: 50%; border: 4px solid #3b82f6; object-fit: cover; margin-bottom: 20px; }
+    .social-icons { display: flex; justify-content: center; gap: 12px; margin: 20px 0; }
+    .social-icon { width: 45px; height: 45px; border-radius: 50%; background: rgba(255,255,255,0.1); display: flex; align-items: center; justify-content: center; color: #fff; transition: 0.3s; }
+    .social-icon:hover { background: var(--primary); transform: translateY(-3px); }
+
+    .mini-link-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-top: 25px; }
+    .mini-link { background: rgba(255,255,255,0.08); padding: 10px 5px; border-radius: 12px; color: #cbd5e1; font-size: 0.7rem; font-weight: 600; text-align: center; border: 1px solid rgba(255,255,255,0.1); }
+
+    /* SCROLLABLE RIGHT SIDE - Reduced by 100px */
+    .main-content {
+      margin-left: var(--phone-width);
+      flex: 1;
+      padding: 40px;
+      /* Ensures content boxes shrink as phone expands */
+      max-width: calc(100vw - var(--phone-width)); 
     }
 
-    /* Mobile Responsiveness */
-    @media (max-width: 640px) {
-      .home-grid { gap: .5rem; }
-      .phone-frame { 
-        height: 85vh; 
-        width: 100%;
-        max-width: 340px; 
-      }
-      .panel { padding: 1rem; } 
-      .footer-grid {
-        grid-template-columns: 1fr;
-        text-align: center;
-      }
-      .footer-contact-list {
-        align-items: center;
-      }
-      .footer-social-icons {
-        justify-content: center;
-      }
+    .panel { background: var(--surface); border: 1px solid var(--border); border-radius: 20px; padding: 40px; margin-bottom: 30px; box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05); }
+
+    /* Horizontal Elements (Fixing the "vertical staff" issue) */
+    .flex-row-fix { display: flex; flex-direction: row; flex-wrap: wrap; gap: 15px; }
+    .chip-container { display: flex; flex-wrap: wrap; gap: 10px; margin: 25px 0; }
+    .chip { background: #dbeafe; color: #1e3a8a; padding: 8px 18px; border-radius: 20px; font-size: 0.85rem; font-weight: 600; }
+
+    /* Standard Utilities */
+    .btn { padding: 15px 30px; border-radius: 12px; font-weight: 700; transition: 0.3s; display: inline-block; text-align: center; }
+    .btn-primary { background: var(--primary); color: white; }
+    .btn-dark { background: var(--ink); color: white; }
+    .text-blue { color: var(--primary); }
+
+    /* Media Queries */
+    @media (max-width: 1100px) {
+      .layout-shell { flex-direction: column; }
+      .phone-aside { position: static; width: 100%; height: auto; padding: 20px 5px; }
+      .main-content { margin-left: 0; max-width: 100%; padding: 20px; }
+      .phone-stick { height: 750px; }
     }
+
+    /* Hidden Admin Styles */
+    #adminPanel.hidden { display: none; }
+    .admin-modal { position: fixed; inset: 0; background: rgba(0,0,0,0.8); z-index: 1000; display: flex; align-items: center; justify-content: center; }
   </style>
 </head>
 <body>
-  <!-- Professional Preloader -->
-  <div class="loading-screen" id="loadingScreen" aria-live="polite">
-    <div class="loading-card">
+
+  <div class="loading-screen" id="loadingScreen">
+    <div style="text-align: center; color: white;">
       <div class="loading-ring"></div>
-      <div class="loading-text">LOADING PORTFOLIO</div>
-      <div class="loading-subtext">Preparing creative experiences</div>
-      <div class="loading-bar-container">
-        <div class="loading-bar"></div>
-      </div>
+      <p style="letter-spacing: 4px; font-weight: 800;">LOADING EXPERIENCE</p>
     </div>
   </div>
 
   <div class="layout-shell">
-    <div class="home-grid">
-      <!-- Fixed Phone Aside -->
-      <aside class="phone-aside" aria-label="Profile preview phone">
-        <div class="phone-stick">
-          <div class="phone-frame">
-            <div class="phone-head">
-              <span>9:41 AM</span>
-              <div class="flex gap-3"><i class="fas fa-signal"></i><i class="fas fa-wifi"></i><i class="fas fa-battery-full"></i></div>
+    <aside class="phone-aside">
+      <div class="phone-stick">
+        <div class="phone-frame">
+          <div class="phone-head">
+            <span>9:41 AM</span>
+            <div style="display: flex; gap: 8px;"><i class="fas fa-signal"></i><i class="fas fa-wifi"></i><i class="fas fa-battery-full"></i></div>
+          </div>
+          <div class="phone-body">
+            <div style="position: relative; display: inline-block;">
+              <img id="profileImage" src="mpover pic.jpg" alt="Profile" class="profile-img">
+              <button id="editProfileBtn" style="position: absolute; bottom: 20px; right: 5px; background: var(--primary); color: white; border: none; width: 35px; height: 35px; border-radius: 50%; cursor: pointer;"><i class="fas fa-pen"></i></button>
             </div>
-            <div class="phone-body">
-              <div class="relative w-36 h-36 mb-5 mx-auto">
-                <img id="profileImage" src="mpover pic.jpg" alt="Portrait of Elie Mpuhwezimana" class="w-full h-full rounded-full object-cover border-4 border-blue-400 shadow-xl"/>
-                <button id="editProfileBtn" aria-label="Edit Profile Image" class="absolute bottom-0 right-0 bg-blue-600 hover:bg-blue-700 text-white rounded-full w-10 h-10 flex items-center justify-center shadow-lg transition"><i class="fas fa-pencil-alt"></i></button>
-              </div>
-              <h3 class="text-2xl font-extrabold tracking-wide">Elie Mpuhwezimana</h3>
-              <p class="text-sm uppercase tracking-[.18em] text-cyan-200 mb-6">Graphic Design & IT Professional</p>
-              <div class="social-icons">
-                <a href="https://twitter.com/" target="_blank" class="social-icon" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
-                <a href="https://www.linkedin.com/messaging/thread/2-NDk5YjU4Y2MtMmIzNy00NDM5LWJlMWEtNDRmNTM4OGJhNWU1XzEwMA==/" target="_blank" class="social-icon" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
-                <a href="https://github.com/dashboard" target="_blank" class="social-icon" aria-label="GitHub"><i class="fab fa-github"></i></a>
-                <a href="https://www.instagram.com/" target="_blank" class="social-icon" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
-              </div>
-              <div class="grid grid-cols-4 gap-2 text-xs mt-2" style="margin-top: 1.6rem;">
-                <a href="portfolio.html#documents" class="mini-link"><i class="fas fa-trophy text-cyan-300"></i>Awards</a>
-                <a href="portfolio.html#documents" class="mini-link"><i class="fas fa-heart text-cyan-300"></i>Hobbies</a>
-                <a href="portfolio.html#documents" class="mini-link"><i class="fas fa-running text-cyan-300"></i>Talents</a>
-                <a href="portfolio.html#documents" class="mini-link"><i class="fas fa-external-link-alt text-cyan-300"></i>Portfolio</a>
-              </div>
+            <h2 style="font-size: 1.8rem; font-weight: 800; margin-bottom: 5px;">Elie Mpuhwezimana</h2>
+            <p style="color: #60a5fa; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 2px;">Creative Technology & IT</p>
+            
+            <div class="social-icons">
+              <a href="#" class="social-icon"><i class="fab fa-linkedin-in"></i></a>
+              <a href="#" class="social-icon"><i class="fab fa-github"></i></a>
+              <a href="#" class="social-icon"><i class="fab fa-twitter"></i></a>
+              <a href="#" class="social-icon"><i class="fab fa-instagram"></i></a>
             </div>
-            <div class="phone-nav">
-              <div class="phone-nav-grid">
-                <button type="button" aria-label="Recent apps" class="nav-btn transition" title="Recent apps">
-                  <i class="far fa-square"></i>
-                </button>
-                <button type="button" aria-label="Home" class="nav-btn transition" title="Home">
-                  <i class="far fa-circle"></i>
-                </button>
-                <button type="button" aria-label="Back" class="nav-btn transition" title="Back">
-                  <span style="font-size: 1.5rem; color: #fff; line-height: 1;">▷</span>
-                </button>
-              </div>
+
+            <div class="mini-link-grid">
+              <div class="mini-link"><i class="fas fa-trophy"></i><br>Awards</div>
+              <div class="mini-link"><i class="fas fa-heart"></i><br>Hobbies</div>
+              <div class="mini-link"><i class="fas fa-running"></i><br>Talents</div>
+              <div class="mini-link"><i class="fas fa-briefcase"></i><br>Work</div>
+            </div>
+          </div>
+          <div style="background: rgba(15,23,42,0.9); padding: 15px; display: flex; justify-content: space-around; border-top: 1px solid rgba(255,255,255,0.1);">
+            <i class="far fa-square" style="color: #94a3b8;"></i>
+            <i class="far fa-circle" style="color: #94a3b8;"></i>
+            <span style="color: #fff; font-size: 1.2rem;">▷</span>
+          </div>
+        </div>
+      </div>
+    </aside>
+
+    <main class="main-content">
+      <section class="panel">
+        <p style="text-transform: uppercase; letter-spacing: 3px; font-size: 0.75rem; font-weight: 700; color: var(--muted);">Digital Portfolio Experience</p>
+        <h1 style="font-size: 3.5rem; line-height: 1.1; margin: 20px 0;">Transform <span class="text-blue">design, code, and sport.</span></h1>
+        <p style="font-size: 1.25rem; color: var(--muted); margin-bottom: 30px;">I’m Elie Mpuhwezimana — a graphic design and IT professional focused on brand communication and digital solutions.</p>
+        
+        <div class="chip-container">
+          <span class="chip">Graphic Design</span>
+          <span class="chip">Programming</span>
+          <span class="chip">Athletics</span>
+          <span class="chip">Brand Strategy</span>
+          <span class="chip">Creative Direction</span>
+        </div>
+
+        <div class="flex-row-fix">
+          <a href="portfolio.html" class="btn btn-primary" style="flex: 1;">Explore Portfolio Hub</a>
+          <a href="contact.html" class="btn btn-dark" style="flex: 1;">Connect Me</a>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2 style="font-size: 2rem; font-weight: 800; margin-bottom: 30px;">Expertise Overview</h2>
+        <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(250px, 1fr)); gap: 25px;">
+          <div style="border: 1px solid var(--border); padding: 25px; border-radius: 15px;">
+            <i class="fas fa-paint-brush text-blue" style="font-size: 2rem; margin-bottom: 15px;"></i>
+            <h3 style="margin-bottom: 10px;">Design</h3>
+            <ul style="color: var(--muted); font-size: 0.9rem; list-style: inside disc; line-height: 1.8;">
+              <li>Advanced Branding</li>
+              <li>UI/UX Figma</li>
+              <li>Video Production</li>
+            </ul>
+          </div>
+          <div style="border: 1px solid var(--border); padding: 25px; border-radius: 15px;">
+            <i class="fas fa-code text-blue" style="font-size: 2rem; margin-bottom: 15px;"></i>
+            <h3 style="margin-bottom: 10px;">Technical</h3>
+            <ul style="color: var(--muted); font-size: 0.9rem; list-style: inside disc; line-height: 1.8;">
+              <li>JS, PHP, Python</li>
+              <li>SQL Databases</li>
+              <li>IT Infrastructure</li>
+            </ul>
+          </div>
+          <div style="border: 1px solid var(--border); padding: 25px; border-radius: 15px;">
+            <i class="fas fa-running text-blue" style="font-size: 2rem; margin-bottom: 15px;"></i>
+            <h3 style="margin-bottom: 10px;">Value-Add</h3>
+            <ul style="color: var(--muted); font-size: 0.9rem; list-style: inside disc; line-height: 1.8;">
+              <li>Problem Solving</li>
+              <li>60 WPM Typing</li>
+              <li>Team Strategy</li>
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel">
+        <h2 style="font-size: 2rem; font-weight: 800; margin-bottom: 30px;">Featured Work</h2>
+        <div style="display: grid; grid-template-columns: repeat(3, 1fr); gap: 20px;">
+          <div style="border-radius: 15px; overflow: hidden; border: 1px solid var(--border);">
+            <img src="https://via.placeholder.com/400x250" style="width: 100%; display: block;">
+            <div style="padding: 15px;">
+              <h4 style="margin-bottom: 5px;">Design Portfolio</h4>
+              <a href="#" class="text-blue" style="font-weight: 700; font-size: 0.8rem;">View More →</a>
+            </div>
+          </div>
+          <div style="border-radius: 15px; overflow: hidden; border: 1px solid var(--border);">
+            <img src="https://via.placeholder.com/400x250" style="width: 100%; display: block;">
+            <div style="padding: 15px;">
+              <h4 style="margin-bottom: 5px;">Web Projects</h4>
+              <a href="#" class="text-blue" style="font-weight: 700; font-size: 0.8rem;">View More →</a>
+            </div>
+          </div>
+          <div style="border-radius: 15px; overflow: hidden; border: 1px solid var(--border);">
+            <img src="https://via.placeholder.com/400x250" style="width: 100%; display: block;">
+            <div style="padding: 15px;">
+              <h4 style="margin-bottom: 5px;">Athletics</h4>
+              <a href="#" class="text-blue" style="font-weight: 700; font-size: 0.8rem;">View More →</a>
             </div>
           </div>
         </div>
-      </aside>
+      </section>
 
-      <!-- Scrollable Main Content -->
-      <main class="main-content space-y-8">
-        <section class="panel p-8 md:p-12">
-          <p class="uppercase tracking-[.22em] text-sm text-slate-500 mb-4">Digital Portfolio Experience</p>
-          <h1 class="text-4xl md:text-5xl font-extrabold leading-tight mb-5">Transform <span class="text-blue-700">design, code, and sport.</span></h1>
-          <h2 class="text-xl md:text-2xl text-slate-600 mb-8">I’m Elie Mpuhwezimana — a graphic design and IT professional focused on brand communication, user experience, and practical digital solutions.</h2>
-          <div class="flex flex-wrap gap-3 mb-8">
-            <span class="chip px-4 py-2 rounded-full text-sm font-semibold">Graphic Design</span>
-            <span class="chip px-4 py-2 rounded-full text-sm font-semibold">Programming</span>
-            <span class="chip px-4 py-2 rounded-full text-sm font-semibold">Athletics</span>
-            <span class="chip px-4 py-2 rounded-full text-sm font-semibold">Brand Strategy</span>
-            <span class="chip px-4 py-2 rounded-full text-sm font-semibold">Creative Direction</span>
+      <footer class="panel" style="background: #f8fafc;">
+        <div style="display: grid; grid-template-columns: 2fr 1fr 1.5fr; gap: 40px;">
+          <div>
+            <h3 class="text-blue" style="margin-bottom: 15px;">Elie Mpuhwezimana</h3>
+            <p style="font-size: 0.9rem; color: var(--muted);">Creating high-impact digital experiences through strategic design and code.</p>
           </div>
-          <div class="grid sm:grid-cols-2 gap-4 max-w-3xl" style="grid-auto-flow: column; margin-bottom: 7px;">
-            <a href="portfolio.html" class="btn-primary px-6 py-4 rounded-lg font-bold text-center transition">Explore Portfolio Hub</a>
-            <a href="contact.html" class="bg-slate-900 text-white px-6 py-4 rounded-lg font-bold text-center hover:bg-slate-700 transition">Connect Me</a>
+          <div>
+            <h4 style="margin-bottom: 15px;">Navigate</h4>
+            <ul style="list-style: none; font-size: 0.9rem; line-height: 2;">
+              <li><a href="#">Home</a></li>
+              <li><a href="#">Portfolio</a></li>
+              <li><a href="#">Blog</a></li>
+            </ul>
           </div>
-        </section>
-
-        <section id="about" class="panel p-8 md:p-12">
-          <div class="grid md:grid-cols-2 gap-8 items-center">
-            <div class="about-img-container shadow-xl mx-auto md:mx-0">
-               <img id="aboutProfileImage" src="mpover pic.jpg" alt="Professional portrait of Elie Mpuhwezimana"/>
-            </div>
-            <div>
-              <h2 class="text-3xl font-extrabold mb-4">About Me</h2>
-              <p class="text-slate-600 mb-4">I'm a focused creative professional with strong expertise in graphic design, visual communication, and IT implementation. I translate ideas into high-quality digital experiences that support organizational goals.</p>
-              <p class="text-slate-600 mb-6">Athletics remains a long-term personal passion, while my professional value-add is strategic creative contribution: combining design thinking, digital execution, and clear communication to strengthen team outcomes.</p>
-              <div class="flex gap-4" style="flex-wrap: nowrap;">
-                <a href="blog.html" class="btn-primary px-7 py-3 rounded-lg font-semibold">View My Blog</a>
-                <a href="https://calendar.google.com/" target="_blank" rel="noopener noreferrer" class="btn-secondary px-7 py-3 rounded-lg font-semibold">Book My Collaboration</a>
-              </div>
-            </div>
+          <div>
+            <h4 style="margin-bottom: 15px;">Contact</h4>
+            <p style="font-size: 0.85rem; color: var(--muted); margin-bottom: 5px;"><i class="fas fa-envelope text-blue"></i> mpuwezimanaelie@gmail.com</p>
+            <p style="font-size: 0.85rem; color: var(--muted);"><i class="fas fa-phone text-blue"></i> +250 790 737 511</p>
           </div>
-        </section>
-
-        <section class="panel p-8 md:p-12">
-          <h2 class="text-3xl font-extrabold mb-8">Expertise Overview</h2>
-          <div class="grid md:grid-cols-3 gap-6">
-            <article class="rounded-xl border border-slate-200 p-6">
-              <div class="text-blue-700 text-4xl mb-4"><i class="fas fa-paint-brush"></i></div>
-              <h3 class="text-xl font-bold mb-3">Design & Multimedia</h3>
-              <ul class="text-slate-600 space-y-2 list-disc list-inside"><li>Graphic Design (Advanced)</li><li>Video & Photo Editing (Advanced)</li><li>Figma Prototyping</li></ul>
-            </article>
-            <article class="rounded-xl border border-slate-200 p-6">
-              <div class="text-blue-700 text-4xl mb-4"><i class="fas fa-code"></i></div>
-              <h3 class="text-xl font-bold mb-3">Technical Skills</h3>
-              <ul class="text-slate-600 space-y-2 list-disc list-inside"><li>JavaScript, HTML, CSS</li><li>PHP, MySQL, SQL</li><li>Python, Java, C++</li><li>Microsoft Suite (Advanced)</li></ul>
-            </article>
-            <article class="rounded-xl border border-slate-200 p-6">
-              <div class="text-blue-700 text-4xl mb-4"><i class="fas fa-running"></i></div>
-              <h3 class="text-xl font-bold mb-3">Professional Value-Add</h3>
-              <ul class="text-slate-600 space-y-2 list-disc list-inside"><li>Athletics (Hobby & Performance Discipline)</li><li>Creative Problem Solving for Teams</li><li>Visual Storytelling for Organizational Impact</li><li>55-60 WPM Typing Speed</li></ul>
-            </article>
-          </div>
-        </section>
-
-        <section class="panel p-8 md:p-12">
-          <h2 class="text-3xl font-extrabold mb-8">Featured Work</h2>
-          <div class="grid md:grid-cols-3 gap-6">
-            <article class="rounded-xl overflow-hidden border border-slate-200"><img src="https://storage.googleapis.com/a1aa/image/9733d964-34d8-4e51-38ee-2871da64431f.jpg" class="w-full h-48 object-cover" alt="Graphic design project"/><div class="p-5"><h3 class="text-xl font-bold mb-2">Graphic Design Portfolio</h3><p class="text-slate-600 mb-3">Collection of logos and flyer designs.</p><a href="portfolio.html#design" class="text-blue-700 font-semibold">Open Design Projects →</a></div></article>
-            <article class="rounded-xl overflow-hidden border border-slate-200"><img src="https://storage.googleapis.com/a1aa/image/42382e8b-d25c-44f7-9e79-bdff505f6a4f.jpg" class="w-full h-48 object-cover" alt="Programming project"/><div class="p-5"><h3 class="text-xl font-bold mb-2">Web Development</h3><p class="text-slate-600 mb-3">Custom websites and web applications.</p><a href="portfolio.html#programming" class="text-blue-700 font-semibold">Open Dev Projects →</a></div></article>
-            <article class="rounded-xl overflow-hidden border border-slate-200"><img src="https://storage.googleapis.com/a1aa/image/815c3dd6-8d68-47f0-2b6c-d4efcee2e0f2.jpg" class="w-full h-48 object-cover" alt="Athletics project"/><div class="p-5"><h3 class="text-xl font-bold mb-2">Athletics Achievements</h3><p class="text-slate-600 mb-3">Competitions and training highlights.</p><a href="portfolio.html#athletics" class="text-blue-700 font-semibold">Open Highlights →</a></div></article>
-          </div>
-          <div class="mt-8"><a href="portfolio.html" class="btn-primary inline-block px-8 py-4 rounded-lg font-semibold">Browse Complete Work Archive</a></div>
-        </section>
-
-        <footer class="panel p-8 md:p-10">
-          <div class="grid md:grid-cols-4 gap-8 footer-grid">
-            <div class="md:col-span-2">
-              <h3 class="text-2xl font-extrabold mb-3 text-blue-700">Elie Mpuhwezimana</h3>
-              <p class="text-slate-600 mb-4">Graphic design and IT professional creating high-impact digital experiences.</p>
-              <div class="flex gap-4 footer-social-icons"><a href="#" class="text-slate-500 hover:text-blue-700 text-xl"><i class="fab fa-twitter"></i></a><a href="#" class="text-slate-500 hover:text-blue-700 text-xl"><i class="fab fa-linkedin-in"></i></a><a href="#" class="text-slate-500 hover:text-blue-700 text-xl"><i class="fab fa-github"></i></a></div>
-            </div>
-            <div>
-              <h3 class="text-xl font-extrabold mb-3 text-blue-700">Navigate</h3>
-              <ul class="space-y-2 text-slate-600"><li><a href="index.html" class="hover:text-blue-700">Home</a></li><li><a href="blog.html" class="hover:text-blue-700">Blog</a></li><li><a href="portfolio.html" class="hover:text-blue-700">Portfolio</a></li><li><a href="mailto:mpuwezimanaelie@gmail.com" class="hover:text-blue-700">Contact</a></li></ul>
-            </div>
-            <div>
-              <h3 class="text-xl font-extrabold mb-3 text-blue-700">Direct Contact</h3>
-              <ul class="space-y-3 text-slate-600 footer-contact-list" style="list-style: none; padding: 0;">
-                <li class="flex items-start gap-2">
-                  <i class="fas fa-envelope text-blue-700 mt-1"></i>
-                  <a href="mailto:mpuwezimanaelie@gmail.com" class="hover:text-blue-700 break-all">mpuwezimanaelie@gmail.com</a>
-                </li>
-                <li class="flex items-center gap-2">
-                  <i class="fas fa-phone text-blue-700"></i>
-                  <a href="tel:+250790737511" class="hover:text-blue-700">+250 790 737 511</a>
-                </li>
-                <li class="flex items-center gap-2">
-                  <i class="fas fa-map-marker-alt text-blue-700"></i>
-                  <span>Kigali, Rwanda</span>
-                </li>
-              </ul>
-            </div>
-          </div>
-          <div class="border-t border-slate-200 mt-8 pt-6 text-sm text-slate-500 text-center">© 2025 Elie Mpuhwezimana. All rights reserved.</div>
-        </footer>
-      </main>
-    </div>
+        </div>
+      </footer>
+    </main>
   </div>
 
-  <div class="fixed inset-0 bg-black bg-opacity-70 flex items-center justify-center z-50 hidden" id="adminPanel">
-    <div role="dialog" aria-modal="true" aria-labelledby="adminPanelTitle" class="bg-slate-900 rounded-xl p-8 w-full max-w-md shadow-2xl text-white">
-      <h3 class="text-2xl font-extrabold mb-6 text-blue-300" id="adminPanelTitle">Admin Controls</h3>
-      <div id="passwordVerify" class="mb-8">
-        <label for="adminPassword" class="block text-white mb-3 font-semibold text-lg">Enter Admin Password</label>
-        <input id="adminPassword" type="password" autocomplete="current-password" placeholder="Enter Your Password" class="w-full px-5 py-3 bg-slate-800 border border-slate-700 rounded-lg text-white text-lg focus:outline-none focus:ring-2 focus:ring-blue-500"/>
-        <button id="verifyPassword" class="btn-primary mt-6 px-6 py-3 rounded-lg w-full font-bold text-lg">Verify</button>
-      </div>
-      <div id="adminActions" class="hidden space-y-8">
-        <div class="p-6 border border-slate-700 rounded-lg">
-          <h4 class="font-bold mb-5 text-xl">Profile Image</h4>
-          <div class="flex flex-col sm:flex-row gap-6">
-            <label class="flex-1 cursor-pointer"><input id="newProfileImage" type="file" accept="image/*" class="hidden" aria-label="Upload new profile image"/><div class="btn-primary text-center px-6 py-3 rounded-lg font-semibold flex items-center justify-center gap-3"><i class="fas fa-upload"></i>Upload New</div></label>
-            <button id="deleteProfileImage" class="flex-1 bg-slate-700 text-white px-6 py-3 rounded-lg hover:bg-slate-600 font-semibold flex items-center justify-center gap-3"><i class="fas fa-trash"></i>Delete Current</button>
-          </div>
-        </div>
-        <div class="p-6 border border-slate-700 rounded-lg">
-          <h4 class="font-bold mb-5 text-xl">Change Password</h4>
-          <div class="mb-6"><label for="newAdminPassword" class="block mb-2 text-lg font-semibold">New Password</label><input id="newAdminPassword" type="password" autocomplete="new-password" class="w-full px-5 py-3 bg-slate-800 border border-slate-700 rounded-lg text-lg focus:outline-none focus:ring-2 focus:ring-blue-500"/></div>
-          <button id="changePassword" class="btn-primary px-6 py-3 rounded-lg w-full font-bold text-lg flex items-center justify-center gap-3"><i class="fas fa-key"></i>Update Password</button>
-        </div>
+  <div id="adminPanel" class="admin-modal hidden">
+    <div style="background: white; padding: 40px; border-radius: 20px; width: 400px;">
+      <h3 style="margin-bottom: 20px;">Admin Verification</h3>
+      <input id="adminPassword" type="password" placeholder="Password" style="width: 100%; padding: 12px; margin-bottom: 15px; border-radius: 8px; border: 1px solid var(--border);">
+      <button id="verifyPassword" class="btn btn-primary" style="width: 100%;">Verify</button>
+      <div id="adminActions" style="display: none; margin-top: 20px;">
+        <input type="file" id="newProfileImage" style="margin-bottom: 10px;">
+        <button id="deleteProfileImage" class="btn" style="background: #ef4444; color: white; width: 100%;">Delete Current Image</button>
       </div>
     </div>
   </div>
 
   <script>
-    // Professional Preloader Handler
-    window.addEventListener('load', function() {
-      const loadingScreen = document.getElementById('loadingScreen');
-      
-      // Minimum display time for better UX
+    // Preloader logic
+    window.addEventListener('load', () => {
       setTimeout(() => {
-        loadingScreen.classList.add('hidden');
-      }, 2000);
+        document.getElementById('loadingScreen').classList.add('hidden');
+      }, 1500);
     });
 
-    document.querySelectorAll('a[href^="#"]').forEach((anchor) => {
-      anchor.addEventListener("click", function (e) {
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute("href"));
-        if (target) target.scrollIntoView({ behavior: "smooth" });
-      });
-    });
-
+    // Profile Management Logic
     const profileImage = document.getElementById("profileImage");
-    const aboutProfileImage = document.getElementById("aboutProfileImage");
     const savedImage = localStorage.getItem("profileImage");
-    if (savedImage) {
-      profileImage.src = savedImage;
-      if (aboutProfileImage) aboutProfileImage.src = savedImage;
-    }
+    if (savedImage) profileImage.src = savedImage;
 
-    document.getElementById("editProfileBtn").addEventListener("click", function () {
+    document.getElementById("editProfileBtn").addEventListener("click", () => {
       document.getElementById("adminPanel").classList.remove("hidden");
-      document.getElementById("passwordVerify").classList.remove("hidden");
-      document.getElementById("adminActions").classList.add("hidden");
-      document.getElementById("adminPassword").value = "";
     });
 
-    document.getElementById("verifyPassword").addEventListener("click", function () {
-      if (document.getElementById("adminPassword").value === "elie") {
-        document.getElementById("passwordVerify").classList.add("hidden");
-        document.getElementById("adminActions").classList.remove("hidden");
+    document.getElementById("verifyPassword").addEventListener("click", () => {
+      const pass = document.getElementById("adminPassword").value;
+      if (pass === "elie") {
+        document.getElementById("adminActions").style.display = "block";
       } else {
-        alert("Incorrect password. Please try again.");
+        alert("Wrong Password");
       }
     });
 
-    document.getElementById("deleteProfileImage").addEventListener("click", function () {
-      if (confirm("Are you sure you want to delete your profile image?")) {
-        const defaultImage = "mpover pic.jpg";
-        profileImage.src = defaultImage;
-        localStorage.removeItem("profileImage");
-        location.reload(); 
-      }
-    });
-
-    document.getElementById("newProfileImage").addEventListener("change", function (e) {
+    document.getElementById("newProfileImage").addEventListener("change", (e) => {
       const file = e.target.files[0];
       if (file) {
         const reader = new FileReader();
-        reader.onload = function (e) {
-          const newImage = e.target.result;
-          localStorage.setItem("profileImage", newImage);
-          location.reload(); 
+        reader.onload = (event) => {
+          localStorage.setItem("profileImage", event.target.result);
+          location.reload();
         };
         reader.readAsDataURL(file);
       }
     });
 
-    // Close admin panel when clicking outside
-    document.getElementById("adminPanel").addEventListener("click", function (e) {
-      if (e.target === this) {
-        this.classList.add("hidden");
+    document.getElementById("deleteProfileImage").addEventListener("click", () => {
+      localStorage.removeItem("profileImage");
+      location.reload();
+    });
+
+    // Close admin panel on outside click
+    window.addEventListener('click', (e) => {
+      if (e.target.id === 'adminPanel') {
+        document.getElementById('adminPanel').classList.add('hidden');
       }
     });
   </script>

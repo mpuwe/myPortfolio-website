@@ -1,1580 +1,469 @@
+<!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <title>Portfolio - Elie Mpuhwezimana</title>
-  <meta name="description" content="View Elie Mpuhwezimana's portfolio of design, programming, and athletic projects" />
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Portfolio | Elie Mpuhwezimana</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;800&family=Manrope:wght@700;800&display=swap" rel="stylesheet">
+    <style>
+        :root { --primary: #1d4ed8; --dark: #0f172a; }
+        body { font-family: 'Inter', sans-serif; background-color: #f8fafc; overflow: hidden; height: 100vh; margin: 0; }
+        h1, h2, h3 { font-family: 'Manrope', sans-serif; }
+        
+        .main-wrapper { height: 100vh; width: 100%; overflow: hidden; position: relative; }
+        .view-section { position: absolute; top: 0; left: 0; width: 100%; height: 100%; transition: opacity 0.3s ease, visibility 0.3s ease; }
+        .view-section.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
 
+        /* Sidebar */
+        .sidebar { width: 260px; transition: width 0.3s ease; position: relative; z-index: 40; }
+        .sidebar.collapsed { width: 72px; }
+        .nav-item .sub-menu { max-height: 0; overflow: hidden; transition: max-height 0.3s ease; }
+        .nav-item.open .sub-menu { max-height: 500px; }
+        .sidebar.collapsed .nav-item .sub-menu { position: absolute; left: 100%; top: 0; width: 220px; background: #1e293b; border-radius: 0 8px 8px 0; display: none; z-index: 100; padding: 8px; }
+        .sidebar.collapsed .nav-item.open .sub-menu { display: block; }
+        .sidebar.collapsed .label-text, .sidebar.collapsed .toggle-indicator { display: none; }
 
-  <!-- Font Awesome for icons -->
-  <link
-    rel="stylesheet"
-    href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css"
-  />
+        /* Admin Panel */
+        #adminPanel { width: 0; transition: width 0.3s ease; background: #ffffff; border-left: 1px solid #e2e8f0; overflow: hidden; display: flex; flex-direction: column; z-index: 30; }
+        .admin-panel-open { width: 320px !important; }
+        .admin-delete-controls { display: none !important; }
+        body.is-admin .admin-delete-controls { display: flex !important; }
 
-  <!-- Google Fonts -->
-  <link
-    href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&family=Manrope:wght@500;700;800&display=swap"
-    rel="stylesheet"
-  />
+        /* Reopen Button */
+        #reopenSidebarBtn { position: fixed; top: 80px; right: 0; background: #1d4ed8; color: white; padding: 8px 12px; border-radius: 6px 0 0 6px; transform: translateX(100%); transition: transform 0.3s ease; cursor: pointer; z-index: 20; font-size: 12px; font-weight: bold; }
+        body.is-admin:not(.panel-is-open) #reopenSidebarBtn { transform: translateX(0); }
 
-  <style>
-    body {
-      font-family: "Inter", sans-serif;
-      background-color: #f4f7fb;
-      color: #0f172a;
-      margin: 0;
-      min-height: 100vh;
-      display: flex;
-      flex-direction: column;
-    }
-    .btn-primary {
-      background-color: #1e3a8a;
-      color: #ffffff;
-    }
-    .btn-primary:hover {
-      background-color: #172554;
-    }
-    .btn-secondary {
-      border: 2px solid #1e3a8a;
-      color: #1e3a8a;
-      background: transparent;
-    }
-    .btn-secondary:hover {
-      background-color: rgba(30, 58, 138, 0.12);
-    }
-    .portfolio-filter button.active {
-      background-color: #1e3a8a;
-      color: white;
-    }
-    .portfolio-item {
-      transition: all 0.3s ease;
-    }
-    .portfolio-item img,
-    .portfolio-item video {
-      width: 100%;
-    }
-    .project-media {
-      width: 100%;
-      height: 12rem;
-      object-fit: cover;
-      background: #000;
-    }
-    .project-media.video {
-      object-fit: contain;
-    }
+        /* --- UPLOAD PROCESSING UI --- */
+        #uploadProgressContainer { display: none; width: 100%; margin-top: 12px; }
+        #uploadCube { height: 8px; width: 100%; background: #e2e8f0; border-radius: 4px; overflow: hidden; }
+        #uploadCubeFill { height: 100%; width: 0%; background: linear-gradient(90deg, #10b981, #34d399); transition: width 0.05s linear; }
+        #uploadPercentText { font-size: 11px; font-weight: 800; color: #10b981; text-align: center; margin-top: 4px; }
 
-    /* Project delete buttons */
-    .portfolio-item .delete-doc {
-      display: flex !important;
-      z-index: 10;
-      background-color: rgba(0, 0, 0, 0.7);
-      border-radius: 50%;
-      width: 32px;
-      height: 32px;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s ease;
-      position: absolute;
-      top: 8px;
-      right: 8px;
-      cursor: pointer;
-    }
+        /* PDF View */
+        .pdf-page-background { height: 100%; width: 100%; display: flex; flex-direction: column; background-color: #334155; overflow-y: auto; padding: 2rem 1rem; padding-bottom: 100px; }
+        .pdf-paper-container { width: 100%; max-width: 1050px; margin: 0 auto; background: white; border-radius: 12px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); overflow: hidden; display: flex; flex-direction: column; border: 1px solid rgba(255,255,255,0.1); }
+        .pdf-viewer { flex: 1; min-height: 800vh; width: 100%; border: none; display: block; }
+        .cv-action-footer { position: fixed; bottom: 0; left: 0; right: 0; z-index: 50; background: transparent; padding: 1rem 2rem; display: flex; justify-content: flex-end; gap: 1rem; }
 
-    .portfolio-item .delete-doc:hover {
-      background-color: rgba(0, 0, 0, 0.9);
-      transform: scale(1.1);
-    }
+        /* Scrollbar */
+        .custom-scroll::-webkit-scrollbar { width: 4px; }
+        .custom-scroll::-webkit-scrollbar-thumb { background: #cbd5e1; border-radius: 10px; }
 
-    .portfolio-item .delete-doc i {
-      font-size: 1rem;
-    }
+        /* Up Button */
+        #upBtn { position: fixed; bottom: 25px; left: 25px; z-index: 999; background: #0f172a; color: white; width: 50px; height: 50px; border-radius: 50%; display: none; align-items: center; justify-content: center; cursor: pointer; box-shadow: 0 4px 15px rgba(0,0,0,0.4); border: 2px solid rgba(255,255,255,0.1); animation: floatUpAndDown 2s ease-in-out infinite; }
+        #upBtn:hover { background: #1d4ed8; transform: scale(1.1); }
+        body.viewing-cv #upBtn { display: flex; }
+        @keyframes floatUpAndDown { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
 
-    /* Live Demo / View button container */
-    .portfolio-item .action-button {
-      position: absolute;
-      bottom: 8px;
-      right: 8px;
-      background-color: rgba(255, 0, 0, 0.85);
-      color: white;
-      font-weight: 600;
-      font-size: 0.875rem;
-      padding: 0.25rem 0.75rem;
-      border-radius: 0.375rem;
-      cursor: pointer;
-      transition: background-color 0.2s ease;
-      z-index: 10;
-      user-select: none;
-      text-decoration: none;
-      display: flex;
-      align-items: center;
-      gap: 0.25rem;
-      white-space: nowrap;
-    }
-    .portfolio-item .action-button:hover {
-      background-color: #172554;
-    }
+        /* Viewer Modal */
+        #viewerModal { position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,0.95); display: none; align-items: center; justify-content: center; flex-direction: column; }
+        #viewerModal.active { display: flex; }
+        .viewer-controls { position: absolute; top: 0; left: 0; right: 0; background: rgba(0,0,0,0.8); padding: 1rem; display: flex; justify-content: center; gap: 1rem; z-index: 10; }
+        .viewer-btn { color: white; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); padding: 0.5rem 1rem; border-radius: 0.5rem; cursor: pointer; }
+        .viewer-btn:hover { background: var(--primary); border-color: var(--primary); }
+        #viewerImage, #viewerVideo { transition: transform 0.2s ease; max-height: 90vh; max-width: 90vw; object-fit: contain; }
+        
+        /* Toast */
+        #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #10b981; color: white; padding: 0.75rem 1.5rem; border-radius: 9999px; font-size: 0.875rem; font-weight: bold; opacity: 0; transition: opacity 0.3s; z-index: 99999; pointer-events: none; }
+        #toast.show { opacity: 1; }
+        #toast.error { background: #ef4444; }
 
-    /* Responsive container max width */
-    .container {
-      max-width: 1280px;
-      margin-left: auto;
-      margin-right: auto;
-      padding-left: 1.5rem;
-      padding-right: 1.5rem;
-    }
-
-    /* Footer pushed to bottom */
-    footer {
-      flex-shrink: 0;
-    }
-
-    /* Document item styles */
-    .document-item {
-      background-color: #ffffff;
-      border-radius: 0.5rem;
-      overflow: hidden;
-      box-shadow: 0 4px 6px rgba(0,0,0,0.3);
-      transition: box-shadow 0.3s ease;
-      display: flex;
-      flex-direction: column;
-      height: 100%;
-      position: relative;
-    }
-    .document-item:hover {
-      box-shadow: 0 6px 12px rgba(0,0,0,0.5);
-    }
-    .document-item .delete-doc {
-      position: absolute;
-      top: 8px;
-      right: 8px;
-      cursor: pointer;
-      z-index: 10;
-      background-color: rgba(0,0,0,0.7);
-      border-radius: 50%;
-      width: 28px;
-      height: 28px;
-      display: flex !important;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s ease;
-    }
-    .document-item .delete-doc:hover {
-      background-color: rgba(0,0,0,0.9);
-      transform: scale(1.1);
-    }
-    .document-item .delete-doc i {
-      font-size: 1rem;
-      color: #1e3a8a;
-    }
-
-    h1, h2, h3, h4 { font-family: "Manrope", sans-serif; }
-    .text-red-500, .hover\:text-red-500:hover { color: #1e3a8a !important; }
-    .bg-\[\#111\], .bg-\[\#222\], .bg-\[\#333\], .bg-gray-900, .bg-gray-800 { background-color: #ffffff !important; }
-    .text-gray-300, .text-gray-400, .text-gray-500 { color: #475569 !important; }
-    .text-white { color: #0f172a !important; }
-    .section-title { font-size: 2rem; font-weight: 800; margin-bottom: 1rem; }
-    .section-subtitle { color: #475569; max-width: 680px; margin: 0 auto 2rem; text-align: center; }
-    .experience-grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(240px,1fr)); gap: 1.25rem; }
-    .experience-card { background: #ffffff; border-radius: .75rem; padding: 1.25rem; box-shadow: 0 8px 20px rgba(15,23,42,.08); border: 1px solid #dbe4f0; }
-    .experience-card h3 { margin: 0 0 .35rem; font-size: 1.1rem; }
-    .experience-card p { margin: 0; color: #475569; }
-    .link-accent { color: #1e3a8a; }
-    .link-accent:hover { color: #172554; }
-    .text-2xl { font-size: 1.5rem; }
-    .text-3xl { font-size: 1.875rem; }
-    .text-4xl { font-size: 2.25rem; }
-    .text-5xl { font-size: 3rem; }
-    .text-xl { font-size: 1.25rem; }
-    .text-lg { font-size: 1.125rem; }
-    .text-sm { font-size: .875rem; }
-    .font-bold { font-weight: 700; }
-    .flex { display: flex; }
-    .grid { display: grid; }
-    .flex-col { flex-direction: column; }
-    .flex-wrap { flex-wrap: wrap; }
-    .flex-row { flex-direction: row; }
-    .items-center { align-items: center; }
-    .justify-between { justify-content: space-between; }
-    .justify-center { justify-content: center; }
-    .gap-2 { gap: .5rem; }
-    .gap-4 { gap: 1rem; }
-    .gap-8 { gap: 2rem; }
-    .space-x-4 > * + * { margin-left: 1rem; }
-    .space-x-6 > * + * { margin-left: 1.5rem; }
-    .space-y-2 > * + * { margin-top: .5rem; }
-    .py-10 { padding-top: 2.5rem; padding-bottom: 2.5rem; }
-    .pb-16 { padding-bottom: 4rem; }
-    .pb-20 { padding-bottom: 5rem; }
-    .p-4 { padding: 1rem; }
-    .p-6 { padding: 1.5rem; }
-    .px-4 { padding-left: 1rem; padding-right: 1rem; }
-    .py-2 { padding-top: .5rem; padding-bottom: .5rem; }
-    .mb-1 { margin-bottom: .25rem; }
-    .mb-2 { margin-bottom: .5rem; }
-    .mb-3 { margin-bottom: .75rem; }
-    .mb-4 { margin-bottom: 1rem; }
-    .mb-6 { margin-bottom: 1.5rem; }
-    .mb-8 { margin-bottom: 2rem; }
-    .mt-auto { margin-top: auto; }
-    .mx-auto { margin-left: auto; margin-right: auto; }
-    .text-center { text-align: center; }
-    .w-full { width: 100%; }
-    .w-1\/2 { width: 50%; }
-    .rounded-lg { border-radius: .5rem; }
-    .rounded-full { border-radius: 9999px; }
-    .shadow-lg { box-shadow: 0 10px 25px rgba(15,23,42,.18); }
-    .hidden { display: none; }
-    .fixed { position: fixed; }
-    .bottom-6 { bottom: 1.5rem; }
-    .right-6 { right: 1.5rem; }
-    .top-0 { top: 0; }
-    .sticky { position: sticky; }
-    .z-50 { z-index: 50; }
-    .flex-grow { flex: 1 1 auto; }
-    .bg-white { background: #ffffff; }
-    .bg-\[\#ffffff\] { background: #ffffff; }
-    .bg-\[\#111\] { background: #ffffff; }
-    .bg-\[\#b8c5d6\] { background: #b8c5d6; }
-    .bg-red-600 { background: #dc2626; }
-    .hover\:bg-red-700:hover { background: #b91c1c; }
-    .border { border: 1px solid #dbe4f0; }
-    .border-\[\#b8c5d6\] { border-color: #b8c5d6; }
-    .text-white { color: #0f172a !important; }
-    .text-gray-300 { color: #475569 !important; }
-    .text-gray-400 { color: #64748b !important; }
-    .text-red-500 { color: #1e3a8a !important; }
-    .hover\:text-red-500:hover { color: #1e3a8a !important; }
-    .hover\:text-white:hover { color: #0f172a !important; }
-    .transition { transition: all .2s ease; }
-    .transition-all { transition: all .2s ease; }
-    .duration-300 { transition-duration: .3s; }
-    .transform { transform: translateZ(0); }
-    .hover\:scale-105:hover { transform: scale(1.05); }
-    .focus\:outline-none:focus { outline: none; }
-    .focus\:ring-2:focus { box-shadow: 0 0 0 2px rgba(220,38,38,.35); }
-    .focus\:ring-red-500:focus { border-color: #ef4444; }
-    .focus\:ring-opacity-50:focus { box-shadow: 0 0 0 2px rgba(220,38,38,.5); }
-    .shadow-xl { box-shadow: 0 14px 30px rgba(15,23,42,.2); }
-    .hover\:shadow-xl:hover { box-shadow: 0 14px 30px rgba(15,23,42,.22); }
-    .h-full { height: 100%; }
-    .relative { position: relative; }
-    .absolute { position: absolute; }
-    .overflow-hidden { overflow: hidden; }
-    .overflow-y-auto { overflow-y: auto; }
-    .max-w-md { max-width: 28rem; }
-    .max-w-2xl { max-width: 42rem; }
-    .max-w-\[600px\] { max-width: 600px; }
-    .max-h-\[90vh\] { max-height: 90vh; }
-    .mx-4 { margin-left: 1rem; margin-right: 1rem; }
-    .sr-only { position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0; }
-    .md\:flex { display: flex; }
-    .md\:hidden { display: none; }
-    .md\:text-5xl { font-size: 3rem; }
-    .md\:grid-cols-3 { grid-template-columns: repeat(3,minmax(0,1fr)); }
-    .md\:grid-cols-4 { grid-template-columns: repeat(4,minmax(0,1fr)); }
-    .md\:col-span-2 { grid-column: span 2 / span 2; }
-    .sm\:grid-cols-2 { grid-template-columns: repeat(2,minmax(0,1fr)); }
-    .grid-cols-1 { grid-template-columns: repeat(1,minmax(0,1fr)); }
-    @media (min-width: 768px) {
-      .md\:flex { display: flex; }
-      .md\:hidden { display: none; }
-      .md\:w-1\/2 { width: 50%; }
-    }
-    @media (min-width: 1024px) {
-      .lg\:flex-row { flex-direction: row; }
-    }
-
-  </style>
+        @media print { .no-print { display: none !important; } }
+    </style>
 </head>
 <body>
-  <!-- Header -->
-  <header class="bg-[#ffffff] text-white p-4 sticky top-0 z-50">
-    <div class="container flex justify-between items-center">
-      <a href="index.html" class="text-2xl font-bold">Elie Mpuhwezimana</a>
-      <nav class="hidden md:flex space-x-6">
-        <a href="index.html" class="hover:text-red-500">Home</a>
-        <a href="blog.html" class="hover:text-red-500">Blog</a>
-        <a href="portfolio.html" class="text-red-500">Portfolio</a>
-        <a href="mailto:mpuwezimanaelie@gmail.com" class="hover:text-red-500">Contact</a>
-      </nav>
-      <button class="md:hidden text-white" aria-label="Toggle menu">
-        <i class="fas fa-bars text-xl"></i>
-      </button>
+
+    <div id="toast">Action Successful</div>
+    <div id="reopenSidebarBtn" onclick="openAdminPanel()"><i class="fas fa-upload mr-2"></i> Upload</div>
+
+    <!-- File Viewer Modal -->
+    <div id="viewerModal">
+        <div class="viewer-controls">
+            <button onclick="viewerAction('zoomIn')" class="viewer-btn"><i class="fas fa-search-plus mr-1"></i> Zoom In</button>
+            <button onclick="viewerAction('zoomOut')" class="viewer-btn"><i class="fas fa-search-minus mr-1"></i> Zoom Out</button>
+            <button onclick="viewerAction('rotateL')" class="viewer-btn"><i class="fas fa-undo mr-1"></i> Rotate</button>
+            <button onclick="closeViewer()" class="viewer-btn bg-red-600 border-red-600"><i class="fas fa-times mr-1"></i> Close</button>
+        </div>
+        <div id="viewerContent" class="flex items-center justify-center h-full w-full"></div>
     </div>
-  </header>
 
-  <!-- Portfolio Filter Section -->
-  <section class="py-10 bg-[#ffffff]">
-    <div class="container text-center">
-      <h1 class="text-4xl md:text-5xl font-bold mb-4">My Portfolio</h1>
-      <p class="text-xl text-gray-300 max-w-2xl mx-auto mb-8">
-        A concise view of my projects, documents, and professional experience.
-      </p>
+    <div class="main-wrapper">
+        <!-- VIEW 1: DASHBOARD -->
+        <section id="dashboard-view" class="view-section bg-slate-100 flex flex-col">
+            <nav class="h-16 bg-white border-b flex justify-between items-center px-6 z-50 flex-shrink-0 no-print">
+                <div class="flex items-center gap-3">
+                    <div class="flex items-center justify-center w-9 h-9 bg-blue-600 text-white rounded-lg text-sm font-extrabold shadow-md">EM</div>
+                    <h1 class="text-lg font-bold text-slate-800">Elie MP</h1>
+                    <div class="border-l border-slate-200 pl-4 ml-2 flex gap-4 text-xs font-semibold text-slate-600">
+                        <a href="index.html" class="hover:text-blue-600 transition-colors">Home</a>
+                        <a href="blog.html" class="hover:text-blue-600 transition-colors">Blog</a>
+                        <a href="contact.html" class="hover:text-blue-600 transition-colors">Contact</a>
+                    </div>
+                </div>
+                <div class="flex gap-2">
+                    <button onclick="toggleAdminMode()" id="adminBtn" class="px-3 py-2 bg-slate-100 text-slate-600 rounded-lg text-xs font-bold hover:bg-slate-200 transition-all border"><i class="fas fa-lock mr-1"></i> Admin</button>
+                    <button onclick="showCV()" class="px-4 py-2 bg-blue-600 text-white rounded-lg text-xs font-bold shadow hover:bg-blue-700 transition-all flex items-center gap-2"><i class="fas fa-file-download"></i> Download CV</button>
+                </div>
+            </nav>
 
-      <!-- Skill Filter Buttons -->
-      <div class="flex flex-wrap justify-center gap-2 mb-6">
-        <button
-          class="skill-filter btn-primary px-4 py-2 rounded-lg"
-          data-category="all"
-          type="button"
-        >
-          All Skills
-        </button>
-        <button
-          class="skill-filter btn-secondary px-4 py-2 rounded-lg"
-          data-category="design"
-          type="button"
-        >
-          Graphic Design
-        </button>
-        <button
-          class="skill-filter btn-secondary px-4 py-2 rounded-lg"
-          data-category="programming"
-          type="button"
-        >
-          Programming
-        </button>
-        <button
-          class="skill-filter btn-secondary px-4 py-2 rounded-lg"
-          data-category="athletics"
-          type="button"
-        >
-          Athletics
-        </button>
-        <button
-          class="skill-filter btn-secondary px-4 py-2 rounded-lg"
-          data-category="product-design"
-          type="button"
-        >
-          Product Design
-        </button>
-        <button
-          class="skill-filter btn-secondary px-4 py-2 rounded-lg"
-          data-category="branding"
-          type="button"
-        >
-          Brand Strategy
-        </button>
-      </div>
+            <div class="flex flex-1 overflow-hidden">
+                <aside id="sidebar" class="sidebar bg-slate-900 text-white flex flex-col h-full relative flex-shrink-0 no-print">
+                    <button onclick="toggleSidebar()" class="absolute -right-3 top-6 bg-blue-600 text-white rounded-full w-6 h-6 flex items-center justify-center text-xs shadow-lg hover:bg-blue-700 z-50"><i id="toggleIcon" class="fas fa-chevron-left"></i></button>
+                    <div class="p-2 flex-1 overflow-y-auto custom-scroll space-y-1 pt-12">
+                        <div class="nav-item">
+                            <button onclick="toggleSubMenu(this)" class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-slate-800 transition-colors group"><div class="flex items-center gap-3"><i class="fas fa-laptop-code text-blue-400 w-6 text-center"></i><span class="label-text text-xs font-semibold uppercase tracking-wide">Projects</span></div><i class="fas fa-chevron-right text-[10px] text-slate-500 toggle-indicator arrow"></i></button>
+                            <div class="sub-menu pl-4 space-y-1 mt-1">
+                                <button onclick="loadContent('projects', 'graphic')" class="sub-btn w-full text-left px-3 py-2 text-xs text-slate-400 hover:bg-slate-800 hover:text-white rounded flex items-center gap-2"><i class="fas fa-palette text-purple-400 w-4 text-center"></i> Graphic Design</button>
+                                <button onclick="loadContent('projects', 'programming')" class="sub-btn w-full text-left px-3 py-2 text-xs text-slate-400 hover:bg-slate-800 hover:text-white rounded flex items-center gap-2"><i class="fas fa-code text-blue-400 w-4 text-center"></i> Programming</button>
+                                <button onclick="loadContent('projects', 'social')" class="sub-btn w-full text-left px-3 py-2 text-xs text-slate-400 hover:bg-slate-800 hover:text-white rounded flex items-center gap-2"><i class="fas fa-users text-green-400 w-4 text-center"></i> Social Projects</button>
+                            </div>
+                        </div>
+                        <div class="nav-item">
+                            <button onclick="toggleSubMenu(this)" class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-slate-800 transition-colors group"><div class="flex items-center gap-3"><i class="fas fa-folder-open text-yellow-400 w-6 text-center"></i><span class="label-text text-xs font-semibold uppercase tracking-wide">Documents</span></div><i class="fas fa-chevron-right text-[10px] text-slate-500 toggle-indicator arrow"></i></button>
+                            <div class="sub-menu pl-4 space-y-1 mt-1">
+                                <button onclick="loadContent('documents', 'cv')" class="sub-btn w-full text-left px-3 py-2 text-xs text-slate-400 hover:bg-slate-800 hover:text-white rounded flex items-center gap-2"><i class="fas fa-file-alt w-4 text-center"></i> CV</button>
+                                <button onclick="loadContent('documents', 'motivation')" class="sub-btn w-full text-left px-3 py-2 text-xs text-slate-400 hover:bg-slate-800 hover:text-white rounded flex items-center gap-2"><i class="fas fa-heart w-4 text-center"></i> Motivation</button>
+                                <button onclick="loadContent('documents', 'diploma')" class="sub-btn w-full text-left px-3 py-2 text-xs text-slate-400 hover:bg-slate-800 hover:text-white rounded flex items-center gap-2"><i class="fas fa-scroll w-4 text-center"></i> Diploma</button>
+                            </div>
+                        </div>
+                        <div class="nav-item">
+                            <button onclick="toggleSubMenu(this)" class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-slate-800 transition-colors group"><div class="flex items-center gap-3"><i class="fas fa-trophy text-amber-400 w-6 text-center"></i><span class="label-text text-xs font-semibold uppercase tracking-wide">Awards</span></div><i class="fas fa-chevron-right text-[10px] text-slate-500 toggle-indicator arrow"></i></button>
+                            <div class="sub-menu pl-4 space-y-1 mt-1">
+                                <button onclick="loadContent('awards', 'trophies')" class="sub-btn w-full text-left px-3 py-2 text-xs text-slate-400 hover:bg-slate-800 hover:text-white rounded flex items-center gap-2"><i class="fas fa-trophy text-yellow-500 w-4 text-center"></i> Trophies</button>
+                                <button onclick="loadContent('awards', 'certificates')" class="sub-btn w-full text-left px-3 py-2 text-xs text-slate-400 hover:bg-slate-800 hover:text-white rounded flex items-center gap-2"><i class="fas fa-certificate text-blue-400 w-4 text-center"></i> Certificates</button>
+                            </div>
+                        </div>
+                        <div class="nav-item">
+                            <button onclick="toggleSubMenu(this)" class="w-full flex items-center justify-between p-3 rounded-lg hover:bg-slate-800 transition-colors group"><div class="flex items-center gap-3"><i class="fas fa-book text-purple-400 w-6 text-center"></i><span class="label-text text-xs font-semibold uppercase tracking-wide">Publications</span></div><i class="fas fa-chevron-right text-[10px] text-slate-500 toggle-indicator arrow"></i></button>
+                            <div class="sub-menu pl-4 space-y-1 mt-1">
+                                <button onclick="loadContent('publications', 'books')" class="sub-btn w-full text-left px-3 py-2 text-xs text-slate-400 hover:bg-slate-800 hover:text-white rounded flex items-center gap-2"><i class="fas fa-book-open w-4 text-center"></i> Books</button>
+                                <button onclick="loadContent('publications', 'stories')" class="sub-btn w-full text-left px-3 py-2 text-xs text-slate-400 hover:bg-slate-800 hover:text-white rounded flex items-center gap-2"><i class="fas fa-feather-alt w-4 text-center"></i> Stories</button>
+                            </div>
+                        </div>
+                    </div>
+                </aside>
 
-      <!-- Document Type Dropdown -->
-      <div class="mb-8 max-w-md mx-auto">
-        <select
-          id="documentFilter"
-          class="bg-[#ffffff] text-white px-4 py-2 rounded-lg border border-[#b8c5d6] w-full"
-          aria-label="Filter documents by type"
-        >
-          <option value="">Select Document Type</option>
-          <option value="personal-statement">Personal Statement</option>
-          <option value="additional-essay">Additional Essay</option>
-          <option value="resume">Resume</option>
-          <option value="cover-letter">Cover Letter</option>
-          <option value="recommendation">College Counselor Recommendation</option>
-          <option value="report-card">Report Card</option>
-          <option value="s4-report">S4 Report Card</option>
-          <option value="s5-report">S5 Report Card</option>
-          <option value="s6-report">S6 Report Card</option>
-          <option value="exam-cert">National Exam Certificate</option>
-        </select>
-      </div>
-    </div>
-  </section>
+                <main id="content-panel" class="flex-1 bg-slate-50 p-6 overflow-y-auto custom-scroll relative"></main>
 
-  <!-- Projects Section -->
-  <section class="py-10 pb-16 flex-grow">
-    <div class="container">
-      <div class="flex flex-col lg:flex-row gap-8">
-        <!-- Projects Column (Left) -->
-        <div class="w-full">
-          <h2 class="section-title text-white">Projects</h2>
-          <div
-            class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8"
-            id="portfolioGrid"
-            aria-live="polite"
-          >
-          </div>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Documents Section -->
-  <section class="py-10 pb-16 bg-[#ffffff]">
-    <div class="container">
-      <h2 class="section-title text-white text-center">Documents</h2>
-      <p class="section-subtitle">Academic records, recommendations, and official files organized for quick review.</p>
-
-      <div
-        class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-8"
-        id="documentsGrid"
-        aria-live="polite"
-      >
-      </div>
-    </div>
-  </section>
-
-  <!-- Experience Section -->
-  <section class="py-10 pb-20">
-    <div class="container">
-      <h2 class="section-title text-white text-center">Experience</h2>
-      <p class="section-subtitle">Focused highlights that show how I apply design, technology, and leadership in real projects.</p>
-      <div class="experience-grid">
-        <div class="experience-card">
-          <h3>Graphic Design & Branding</h3>
-          <p>Built brand systems, social assets, and marketing collateral for campaigns and events.</p>
-        </div>
-        <div class="experience-card">
-          <h3>Web & IT Support</h3>
-          <p>Delivered responsive websites, dashboards, and technical setup for teams and organizations.</p>
-        </div>
-        <div class="experience-card">
-          <h3>Athletics & Leadership</h3>
-          <p>Applied discipline and performance mindset to team collaboration, coaching, and event planning.</p>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- Admin Button -->
-  <button
-    id="adminBtn"
-    class="fixed bottom-6 right-6 bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-full shadow-lg transition-all duration-300 transform hover:scale-105 focus:outline-none focus:ring-2 focus:ring-red-500 focus:ring-opacity-50"
-    aria-label="Open admin upload panel"
-  >
-    Upload
-  </button>
-
-  <!-- Admin Modal -->
-  <div
-    id="adminModal"
-    class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50"
-    role="dialog"
-    aria-modal="true"
-    aria-labelledby="adminPanelTitle"
-  >
-    <div class="bg-[#ffffff] rounded-lg p-6 max-w-[600px] w-full mx-4 max-h-[90vh] overflow-y-auto">
-      <h3 id="adminPanelTitle" class="text-2xl font-bold mb-6 text-white">
-        Admin Panel
-      </h3>
-
-      <div id="loginForm" style="width:max-content">
-        <div class="mb-4">
-          <label class="block text-gray-300 mb-2" for="adminPassword"
-            >Admin Password</label
-          >
-          <input
-            type="password"
-            id="adminPassword"
-            class="w-full px-4 py-2 bg-[#b8c5d6] text-white rounded-lg"
-          />
-        </div>
-        <button
-          id="loginBtn"
-          class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg"
-          type="button"
-        >
-          Login
-        </button>
-      </div>
-
-      <div id="adminActions" class="hidden">
-        <div class="mb-4">
-          <label class="block text-gray-300 mb-2" for="newPassword"
-            >Change Password</label
-          >
-          <input
-            type="password"
-            id="newPassword"
-            class="w-full px-4 py-2 bg-[#b8c5d6] text-white rounded-lg mb-2"
-            placeholder="New password"
-          />
-          <input
-            type="password"
-            id="confirmPassword"
-            class="w-full px-4 py-2 bg-[#b8c5d6] text-white rounded-lg"
-            placeholder="Confirm password"
-          />
-          <input
-            type="button"
-            value="Update"
-            onclick="updatePassword()"
-            class="w-full btn-primary font-bold py-2 px-4 rounded-lg mt-2"
-          />
-        </div>
-
-        <div class="flex flex-col md:flex-row gap-4">
-          <!-- Project Upload Section -->
-          <div class="w-full md:w-1/2 p-4 border border-[#b8c5d6] rounded-lg">
-            <h4 class="text-lg font-bold mb-3 text-white">Upload Project</h4>
-            <div class="mb-4">
-              <label for="projectCategory" class="sr-only">Project Category</label>
-              <select
-                id="projectCategory"
-                class="w-full px-4 py-2 bg-[#b8c5d6] text-white rounded-lg"
-              >
-                <option value="design">Graphic Design</option>
-                <option value="programming">Programming</option>
-                <option value="athletics">Athletics</option>
-                <option value="product-design">Product Design</option>
-                <option value="branding">Brand Strategy</option>
-              </select>
-              <label for="projectImage" class="sr-only">Project Image</label>
-              <input
-                type="file"
-                id="projectImage"
-                accept="image/*,video/*"
-                class="w-full mb-2"
-              />
-              <label for="projectTitle" class="sr-only">Project Title</label>
-              <input
-                type="text"
-                id="projectTitle"
-                placeholder="Project Title"
-                class="w-full px-4 py-2 bg-[#b8c5d6] text-white rounded-lg mb-2"
-              />
-              <label for="projectDesc" class="sr-only">Project Description</label>
-              <textarea
-                id="projectDesc"
-                placeholder="Project Description"
-                class="w-full px-4 py-2 bg-[#b8c5d6] text-white rounded-lg"
-              ></textarea>
+                <!-- RIGHT ADMIN PANEL -->
+                <aside id="adminPanel" class="no-print">
+                    <div class="w-80 h-full flex flex-col bg-slate-50 border-l border-slate-200">
+                        <div class="p-4 border-b bg-white flex justify-between items-center">
+                            <div>
+                                <h3 class="font-bold text-slate-800 text-sm">Upload New Item</h3>
+                                <p id="adminPanelContext" class="text-xs text-blue-600 font-medium mt-1">Category: ...</p>
+                            </div>
+                            <button onclick="closeAdminPanel()" class="text-slate-400 hover:text-red-500 transition-colors text-xl"><i class="fas fa-times"></i></button>
+                        </div>
+                        <div class="p-4 flex-1 overflow-y-auto custom-scroll space-y-4">
+                            <div>
+                                <label class="text-xs font-semibold text-slate-600 block mb-1">Title *</label>
+                                <input type="text" id="itemTitle" placeholder="Enter title..." class="w-full border p-2 rounded text-sm outline-none bg-white">
+                            </div>
+                            <div>
+                                <label class="text-xs font-semibold text-slate-600 block mb-1">Description</label>
+                                <textarea id="itemDesc" placeholder="Details..." class="w-full border p-2 rounded text-sm h-24 outline-none bg-white"></textarea>
+                            </div>
+                            <div>
+                                <label class="text-xs font-semibold text-slate-600 block mb-1">File (Any Format)</label>
+                                <div class="border-dashed border-2 border-slate-300 rounded-lg p-4 text-center cursor-pointer hover:border-blue-400 transition-colors bg-white" onclick="document.getElementById('itemImage').click()">
+                                    <input type="file" id="itemImage" class="hidden">
+                                    <i class="fas fa-cloud-upload-alt text-3xl text-slate-300 mb-2"></i>
+                                    <p class="text-xs text-slate-500">Click to Upload</p>
+                                    <p id="fileName" class="text-[10px] text-blue-500 font-bold mt-1 truncate"></p>
+                                </div>
+                                <!-- PROGRESS UI -->
+                                <div id="uploadProgressContainer">
+                                    <div id="uploadCube"><div id="uploadCubeFill"></div></div>
+                                    <div id="uploadPercentText">0%</div>
+                                </div>
+                            </div>
+                            <div id="imagePreviewContainer" class="hidden">
+                                <p class="text-[10px] text-slate-500 mb-1">Preview:</p>
+                                <!-- Preview will be injected here -->
+                                <div id="previewWrapper" class="w-full h-32 rounded-lg border overflow-hidden bg-slate-100 flex items-center justify-center"></div>
+                            </div>
+                        </div>
+                        <div class="p-4 border-t bg-white">
+                            <button id="saveBtn" onclick="saveItem()" class="w-full bg-blue-600 text-white py-2.5 rounded font-bold text-sm hover:bg-blue-700 transition-colors shadow-lg flex items-center justify-center gap-2"><i class="fas fa-save"></i> Save Item</button>
+                        </div>
+                    </div>
+                </aside>
             </div>
-            <button
-              id="uploadProjectBtn"
-              class="w-full btn-primary font-bold py-2 px-4 rounded-lg"
-              type="button"
-            >
-              Upload Project
-            </button>
-            <div
-              id="projectUploadStatus"
-              class="mt-2 text-sm hidden"
-              role="alert"
-              aria-live="assertive"
-            ></div>
-          </div>
+        </section>
 
-          <!-- Document Upload Section -->
-          <div class="w-full md:w-1/2 p-4 border border-[#b8c5d6] rounded-lg">
-            <h4 class="text-lg font-bold mb-3 text-white">Upload Document</h4>
-            <div class="mb-4">
-              <label for="documentType" class="sr-only">Document Type</label>
-              <select
-                id="documentType"
-                class="w-full px-4 py-2 bg-[#b8c5d6] text-white rounded-lg mb-2"
-              >
-                <option value="personal-statement">Personal Statement</option>
-                <option value="resume">Resume</option>
-                <option value="additional-essay">Additional Essay</option>
-                <option value="cover-letter">Cover Letter</option>
-                <option value="recommendation">Recommendation</option>
-                <option value="report-card">Report Card</option>
-                <option value="s4-report">S4 Report</option>
-                <option value="s5-report">S5 Report</option>
-                <option value="s6-report">S6 Report</option>
-                <option value="exam-cert">Exam Certificate</option>
-              </select>
-              <label for="documentFile" class="sr-only">Document File</label>
-              <input
-                type="file"
-                id="documentFile"
-                accept=".pdf,.doc,.docx"
-                class="w-full mb-2"
-              />
+        <!-- VIEW 2: CV -->
+        <section id="cv-view" class="view-section hidden">
+            <div class="pdf-page-background">
+                <div class="pdf-paper-container">
+                    <embed class="pdf-viewer no-print" src="documents/resume.pdf" type="application/pdf" title="Elie Mpuhwezimana CV">
+                </div>
             </div>
-            <button
-              id="uploadDocumentBtn"
-              class="w-full bg-green-600 hover:bg-green-700 text-white font-bold py-2 px-4 rounded-lg"
-              type="button"
-            >
-              Upload Document
-            </button>
-            <div
-              id="documentUploadStatus"
-              class="mt-2 text-sm hidden"
-              role="alert"
-              aria-live="assertive"
-            ></div>
-          </div>
-        </div>
-
-        <div class="flex space-x-2 mt-4">
-          <button
-            id="logoutBtn"
-            class="w-full bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg"
-            type="button"
-          >
-            Logout
-          </button>
-        </div>
-      </div>
+            <div class="cv-action-footer no-print">
+                <a href="documents/resume.pdf" target="_blank" class="px-6 py-3 bg-slate-800 text-white rounded-lg text-xs font-bold hover:bg-slate-700 transition-all shadow-lg text-center flex items-center gap-2"><i class="fas fa-external-link-alt"></i> Open in New Tab</a>
+                <a href="documents/resume.pdf" download="Elie_Mpuhwezimana_CV.pdf" class="px-6 py-3 bg-blue-600 text-white rounded-lg text-xs font-bold hover:bg-blue-700 transition-all shadow-lg text-center flex items-center gap-2"><i class="fas fa-download"></i> Download Now</a>
+            </div>
+        </section>
+        <button id="upBtn" onclick="showDashboard()" title="Go to Dashboard"><i class="fas fa-arrow-up"></i></button>
     </div>
-  </div>
 
-  <!-- Footer -->
-  <footer class="bg-[#111] text-white py-12 mt-auto">
-    <div class="container">
-      <div class="grid grid-cols-1 md:grid-cols-4 gap-8">
-        <!-- About Column -->
-        <div class="md:col-span-2">
-          <h3 class="text-xl font-bold mb-4 text-red-500">
-            Elie Mpuhwezimana
-          </h3>
-          <p class="mb-4">
-            Multidisciplinary professional with diverse skills in design,
-            programming, athletics, and more.
-          </p>
-          <div class="flex space-x-4">
-            <a href="#" class="text-gray-400 hover:text-white transition">
-              <i class="fab fa-twitter text-xl"></i>
-            </a>
-            <a href="#" class="text-gray-400 hover:text-white transition">
-              <i class="fab fa-linkedin text-xl"></i>
-            </a>
-            <a href="#" class="text-gray-400 hover:text-white transition">
-              <i class="fab fa-github text-xl"></i>
-            </a>
-          </div>
+    <!-- AUTH MODAL -->
+    <div id="authModal" class="fixed inset-0 bg-black/60 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 no-print">
+        <div class="bg-white rounded-xl w-full max-w-sm p-6 space-y-4">
+            <h3 class="font-bold text-lg text-slate-800">Admin Access</h3>
+            <input type="password" id="adminPass" placeholder="Enter Password" class="w-full border p-2 rounded" value="">
+            <div class="flex gap-2">
+                <button onclick="verifyAdmin()" class="flex-1 bg-slate-900 text-white p-2 rounded font-bold text-sm">Unlock</button>
+                <button onclick="closeAuthModal()" class="flex-1 border p-2 rounded text-sm">Cancel</button>
+            </div>
         </div>
-
-        <!-- Quick Links -->
-        <div>
-          <h3 class="text-xl font-bold mb-4 text-red-500">Quick Links</h3>
-          <ul class="space-y-2">
-            <li>
-              <a href="index.html" class="hover:text-red-500 transition">Home</a>
-            </li>
-            <li>
-              <a href="blog.html" class="hover:text-red-500 transition"
-                >Blog</a
-              >
-            </li>
-            <li>
-              <a href="portfolio.html" class="hover:text-red-500 transition"
-                >Portfolio</a
-              >
-            </li>
-            <li>
-              <a href="mailto:mpuwezimanaelie@gmail.com" class="hover:text-red-500 transition"
-                >Contact</a
-              >
-            </li>
-          </ul>
-        </div>
-
-        <!-- Contact Info -->
-        <div>
-          <h3 class="text-xl font-bold mb-4 text-red-500">Contact</h3>
-          <ul class="space-y-2">
-            <li class="flex items-center">
-              <i class="fas fa-envelope mr-2 text-red-500"></i>
-              mpuwezimanaelie@gmail.com
-            </li>
-            <li class="flex items-center">
-              <i class="fas fa-phone mr-2 text-red-500"></i>+250 795176702
-            </li>
-            <li class="flex items-center">
-              <i class="fas fa-map-marker-alt mr-2 text-red-500"></i>Kigali-Rwanda
-            </li>
-          </ul>
-        </div>
-      </div>
-
-      <!-- Copyright Section -->
-      <div class="border-t border-gray-800 mt-8 pt-8 text-center text-gray-400">
-        <p>&copy; 2024 Elie Mpuhwezimana. All rights reserved.</p>
-      </div>
     </div>
-  </footer>
 
-  <!-- Scripts -->
-  <script>
-    // LocalStorage keys
-    const LS_PROJECTS_KEY = "eliePortfolioProjects";
-    const LS_DOCUMENTS_KEY = "eliePortfolioDocuments";
+    <script>
+        // PDF.js CONFIG
+        pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
-    // Admin password (in real app, this should be server-side)
-    let ADMIN_PASSWORD = "elie";
-    let isAdmin = false;
+        // INDEXED DB SETUP
+        const DB_NAME = 'Portfolio_Blob_DB_V3';
+        const STORE_NAME = 'files';
+        let db;
 
-    // DOM elements
-    const adminBtn = document.getElementById("adminBtn");
-    const adminModal = document.getElementById("adminModal");
-    const loginForm = document.getElementById("loginForm");
-    const adminActions = document.getElementById("adminActions");
-    const loginBtn = document.getElementById("loginBtn");
-    const logoutBtn = document.getElementById("logoutBtn");
-    const portfolioGrid = document.getElementById("portfolioGrid");
-    const documentsGrid = document.getElementById("documentsGrid");
-    const projectUploadStatus = document.getElementById("projectUploadStatus");
-    const documentUploadStatus = document.getElementById("documentUploadStatus");
+        function initDB() {
+            return new Promise((resolve, reject) => {
+                const request = indexedDB.open(DB_NAME, 1);
+                request.onupgradeneeded = (e) => { const database = e.target.result; if (!database.objectStoreNames.contains(STORE_NAME)) database.createObjectStore(STORE_NAME, { keyPath: 'id' }); };
+                request.onsuccess = (e) => { db = e.target.result; resolve(db); };
+                request.onerror = (e) => reject('DB Error');
+            });
+        }
 
-    // Close modal when clicking outside
-    adminModal.addEventListener("click", (e) => {
-      if (e.target === adminModal) {
-        adminModal.classList.add("hidden");
-      }
-    });
+        function dbAdd(item) { return new Promise((resolve, reject) => { const tx = db.transaction(STORE_NAME, 'readwrite'); const store = tx.objectStore(STORE_NAME); store.add(item); tx.oncomplete = () => resolve(); tx.onerror = (e) => reject(e.target.error); }); }
+        function dbDelete(id) { return new Promise((resolve, reject) => { const tx = db.transaction(STORE_NAME, 'readwrite'); const store = tx.objectStore(STORE_NAME); store.delete(id); tx.oncomplete = () => resolve(); tx.onerror = (e) => reject(e.target.error); }); }
+        function dbGetAll() {
+            return new Promise((resolve, reject) => {
+                const tx = db.transaction(STORE_NAME, 'readonly'); const store = tx.objectStore(STORE_NAME); const request = store.getAll();
+                request.onsuccess = () => {
+                    const data = { projects: { graphic: [], programming: [], social: [] }, documents: { cv: [], motivation: [], diploma: [], recommendation: [] }, awards: { trophies: [], certificates: [], rewards: [] }, publications: { books: [], stories: [], magazines: [] } };
+                    request.result.forEach(item => { if(data[item.category] && data[item.category][item.subcategory]) data[item.category][item.subcategory].push(item); });
+                    resolve(data);
+                };
+            });
+        }
 
-    // Toggle admin modal
-    adminBtn.addEventListener("click", (e) => {
-      e.stopPropagation();
-      adminModal.classList.toggle("hidden");
-    });
+        // STATE
+        let appData = {};
+        let currentCategory = 'projects';
+        let currentSubCategory = 'programming';
+        let isAdmin = false;
+        let pendingDeleteId = null;
+        const ADMIN_PASSWORD = "elie";
+        let viewerState = { zoom: 1, rotation: 0 };
 
-    // Login functionality
-    loginBtn.addEventListener("click", () => {
-      const password = document.getElementById("adminPassword").value;
-      if (password === ADMIN_PASSWORD) {
-        isAdmin = true;
-        loginForm.classList.add("hidden");
-        adminActions.classList.remove("hidden");
-        document.getElementById("adminPassword").value = "";
-      } else {
-        alert("Incorrect password");
-      }
-    });
+        window.onload = async () => { await initDB(); appData = await dbGetAll(); loadContent('projects', 'programming'); };
 
-    // Logout functionality
-    logoutBtn.addEventListener("click", () => {
-      isAdmin = false;
-      adminActions.classList.add("hidden");
-      loginForm.classList.remove("hidden");
-      document.getElementById("adminPassword").value = "";
-    });
-
-    // Update password function
-    function updatePassword() {
-      if (!isAdmin) return;
-      const newPass = document.getElementById("newPassword").value;
-      const confirmPass = document.getElementById("confirmPassword").value;
-      if (!newPass || !confirmPass) {
-        alert("Please fill both password fields");
-        return;
-      }
-      if (newPass !== confirmPass) {
-        alert("Passwords do not match");
-        return;
-      }
-      ADMIN_PASSWORD = newPass;
-      alert("Password updated successfully");
-      document.getElementById("newPassword").value = "";
-      document.getElementById("confirmPassword").value = "";
-    }
-
-    // Save projects to localStorage
-    function saveProjects(projects) {
-      localStorage.setItem(LS_PROJECTS_KEY, JSON.stringify(projects));
-    }
-
-    // Save documents to localStorage
-    function saveDocuments(documents) {
-      localStorage.setItem(LS_DOCUMENTS_KEY, JSON.stringify(documents));
-    }
-
-    // Load projects from localStorage
-    function loadProjects() {
-      const projectsJSON = localStorage.getItem(LS_PROJECTS_KEY);
-      if (!projectsJSON) return [];
-      try {
-        return JSON.parse(projectsJSON);
-      } catch {
-        return [];
-      }
-    }
-
-    // Load documents from localStorage
-    function loadDocuments() {
-      const documentsJSON = localStorage.getItem(LS_DOCUMENTS_KEY);
-      if (!documentsJSON) return [];
-      try {
-        return JSON.parse(documentsJSON);
-      } catch {
-        return [];
-      }
-    }
-
-    // Render projects to DOM
-    function renderProjects() {
-      portfolioGrid.innerHTML = "";
-      const projects = loadProjects();
-
-      // Add initial hardcoded projects if none saved yet
-      if (projects.length === 0) {
-        const initialProjects = [
-          {
-            id: generateId(),
-            category: "design",
-            doctype: "personal-statement",
-            title: "Brand Identity Design",
-            desc: "Alongside this project, my graphic design demonstrates creativity, visual communication, and a solid grasp of design principles like color, layout, and typography. Using tools such as Photoshop, Illustrator, and Figma, I created logos, posters, and digital content aimed at engaging and informing the target audience.",
-            image:
-              "designer.jpg",
-            alt: "designer photo showing a designer working on a laptop with design software",
-            demoLink: "designer.jpg"
-          },
-          {
-            id: generateId(),
-            category: "design",
-            doctype: "resume",
-            title: "Marketing Materials",
-            desc: "Alongside this project, my graphic design demonstrates the ability to combine creativity with practical design skills. From logos to promotional materials, each piece reflects thoughtful composition and effective use of tools like Photoshop, Illustrator, and Figma to deliver clear and engaging visuals.",
-            image:
-              "designer2.jpg",
-            alt: "desinger photo showing a designer working on a laptop with design software",
-            demoLink: "designer2.jpg"
-          },
-          {
-            id: generateId(),
-            category: "programming",
-            doctype: "additional-essay",
-            title: "🤖 Ubuzima bwacu, AI Assistant",
-            desc: "A smart AI assistant designed to support and improve everyday health and well-being through intelligent, personalized guidance. It offers tailored advice, pills and vaccination reminders, and resources to help users maintain a healthy lifestyle and manage their wellness effectively.",
-            image:
-              "AI-in-Healthcare.jpg",
-            alt: "E-commerce Platform project showin  g a laptop screen with online store interface",
-            demoLink: "https://singular-frangipane-45a1d7.netlify.app/"
-          },
-          {
-            id: generateId(),
-            category: "programming",
-            title: "🎬 ElieTrailer: Movie Trailer Search and Watch Site",
-            desc: "ElieTrailer is the perfect platform for movie lovers to search and watch trailers of their favorite films. With a user-friendly interface, users can quickly find and preview movies to decide what to watch. The site offers instant trailer playback from YouTube and includes subtitle options for accessibility.",
-            image:
-              "trailorimage.jpg",
-            alt: "Mobile App Development project showing a smartphone with task management app interface",
-            demoLink: "https://movie-app-ebon-omega.vercel.app/"
-          },
-          {
-            id: generateId(),
-            category: "programming",
-            title: "🔐 Cyber Encryption Tool – Neon Matrix",
-            desc: "The Cyber Encryption Tool is a modern web app that helps ethical hackers, cybersecurity learners, and penetration testers evaluate and secure sensitive information using classical encryption methods. Its intuitive neon-themed UI allows easy encryption and decryption.",
-            image:
-              "hackingimage2.jpg",
-            alt: "Task Management Web App project showing a desktop screen with task lists and calendar",
-            demoLink: "https://hucking.vercel.app/"
-          },
-          {
-            id: generateId(),
-            category: "programming",
-            title: "🌦️ Real-Time Weather & Climate Updates Worldwide",
-            desc: "Get instant real-time weather and climate change updates worldwide with My Weather App. Whether you're planning to fly or just want to stay informed, search any location—sell, sector, district, city, or country—and access current temperature, wind, humidity, and a 5-day forecast in a clean, user-friendly interface.",
-            image:
-              "weatherImage.webp",
-            alt: "Weather Forecast App project showing a smartphone with weather data and maps",
-            demoLink: "https://checkclimate.vercel.app/"
-          },
-          {
-            id: generateId(),
-            category: "athletics",
-            doctype: "report-card",
-            title: "Track Competitions",
-            desc: "Participation in regional and national track events.",
-            image:
-              "runner.png",
-            alt: "Track Competitions project showing an athlete running on a track during a race",
-          },
-          {
-            id: generateId(),
-            category: "product-design",
-            doctype: "recommendation",
-            title: "Product Design Concepts",
-            desc: "This project highlights interface structure, user flow clarity, and accessibility-first design decisions to improve how users interact with digital products.",
-            image:
-              "shoppingimage.jpg",
-            alt: "Product Design Concepts showing interface prototypes and workflow screens",
-          },
-          {
-            id: generateId(),
-            category: "branding",
-            doctype: "s4-report",
-            title: "Brand Communication Campaign",
-            desc: "Strategic branding and communication work for organizational visibility.",
-            image:
-              "hostpito.jpg",
-            alt: "Brand communication campaign visuals and identity presentation assets",
-          },
-          {
-            id: generateId(),
-            category: "programming",
-            doctype: "exam-cert",
-            title: "✈️ Online Clothing Shopping in Rwanda",
-            desc: "The Rimba Collection is an online clothing shopping platform designed for customers in Rwanda. It offers a wide range of fashion items, including men's, women's, and accessories collections.",
-            image:
-              "shoppingimage.jpg",
-            alt: "Programming Certification project showing a certificate with web development skills",
-            demoLink: "https://buying-pied.vercel.app/"          
-          },
-          {
-            id: generateId(),
-            category: "athletics",
-            doctype: "s5-report",
-            title: "Athletic Performance",
-            desc: "Track and field performance evaluation.",
-            image:
-              "young-african.jpg",
-            alt: "Athletic Performance project showing an athlete mid-jump during a track and field event",
-          },
-        ];
-        saveProjects(initialProjects);
-        return renderProjects();
-      }
-
-      projects.forEach((project) => {
-        const isProgramming = project.category === "programming";
-        const projectDiv = document.createElement("div");
-        projectDiv.className =
-          "portfolio-item bg-[#ffffff] rounded-lg overflow-hidden shadow-lg hover:shadow-xl transition duration-300 h-full flex flex-col relative";
-        projectDiv.dataset.category = project.category;
-        projectDiv.dataset.doctype = project.doctype || "";
-        projectDiv.dataset.id = project.id;
+        // VIEW LOGIC
+        function showCV() { document.getElementById('dashboard-view').classList.add('hidden'); document.getElementById('cv-view').classList.remove('hidden'); document.body.classList.add('viewing-cv'); }
+        function showDashboard() { document.getElementById('cv-view').classList.add('hidden'); document.getElementById('dashboard-view').classList.remove('hidden'); document.body.classList.remove('viewing-cv'); }
+        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('collapsed'); document.getElementById('toggleIcon').classList.toggle('fa-chevron-left'); document.getElementById('toggleIcon').classList.toggle('fa-chevron-right'); }
+        function toggleSubMenu(btn) { btn.closest('.nav-item').classList.toggle('open'); }
+        function openAdminPanel() { document.getElementById('adminPanel').classList.add('admin-panel-open'); document.body.classList.add('panel-is-open'); }
+        function closeAdminPanel() { document.getElementById('adminPanel').classList.remove('admin-panel-open'); document.body.classList.remove('panel-is-open'); }
         
-        const mediaType = project.mediaType || (project.image && project.image.startsWith('data:video') ? 'video' : 'image');
-        const mediaMarkup = mediaType === 'video'
-          ? `<video class="project-media video" src="${project.image}" controls playsinline preload="metadata" aria-label="${project.alt || project.title}"></video>`
-          : `<img src="${project.image}" alt="${project.alt || project.title}" class="project-media" />`;
+        function toggleAdminMode() { if (isAdmin) { isAdmin = false; document.body.classList.remove('is-admin'); document.getElementById('adminBtn').innerHTML = '<i class="fas fa-lock mr-1"></i> Admin'; closeAdminPanel(); renderContent(appData[currentCategory][currentSubCategory], currentSubCategory); } else { document.getElementById('authModal').classList.remove('hidden'); } }
+        function verifyAdmin() { if (document.getElementById('adminPass').value === ADMIN_PASSWORD) { isAdmin = true; document.body.classList.add('is-admin'); document.getElementById('adminBtn').innerHTML = '<i class="fas fa-unlock mr-1"></i> Exit Admin'; closeAuthModal(); openAdminPanel(); if (pendingDeleteId !== null) { performDelete(pendingDeleteId); pendingDeleteId = null; } } else { alert("Incorrect Password"); } }
+        function closeAuthModal() { document.getElementById('authModal').classList.add('hidden'); document.getElementById('adminPass').value = ""; }
 
-        projectDiv.innerHTML = `
-          ${mediaMarkup}
-          <button class="delete-doc" 
-            aria-label="Delete project ${project.title}"
-            data-id="${project.id}">
-            <i class="fas fa-trash"></i>
-          </button>
-          <div class="p-6 flex-1 flex flex-col">
-            <h3 class="text-xl font-bold mb-2 text-white">${project.title}</h3>
-            <p class="text-gray-300 mb-4 flex-1">${project.desc}</p>
-            <div class="flex justify-between items-center">
-              <span class="text-sm text-red-500">${capitalizeFirstLetter(
-                project.category
-              )}</span>
-            </div>
-          </div>
-          <a href="#" target="_self" class="action-button" aria-label="${
-            isProgramming ? "Live demo" : "View"
-          } of ${project.title} project" data-id="${project.id}" data-type="project">${isProgramming ? "Live Demo" : "View"} ${
-          isProgramming
-            ? '<i class="fas fa-play-circle"></i>'
-            : '<i class="fas fa-eye"></i>'
-        }</a>
-        `;
+        // RENDERING
+        function loadContent(cat, sub) { currentCategory = cat; currentSubCategory = sub; if (!appData[cat]) appData[cat] = {}; if (!appData[cat][sub]) appData[cat][sub] = []; renderContent(appData[cat][sub], sub); document.getElementById('adminPanelContext').innerText = "Upload to: " + sub.replace(/([A-Z])/g, ' $1'); }
 
-        portfolioGrid.appendChild(projectDiv);
-      });
-
-      // Attach delete event listeners for projects
-      document.querySelectorAll(".portfolio-item .delete-doc").forEach((btn) => {
-        btn.addEventListener("click", (e) => {
-          e.stopPropagation();
-          confirmDeleteDocument(btn);
-        });
-      });
-
-      // Attach view button event listeners for projects
-      document.querySelectorAll(".portfolio-item .action-button").forEach((btn) => {
-        btn.addEventListener("click", (e) => {
-          e.preventDefault();
-          const id = btn.dataset.id;
-          const projects = loadProjects();
-          const project = projects.find(p => p.id === id);
-          if (!project) return;
-
-          // Open the project demo link if it exists
-          if (project.demoLink) {
-            window.open(project.demoLink, "_blank", "noopener");
-          } else if (project.image) {
-            // fallback open uploaded media in new tab
-            window.open(project.image, "_blank", "noopener");
-          } else {
-            alert("No preview available.");
-          }
-        });
-      });
-    }
-
-    // Render documents to DOM
-    function renderDocuments() {
-      documentsGrid.innerHTML = "";
-      const documents = loadDocuments();
-
-      // Add initial hardcoded documents if none saved yet
-      if (documents.length === 0) {
-        const initialDocuments = [
-          {
-            id: generateId(),
-            doctype: "personal-statement",
-            title: "Personal Statement",
-            desc: "My academic and professional aspirations",
-            icon: "fa-file-alt",
-            file: "https://placehold.co/600x800/png?text=Personal+Statement+PDF+Placeholder",
-            mimeType: "application/pdf",
-          },
-          {
-            id: generateId(),
-            doctype: "resume",
-            title: "Resume",
-            desc: "Professional experience and skills",
-            icon: "fa-file-contract",
-            file: "https://placehold.co/600x800/png?text=Resume+PDF+Placeholder",
-            mimeType: "application/pdf",
-          },
-          {
-            id: generateId(),
-            doctype: "additional-essay",
-            title: "Additional Essay",
-            desc: "Supplementary academic writing",
-            icon: "fa-file-signature",
-            file: "https://placehold.co/600x800/png?text=Additional+Essay+PDF+Placeholder",
-            mimeType: "application/pdf",
-          },
-          {
-            id: generateId(),
-            doctype: "cover-letter",
-            title: "Cover Letter",
-            desc: "Professional introduction letter",
-            icon: "fa-envelope-open-text",
-            file: "https://placehold.co/600x800/png?text=Cover+Letter+PDF+Placeholder",
-            mimeType: "application/pdf",
-          },
-          {
-            id: generateId(),
-            doctype: "recommendation",
-            title: "Recommendation",
-            desc: "College counselor recommendation",
-            icon: "fa-user-tie",
-            file: "https://placehold.co/600x800/png?text=Recommendation+PDF+Placeholder",
-            mimeType: "application/pdf",
-          },
-          {
-            id: generateId(),
-            doctype: "report-card",
-            title: "Report Card",
-            desc: "Academic performance records",
-            icon: "fa-file-certificate",
-            file: "https://placehold.co/600x800/png?text=Report+Card+PDF+Placeholder",
-            mimeType: "application/pdf",
-          },
-          {
-            id: generateId(),
-            doctype: "s4-report",
-            title: "S4 Report",
-            desc: "Secondary 4 academic records",
-            icon: "fa-file-export",
-            file: "https://placehold.co/600x800/png?text=S4+Report+PDF+Placeholder",
-            mimeType: "application/pdf",
-          },
-          {
-            id: generateId(),
-            doctype: "s5-report",
-            title: "S5 Report",
-            desc: "Secondary 5 academic records",
-            icon: "fa-file-export",
-            file: "https://placehold.co/600x800/png?text=S5+Report+PDF+Placeholder",
-            mimeType: "application/pdf",
-          },
-          {
-            id: generateId(),
-            doctype: "s6-report",
-            title: "S6 Report",
-            desc: "Secondary 6 academic records",
-            icon: "fa-file-export",
-            file: "https://placehold.co/600x800/png?text=S6+Report+PDF+Placeholder",
-            mimeType: "application/pdf",
-          },
-          {
-            id: generateId(),
-            doctype: "exam-cert",
-            title: "National Exam",
-            desc: "Official exam certification",
-            icon: "fa-award",
-            file: "https://placehold.co/600x800/png?text=National+Exam+Certificate+PDF+Placeholder",
-            mimeType: "application/pdf",
-          },
-        ];
-        saveDocuments(initialDocuments);
-        return renderDocuments();
-      }
-
-      documents.forEach((doc) => {
-        const docDiv = document.createElement("div");
-        docDiv.className =
-          "document-item";
-        docDiv.dataset.doctype = doc.doctype;
-        docDiv.dataset.id = doc.id;
-
-        // Determine if file is base64 or URL
-        let fileHref = doc.file;
-        let downloadHref = doc.file;
-        let mimeType = doc.mimeType || "";
-
-        if (doc.file && doc.file.startsWith("data:")) {
-          fileHref = doc.file;
-          downloadHref = doc.file;
-          mimeType = doc.file.split(";")[0].split(":")[1];
-        } else if (doc.base64) {
-          fileHref = doc.base64;
-          downloadHref = doc.base64;
-          mimeType = doc.base64.split(";")[0].split(":")[1];
-        }
-
-        docDiv.innerHTML = `
-          <button class="delete-doc" aria-label="Delete document ${doc.title}" data-id="${doc.id}">
-            <i class="fas fa-trash"></i>
-          </button>
-          <div class="p-4 flex-1 flex flex-col items-center justify-center">
-            <i class="fas ${doc.icon} text-4xl text-red-500 mb-3"></i>
-            <h3 class="text-lg font-bold mb-1 text-white text-center">${doc.title}</h3>
-            <p class="text-gray-300 text-sm text-center mb-3">${doc.desc}</p>
-          </div>
-          <div class="p-3 bg-[#b8c5d6] flex justify-between items-center">
-            <div class="flex gap-3">
-              <a href="#" class="view-link link-accent text-sm" target="_blank" rel="noopener noreferrer" aria-label="View ${doc.title}">
-                <i class="fas fa-eye"></i> View
-              </a>
-              <a href="#" class="download-link link-accent text-sm" download aria-label="Download ${doc.title}">
-                <i class="fas fa-download"></i> Download
-              </a>
-            </div>
-          </div>
-        `;
-
-        documentsGrid.appendChild(docDiv);
-
-        // Setup view and download links properly
-        const viewLink = docDiv.querySelector(".view-link");
-        const downloadLink = docDiv.querySelector(".download-link");
-
-        if (doc.file && (doc.file.startsWith("data:") || doc.base64)) {
-          // For base64 data, create blob URL for viewing and downloading
-          const blob = base64ToBlob(doc.file || doc.base64);
-          const blobUrl = URL.createObjectURL(blob);
-          viewLink.href = blobUrl;
-          downloadLink.href = blobUrl;
-          downloadLink.download = doc.title.replace(/\s+/g, "_") + getFileExtensionFromMime(blob.type);
-          // Revoke blob URL on unload to avoid memory leaks
-          window.addEventListener("unload", () => URL.revokeObjectURL(blobUrl));
-        } else if (doc.file) {
-          // For URLs or relative paths, just use them directly
-          viewLink.href = doc.file;
-          downloadLink.href = doc.file;
-          downloadLink.download = doc.title.replace(/\s+/g, "_") + getFileExtensionFromFilename(doc.file);
-        } else {
-          // If no file, disable links
-          viewLink.removeAttribute("href");
-          downloadLink.removeAttribute("href");
-          viewLink.classList.add("opacity-50", "cursor-not-allowed");
-          downloadLink.classList.add("opacity-50", "cursor-not-allowed");
-        }
-
-        // Fix for PDF blank page issue: open PDFs in new tab with proper mime type
-        viewLink.addEventListener("click", (e) => {
-          e.preventDefault();
-          if (!viewLink.href) return;
-          const isPdf = (mimeType === "application/pdf") || viewLink.href.toLowerCase().endsWith(".pdf");
-          if (isPdf) {
-            // Open PDF in new tab
-            window.open(viewLink.href, "_blank", "noopener");
-          } else {
-            // For other files, trigger download or open in new tab
-            window.open(viewLink.href, "_blank", "noopener");
-          }
-        });
-      });
-
-      // Attach delete event listeners for documents
-      document.querySelectorAll(".document-item .delete-doc").forEach((btn) => {
-        btn.addEventListener("click", (e) => {
-          e.stopPropagation();
-          confirmDeleteDocument(btn);
-        });
-      });
-    }
-
-    // Convert base64 data URL to Blob
-    function base64ToBlob(dataURL) {
-      const parts = dataURL.split(',');
-      const mime = parts[0].match(/:(.*?);/)[1];
-      const bstr = atob(parts[1]);
-      let n = bstr.length;
-      const u8arr = new Uint8Array(n);
-      while (n--) {
-        u8arr[n] = bstr.charCodeAt(n);
-      }
-      return new Blob([u8arr], { type: mime });
-    }
-
-    // Get file extension from MIME type
-    function getFileExtensionFromMime(mime) {
-      const map = {
-        "application/pdf": ".pdf",
-        "application/msword": ".doc",
-        "application/vnd.openxmlformats-officedocument.wordprocessingml.document": ".docx",
-        "text/plain": ".txt",
-      };
-      return map[mime] || "";
-    }
-
-    // Get file extension from filename string
-    function getFileExtensionFromFilename(filename) {
-      const match = filename.match(/\.[0-9a-z]+$/i);
-      return match ? match[0] : "";
-    }
-
-    // Capitalize first letter helper
-    function capitalizeFirstLetter(string) {
-      return string.charAt(0).toUpperCase() + string.slice(1);
-    }
-
-    // Generate unique ID for items
-    function generateId() {
-      return (
-        Date.now().toString(36) +
-        Math.random().toString(36).substr(2, 5)
-      ).toUpperCase();
-    }
-
-    // Upload new project
-    document
-      .getElementById("uploadProjectBtn")
-      .addEventListener("click", () => {
-        if (!isAdmin) {
-          alert("Please login as admin to upload projects.");
-          return;
-        }
-
-        const category = document.getElementById("projectCategory").value;
-        const title = document.getElementById("projectTitle").value.trim();
-        const desc = document.getElementById("projectDesc").value.trim();
-        const imageFile = document.getElementById("projectImage").files[0];
-
-        if (!title || !desc || !imageFile) {
-          alert("Please fill all fields");
-          return;
-        }
-
-        const reader = new FileReader();
-
-        reader.onload = function (e) {
-          const projects = loadProjects();
-          const mediaType = imageFile.type.startsWith("video/") ? "video" : "image";
-
-          const newProject = {
-            id: generateId(),
-            category,
-            doctype: "",
-            title,
-            desc,
-            image: e.target.result,
-            mediaType,
-            alt:
-              mediaType === "video"
-                ? `${title} project video showcasing ${title}`
-                : `${title} project image showing ${title}`,
-          };
-
-          projects.unshift(newProject);
-          saveProjects(projects);
-          renderProjects();
-
-          // Reset form
-          document.getElementById("projectTitle").value = "";
-          document.getElementById("projectDesc").value = "";
-          document.getElementById("projectImage").value = "";
-
-          projectUploadStatus.textContent = "Project uploaded successfully!";
-          projectUploadStatus.className = "mt-2 text-sm text-green-500 font-bold";
-          projectUploadStatus.style.display = "block";
-          setTimeout(() => {
-            projectUploadStatus.style.display = "none";
-          }, 4000);
-        };
-
-        reader.onerror = function () {
-          projectUploadStatus.textContent = "Failed to read image file.";
-          projectUploadStatus.className = "mt-2 text-sm text-red-500 font-bold";
-          projectUploadStatus.style.display = "block";
-          setTimeout(() => {
-            projectUploadStatus.style.display = "none";
-          }, 4000);
-        };
-
-        reader.readAsDataURL(imageFile);
-      });
-
-    // Document upload logic
-    document
-      .getElementById("uploadDocumentBtn")
-      .addEventListener("click", function () {
-        if (!isAdmin) {
-          alert("Please login as admin to upload documents.");
-          return;
-        }
-
-        var type = document.getElementById("documentType").value;
-        var fileInput = document.getElementById("documentFile");
-        var file = fileInput.files[0];
-        var status = document.getElementById("documentUploadStatus");
-
-        if (!file) {
-          status.textContent = "Please select a file";
-          status.className = "mt-2 text-sm text-red-500";
-          status.style.display = "block";
-          return;
-        }
-
-        // Validate file type
-        const allowedTypes = [
-          "application/pdf",
-          "application/msword",
-          "application/vnd.openxmlformats-officedocument.wordprocessingml.document",
-          "text/plain"
-        ];
-        if (!allowedTypes.includes(file.type)) {
-          status.textContent = "Unsupported file type. Please upload PDF or Word documents.";
-          status.className = "mt-2 text-sm text-red-500";
-          status.style.display = "block";
-          return;
-        }
-
-        status.textContent = "Uploading...";
-        status.className = "mt-2 text-sm text-yellow-500";
-        status.style.display = "block";
-
-        var reader = new FileReader();
-
-        reader.onload = function (e) {
-          var name = document.getElementById("documentType").options[
-            document.getElementById("documentType").selectedIndex
-          ].text;
-          var icon = getDocumentIcon(type);
-
-          const documents = loadDocuments();
-
-          // Store the base64 data URL in the document object for viewing/downloading
-          const newDoc = {
-            id: generateId(),
-            doctype: type,
-            title: name,
-            desc: type.replace(/-/g, " "),
-            icon,
-            file: e.target.result, // Use base64 data URL for href and download
-            base64: e.target.result,
-            mimeType: file.type,
-          };
-
-          documents.unshift(newDoc);
-          saveDocuments(documents);
-          renderDocuments();
-
-          // Reset the file input and show success message
-          fileInput.value = "";
-          status.textContent = "Document uploaded successfully!";
-          status.className = "mt-2 text-sm text-green-500 font-bold";
-          setTimeout(() => {
-            status.style.display = "none";
-          }, 4000);
-        };
-
-        reader.onerror = function () {
-          status.textContent = "Upload failed";
-          status.className = "mt-2 text-sm text-red-500";
-          status.style.display = "block";
-        };
-
-        reader.readAsDataURL(file);
-      });
-
-    // Delete confirmation modal
-    const deleteModal = document.createElement("div");
-    deleteModal.id = "deleteConfirmModal";
-    deleteModal.className =
-      "hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50";
-    deleteModal.innerHTML = `
-      <div class="bg-[#ffffff] rounded-lg p-6 max-w-md w-full mx-4">
-        <h3 class="text-xl font-bold mb-4 text-white">Confirm Delete</h3>
-        <p class="text-gray-300 mb-4">Are you sure you want to permanently delete this item?</p>
-        <div class="mb-4">
-          <label class="block text-gray-300 mb-2">Admin Password Required</label>
-          <input type="password" id="deletePassword" class="w-full px-4 py-2 bg-[#b8c5d6] text-white rounded-lg mb-2" placeholder="Enter admin password" />
-          <p id="passwordError" class="text-red-500 text-sm hidden">Incorrect password</p>
-        </div>
-        <div class="flex gap-2">
-          <button id="confirmDeleteBtn" class="flex-1 bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-lg">
-            Delete Permanently
-          </button>
-          <button id="cancelDeleteBtn" class="flex-1 bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-lg">
-            Cancel
-          </button>
-        </div>
-      </div>
-    `;
-    document.body.appendChild(deleteModal);
-
-    let currentItemToDelete = null;
-
-    // Show delete confirmation
-    function confirmDeleteDocument(button) {
-      currentItemToDelete = button.closest(".document-item, .portfolio-item");
-      deleteModal.classList.remove("hidden");
-      document.getElementById("deletePassword").focus();
-    }
-
-    // Handle delete confirmation
-    document.addEventListener("click", function (e) {
-      if (e.target.id === "confirmDeleteBtn") {
-        const password = document.getElementById("deletePassword").value;
-        const errorElement = document.getElementById("passwordError");
-
-        if (password === ADMIN_PASSWORD) {
-          if (currentItemToDelete) {
-            // Remove item from DOM
-            const id = currentItemToDelete.dataset.id;
-            const isProject = currentItemToDelete.classList.contains("portfolio-item");
-            const isDocument = currentItemToDelete.classList.contains("document-item");
-
-            if (isProject) {
-              let projects = loadProjects();
-              projects = projects.filter((p) => p.id !== id);
-              saveProjects(projects);
-              renderProjects();
-            } else if (isDocument) {
-              let documents = loadDocuments();
-              documents = documents.filter((d) => d.id !== id);
-              saveDocuments(documents);
-              renderDocuments();
-            } else {
-              // fallback remove from DOM
-              currentItemToDelete.remove();
+        function renderContent(items, title) {
+            const panel = document.getElementById('content-panel');
+            let html = `<div class="flex justify-between items-center mb-6 border-b pb-4"><h2 class="text-xl font-bold text-slate-800 capitalize flex items-center gap-2"><span class="w-2 h-6 bg-blue-600 rounded-full"></span>${title.replace(/([A-Z])/g, ' $1')}</h2></div>`;
+            if (!items || items.length === 0) { html += `<div class="flex flex-col items-center justify-center h-64 text-slate-300 border-2 border-dashed rounded-xl"><i class="fas fa-folder-open text-5xl mb-3"></i><p class="font-semibold">No items</p></div>`; }
+            else {
+                const isVisual = currentCategory !== 'documents';
+                // 2. Layout Preservation
+                const gridClass = isVisual ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6' : 'space-y-4';
+                html += `<div class="${gridClass}">`;
+                items.forEach(item => {
+                    const thumb = renderThumbnail(item); // 3. Thumbnail Logic
+                    const wrapStart = isVisual 
+                        ? `<div class="group relative bg-white rounded-xl overflow-hidden shadow hover:shadow-lg transition-all border hover:border-blue-200">` 
+                        : `<div class="group relative bg-white rounded-lg shadow-sm border flex justify-between items-center p-4 hover:border-blue-200 transition-colors cursor-pointer">`;
+                    
+                    html += `
+                        ${wrapStart}
+                            <div class="h-48 bg-slate-100 overflow-hidden flex items-center justify-center cursor-pointer" onclick="openViewer(${item.id})">${thumb}</div>
+                            <div class="${isVisual ? 'p-4' : 'flex-1 flex items-center gap-3'}">
+                                ${!isVisual ? `<i class="fas ${item.type === 'pdf' ? 'fa-file-pdf text-red-500' : 'fa-file text-blue-500'} text-2xl w-12 h-12 flex items-center justify-center"></i>` : ''}
+                                <div class="${!isVisual ? 'flex-1' : ''}">
+                                    <h3 class="font-bold text-sm text-slate-800">${item.title}</h3>
+                                    <p class="text-xs text-slate-500 mt-1">${item.desc || ''}</p>
+                                </div>
+                            </div>
+                            <button onclick="event.stopPropagation(); deleteItem(${item.id})" class="admin-delete-controls absolute top-2 right-2 bg-red-500 text-white p-2 rounded-full text-[10px] opacity-0 group-hover:opacity-100 transition-opacity shadow-lg hover:bg-red-600"><i class="fas fa-trash"></i></button>
+                        </div>`;
+                });
+                html += `</div>`;
             }
-
-            // Show success message
-            const status = document.createElement("div");
-            status.className =
-              "fixed bottom-4 left-1/2 transform -translate-x-1/2 bg-green-600 text-white px-4 py-2 rounded-lg shadow-lg";
-            status.textContent = "Item permanently deleted";
-            document.body.appendChild(status);
-            setTimeout(() => status.remove(), 3000);
-          }
-        } else {
-          // Show password error
-          errorElement.classList.remove("hidden");
-          document.getElementById("deletePassword").focus();
-          return;
+            panel.innerHTML = html;
         }
 
-        // Clear and hide modal
-        deleteModal.classList.add("hidden");
-        document.getElementById("deletePassword").value = "";
-        errorElement.classList.add("hidden");
-      } else if (
-        e.target.id === "cancelDeleteBtn" ||
-        e.target === deleteModal
-      ) {
-        // Cancel deletion
-        deleteModal.classList.add("hidden");
-        document.getElementById("deletePassword").value = "";
-        document.getElementById("passwordError").classList.add("hidden");
-      }
-    });
+        function renderThumbnail(item) {
+            // 3. Fixing Black Screen
+            if (item.type === 'video' && item.file) {
+                const blobUrl = URL.createObjectURL(item.file);
+                return `<div class="relative w-full h-full">
+                    <video src="${blobUrl}#t=0.5" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"></video>
+                    <div class="absolute inset-0 flex items-center justify-center text-white text-4xl opacity-70 pointer-events-none"><i class="fas fa-play-circle"></i></div>
+                </div>`;
+            }
+            if (item.type === 'pdf') { if(item.thumb) return `<img src="${item.thumb}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">`; return `<i class="fas fa-file-pdf text-4xl text-red-400"></i>`; }
+            if (item.type === 'image' && item.thumb) return `<img src="${item.thumb}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">`;
+            return `<i class="fas fa-file text-4xl text-slate-300"></i>`;
+        }
 
-    // Get appropriate icon for document type
-    function getDocumentIcon(docType) {
-      const icons = {
-        "personal-statement": "fa-file-alt",
-        resume: "fa-file-contract",
-        "additional-essay": "fa-file-signature",
-        "cover-letter": "fa-envelope-open-text",
-        recommendation: "fa-user-tie",
-        "report-card": "fa-file-certificate",
-        "s4-report": "fa-file-export",
-        "s5-report": "fa-file-export",
-        "s6-report": "fa-file-export",
-        "exam-cert": "fa-award",
-      };
-      return icons[docType] || "fa-file";
-    }
+        // SAVE LOGIC (Processing Sequence)
+        async function saveItem() {
+            const title = document.getElementById('itemTitle').value;
+            if (!title) return showToast("Title required", true);
 
-    // Filter items based on active filters
-    function filterItems() {
-      const activeCategory =
-        document.querySelector(".skill-filter.btn-primary")?.dataset.category ||
-        "all";
-      const docType = document.getElementById("documentFilter").value;
+            const btn = document.getElementById('saveBtn');
+            btn.disabled = true;
+            btn.innerHTML = 'Processing...';
 
-      // Filter projects
-      document.querySelectorAll(".portfolio-item").forEach((item) => {
-        const categoryMatch =
-          activeCategory === "all" || item.dataset.category === activeCategory;
-        const docTypeMatch = !docType || item.dataset.doctype === docType;
-        item.style.display = categoryMatch && docTypeMatch ? "flex" : "none";
-      });
+            const fileInput = document.getElementById('itemImage');
+            const newItem = { id: Date.now(), title, desc: document.getElementById('itemDesc').value, category: currentCategory, subcategory: currentSubCategory, type: 'text', file: null, thumb: null };
 
-      // Filter documents
-      document.querySelectorAll(".document-item").forEach((item) => {
-        const docTypeMatch = !docType || item.dataset.doctype === docType;
-        item.style.display = docTypeMatch ? "flex" : "none";
-      });
-    }
+            // 4. Processing Sequence
+            const progressContainer = document.getElementById('uploadProgressContainer');
+            const progressBar = document.getElementById('uploadCubeFill');
+            const progressText = document.getElementById('uploadPercentText');
+            
+            progressContainer.style.display = 'block';
+            progressBar.style.width = '0%';
+            progressText.innerText = '0%';
 
-    // Skill filtering
-    document.querySelectorAll(".skill-filter").forEach((button) => {
-      button.addEventListener("click", function () {
-        // Update active button styling
-        document.querySelectorAll(".skill-filter").forEach((btn) => {
-          btn.classList.toggle("btn-primary", btn === this);
-          btn.classList.toggle("btn-secondary", btn !== this);
+            // Run visual loop 1-100%
+            await new Promise(resolve => {
+                let percent = 0;
+                const interval = setInterval(() => {
+                    percent++;
+                    progressBar.style.width = percent + '%';
+                    progressText.innerText = percent + '%';
+                    if (percent >= 100) {
+                        clearInterval(interval);
+                        resolve();
+                    }
+                }, 15); // Speed
+            });
+
+            // Proceed to save after 100%
+            if (fileInput.files[0]) {
+                const file = fileInput.files[0];
+                if (file.type.includes('image')) newItem.type = 'image';
+                else if (file.type.includes('pdf')) newItem.type = 'pdf';
+                else if (file.type.includes('video')) newItem.type = 'video';
+                else newItem.type = 'file';
+
+                const reader = new FileReader();
+                reader.onload = async (e) => {
+                    try {
+                        const blob = new Blob([e.target.result], { type: file.type });
+                        newItem.file = blob;
+
+                        if (newItem.type === 'pdf') { const base64 = await blobToBase64(blob); newItem.thumb = await generatePDFThumbnail(base64); } 
+                        else if (newItem.type === 'image') { newItem.thumb = await createImageThumbnail(blob); }
+
+                        await dbAdd(newItem);
+                        appData = await dbGetAll();
+                        renderContent(appData[currentCategory][currentSubCategory], currentSubCategory);
+                        showToast("Saved!");
+                        clearForm();
+                    } catch (err) { console.error(err); showToast("Error processing file", true); }
+                    
+                    setTimeout(() => { progressContainer.style.display = 'none'; btn.disabled = false; btn.innerHTML = '<i class="fas fa-save"></i> Save Item'; }, 500);
+                };
+                reader.readAsArrayBuffer(file);
+            } else {
+                try { await dbAdd(newItem); appData = await dbGetAll(); renderContent(appData[currentCategory][currentSubCategory], currentSubCategory); showToast("Saved!"); clearForm(); } catch (err) { showToast("Error", true); }
+                setTimeout(() => { progressContainer.style.display = 'none'; btn.disabled = false; btn.innerHTML = '<i class="fas fa-save"></i> Save Item'; }, 500);
+            }
+        }
+
+        function blobToBase64(blob) { return new Promise((resolve) => { const reader = new FileReader(); reader.onload = () => resolve(reader.result); reader.readAsDataURL(blob); }); }
+        function createImageThumbnail(blob) { return new Promise((resolve) => { const img = new Image(); img.src = URL.createObjectURL(blob); img.onload = () => { const c = document.createElement('canvas'); const ctx = c.getContext('2d'); c.width=300; c.height=200; ctx.drawImage(img,0,0,300,200); resolve(c.toDataURL('image/jpeg',0.7)); }; }); }
+        function generatePDFThumbnail(base64) { return new Promise((resolve) => { pdfjsLib.getDocument(base64).promise.then(pdf => pdf.getPage(1).then(page => { const viewport = page.getViewport({scale:1.5}); const c = document.createElement('canvas'); const ctx = c.getContext('2d'); c.width=viewport.width; c.height=viewport.height; page.render({canvasContext:ctx, viewport}).promise.then(() => resolve(c.toDataURL())); })); }).catch(() => resolve(null)); }
+
+        function clearForm() { document.getElementById('itemTitle').value = ''; document.getElementById('itemDesc').value = ''; document.getElementById('itemImage').value = ''; document.getElementById('fileName').innerText = ''; document.getElementById('imagePreviewContainer').classList.add('hidden'); }
+
+        async function deleteItem(id) { if (isAdmin) { if (confirm("Delete permanently?")) await performDelete(id); } else { pendingDeleteId = id; document.getElementById('authModal').classList.remove('hidden'); } }
+        async function performDelete(id) { appData[currentCategory][currentSubCategory] = appData[currentCategory][currentSubCategory].filter(i => i.id !== id); renderContent(appData[currentCategory][currentSubCategory], currentSubCategory); showToast("Deleted"); try { await dbDelete(id); } catch (e) { console.error(e); } }
+
+        // FILE VIEWER (Zero Clutter)
+        function openViewer(id) {
+            const item = appData[currentCategory][currentSubCategory].find(i => i.id === id);
+            if (!item) return showToast("Item not found", true);
+            if (!item.file && !item.thumb) return showToast("No file preview", true);
+            
+            const modal = document.getElementById('viewerModal');
+            const content = document.getElementById('viewerContent');
+            viewerState = { zoom: 1, rotation: 0 };
+            document.querySelector('.viewer-controls').style.display = 'flex';
+
+            const blobUrl = URL.createObjectURL(item.file);
+
+            // 5. Content Only Logic
+            if (item.type === 'image') { content.innerHTML = `<img id="viewerImage" src="${blobUrl}" class="transition-transform duration-200">`; }
+            else if (item.type === 'pdf') { content.innerHTML = `<div id="viewerPdfWrapper" style="transform-origin: center; transition: transform 0.2s;" class="w-full h-full flex items-center justify-center"><iframe src="${blobUrl}" class="w-full h-full border-0"></iframe></div>`; }
+            else if (item.type === 'video') {
+                content.innerHTML = `<video id="viewerVideo" controls autoplay playsinline class="max-h-[90vh] max-w-[90vw] object-contain"><source src="${blobUrl}"></video>`;
+                document.querySelector('.viewer-controls').style.display = 'none';
+                return;
+            }
+            else { content.innerHTML = `<div class="text-white text-center"><i class="fas fa-file text-5xl mb-4"></i><p>Preview not available</p></div>`; return; }
+            
+            modal.classList.add('active');
+        }
+        
+        function closeViewer() { document.getElementById('viewerModal').classList.remove('active'); }
+        function viewerAction(action) { const img = document.getElementById('viewerImage'); const pdfWrap = document.getElementById('viewerPdfWrapper'); const target = img || pdfWrap; if (!target) return; if (action === 'zoomIn') viewerState.zoom += 0.2; if (action === 'zoomOut') viewerState.zoom = Math.max(0.2, viewerState.zoom - 0.2); if (action === 'rotateL') viewerState.rotation -= 90; target.style.transform = `scale(${viewerState.zoom}) rotate(${viewerState.rotation}deg)`; }
+
+        // Helpers
+        function showToast(msg, err = false) { const t = document.getElementById('toast'); t.innerText = msg; t.className = err ? 'show error' : 'show'; setTimeout(() => t.classList.remove('show'), 2000); }
+        
+        // 1. File Selection Logic (Real-Time Feedback)
+        document.getElementById('itemImage').addEventListener('change', function(e) {
+            if (e.target.files[0]) {
+                const file = e.target.files[0];
+                document.getElementById('fileName').innerText = file.name;
+                const previewContainer = document.getElementById('imagePreviewContainer');
+                const previewWrapper = document.getElementById('previewWrapper');
+                previewContainer.classList.remove('hidden');
+
+                // Clear previous
+                previewWrapper.innerHTML = '';
+
+                if (file.type.includes('image')) {
+                    const reader = new FileReader();
+                    reader.onload = (ev) => { const img = document.createElement('img'); img.src = ev.target.result; img.className = 'w-full h-full object-cover'; previewWrapper.appendChild(img); };
+                    reader.readAsDataURL(file);
+                } else if (file.type.includes('video')) {
+                    const url = URL.createObjectURL(file);
+                    const vid = document.createElement('video');
+                    vid.src = url + "#t=0.5"; // Seeking metadata
+                    vid.className = 'w-full h-full object-cover';
+                    vid.muted = true;
+                    vid.load();
+                    previewWrapper.appendChild(vid);
+                } else {
+                    previewWrapper.innerHTML = `<div class="text-slate-400 text-xs font-bold pt-10"><i class="fas fa-file text-2xl mb-2"></i><br>No Preview</div>`;
+                }
+            }
         });
-        filterItems();
-      });
-    });
-
-    // Document dropdown navigation
-    document
-      .getElementById("documentFilter")
-      .addEventListener("change", function () {
-        const docType = this.value;
-        if (docType) {
-          const docElement = document.querySelector(
-            `.document-item[data-doctype="${docType}"]`
-          );
-          if (docElement) {
-            docElement.scrollIntoView({ behavior: "smooth" });
-            docElement.classList.add("ring-2", "ring-red-500");
-            setTimeout(() => {
-              docElement.classList.remove("ring-2", "ring-red-500");
-            }, 2000);
-          }
-        }
-      });
-
-    // Mobile menu toggle
-    const mobileMenuButton = document.querySelector(".md\\:hidden");
-    const mobileMenu = document.querySelector("nav");
-
-    mobileMenuButton.addEventListener("click", function () {
-      mobileMenu.classList.toggle("hidden");
-      mobileMenu.classList.toggle("flex");
-      mobileMenu.classList.toggle("flex-col");
-      mobileMenu.classList.toggle("absolute");
-      mobileMenu.classList.toggle("top-16");
-      mobileMenu.classList.toggle("left-0");
-      mobileMenu.classList.toggle("right-0");
-      mobileMenu.classList.toggle("bg-[#ffffff]");
-      mobileMenu.classList.toggle("p-4");
-      mobileMenu.classList.toggle("space-y-4");
-    });
-
-    // Initial render
-    renderProjects();
-    renderDocuments();
-    document
-      .querySelector('.skill-filter[data-category="all"]')
-      .classList.add("btn-primary");
-  </script>
+    </script>
 </body>
 </html>
-
-
-<!-- l -->
