@@ -12,7 +12,7 @@
         :root { --primary: #1d4ed8; --dark: #0f172a; }
         body { font-family: 'Inter', sans-serif; background-color: #f8fafc; overflow: hidden; height: 100vh; margin: 0; }
         h1, h2, h3 { font-family: 'Manrope', sans-serif; }
-        
+
         .main-wrapper { height: 100vh; width: 100%; overflow: hidden; position: relative; }
         .view-section { position: absolute; top: 0; left: 0; width: 100%; height: 100%; transition: opacity 0.3s ease, visibility 0.3s ease; }
         .view-section.hidden { opacity: 0; visibility: hidden; pointer-events: none; }
@@ -36,7 +36,7 @@
         #reopenSidebarBtn { position: fixed; top: 80px; right: 0; background: #1d4ed8; color: white; padding: 8px 12px; border-radius: 6px 0 0 6px; transform: translateX(100%); transition: transform 0.3s ease; cursor: pointer; z-index: 20; font-size: 12px; font-weight: bold; }
         body.is-admin:not(.panel-is-open) #reopenSidebarBtn { transform: translateX(0); }
 
-        /* --- UPLOAD PROCESSING UI --- */
+        /* Upload progress */
         #uploadProgressContainer { display: none; width: 100%; margin-top: 12px; }
         #uploadCube { height: 8px; width: 100%; background: #e2e8f0; border-radius: 4px; overflow: hidden; }
         #uploadCubeFill { height: 100%; width: 0%; background: linear-gradient(90deg, #10b981, #34d399); transition: width 0.05s linear; }
@@ -44,7 +44,7 @@
 
         /* PDF View */
         .pdf-page-background { height: 100%; width: 100%; display: flex; flex-direction: column; background-color: #334155; overflow-y: auto; padding: 2rem 1rem; padding-bottom: 100px; }
-        .pdf-paper-container { width: 100%; max-width: 1050px; margin: 0 auto; background: white; border-radius: 12px; box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25); overflow: hidden; display: flex; flex-direction: column; border: 1px solid rgba(255,255,255,0.1); }
+        .pdf-paper-container { width: 100%; max-width: 1050px; margin: 0 auto; background: white; border-radius: 12px; box-shadow: 0 25px 50px -12px rgba(0,0,0,0.25); overflow: hidden; display: flex; flex-direction: column; border: 1px solid rgba(255,255,255,0.1); }
         .pdf-viewer { flex: 1; min-height: 800vh; width: 100%; border: none; display: block; }
         .cv-action-footer { position: fixed; bottom: 0; left: 0; right: 0; z-index: 50; background: transparent; padding: 1rem 2rem; display: flex; justify-content: flex-end; gap: 1rem; }
 
@@ -58,18 +58,45 @@
         body.viewing-cv #upBtn { display: flex; }
         @keyframes floatUpAndDown { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-8px); } }
 
-        /* Viewer Modal */
+        /* ===== VIEWER MODAL ===== */
         #viewerModal { position: fixed; inset: 0; z-index: 9999; background: rgba(0,0,0,0.95); display: none; align-items: center; justify-content: center; flex-direction: column; }
         #viewerModal.active { display: flex; }
+
         .viewer-controls { position: absolute; top: 0; left: 0; right: 0; background: rgba(0,0,0,0.8); padding: 1rem; display: flex; justify-content: center; gap: 1rem; z-index: 10; }
         .viewer-btn { color: white; background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.2); padding: 0.5rem 1rem; border-radius: 0.5rem; cursor: pointer; }
         .viewer-btn:hover { background: var(--primary); border-color: var(--primary); }
-        #viewerImage, #viewerVideo { transition: transform 0.2s ease; max-height: 90vh; max-width: 90vw; object-fit: contain; }
-        
+
+        /* ===== PLAY BUTTON — black & white, uniform ===== */
+        .play-btn-bw {
+            width: 44px; height: 44px; border-radius: 50%;
+            background: rgba(255,255,255,0.92);
+            border: 2px solid rgba(0,0,0,0.15);
+            display: flex; align-items: center; justify-content: center;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.25);
+            cursor: pointer;
+            flex-shrink: 0;
+        }
+        .play-btn-bw i { color: #111; font-size: 15px; }
+        .play-btn-bw i.fa-play { margin-left: 3px; }
+
         /* Toast */
         #toast { position: fixed; bottom: 20px; left: 50%; transform: translateX(-50%); background: #10b981; color: white; padding: 0.75rem 1.5rem; border-radius: 9999px; font-size: 0.875rem; font-weight: bold; opacity: 0; transition: opacity 0.3s; z-index: 99999; pointer-events: none; }
         #toast.show { opacity: 1; }
         #toast.error { background: #ef4444; }
+
+        /* Dot menu */
+        .dot-menu-wrap { position: relative; display: inline-block; }
+        .dot-menu { position: absolute; right: 0; bottom: 110%; top: auto; background: #1e293b; border: 1px solid #334155; border-radius: 8px; min-width: 160px; z-index: 999; display: none; box-shadow: 0 -4px 24px rgba(0,0,0,0.4); }
+        .dot-menu.open { display: block; }
+        .dot-menu button { display: block; width: 100%; text-align: left; padding: 8px 14px; font-size: 12px; color: #cbd5e1; background: none; border: none; cursor: pointer; }
+        .dot-menu button:hover { background: #334155; color: white; }
+
+        /* Card hover toolbar */
+        .card-toolbar { opacity: 0; transition: opacity 0.2s; }
+        .group:hover .card-toolbar { opacity: 1; }
+
+        /* Clickable thumb cursor */
+        .thumb-clickable { cursor: pointer; }
 
         @media print { .no-print { display: none !important; } }
     </style>
@@ -81,13 +108,16 @@
 
     <!-- File Viewer Modal -->
     <div id="viewerModal">
-        <div class="viewer-controls">
+        <!-- Image / PDF / Audio controls -->
+        <div class="viewer-controls" id="viewerControls">
             <button onclick="viewerAction('zoomIn')" class="viewer-btn"><i class="fas fa-search-plus mr-1"></i> Zoom In</button>
             <button onclick="viewerAction('zoomOut')" class="viewer-btn"><i class="fas fa-search-minus mr-1"></i> Zoom Out</button>
-            <button onclick="viewerAction('rotateL')" class="viewer-btn"><i class="fas fa-undo mr-1"></i> Rotate</button>
+            <button id="rotateBtn" onclick="viewerAction('rotateL')" class="viewer-btn"><i class="fas fa-undo mr-1"></i> Rotate</button>
             <button onclick="closeViewer()" class="viewer-btn bg-red-600 border-red-600"><i class="fas fa-times mr-1"></i> Close</button>
         </div>
-        <div id="viewerContent" class="flex items-center justify-center h-full w-full"></div>
+        <!-- Video / audio close button -->
+        <button id="mediaCloseBtn" onclick="closeViewer()" style="display:none;position:absolute;top:14px;right:20px;z-index:20;background:rgba(200,0,0,0.8);color:white;border:none;border-radius:8px;padding:8px 16px;font-size:13px;cursor:pointer;"><i class="fas fa-times mr-1"></i> Close</button>
+        <div id="viewerContent" class="flex items-center justify-center" style="width:100%;height:100%;padding-top:64px;box-sizing:border-box;"></div>
     </div>
 
     <div class="main-wrapper">
@@ -175,7 +205,6 @@
                                     <p class="text-xs text-slate-500">Click to Upload</p>
                                     <p id="fileName" class="text-[10px] text-blue-500 font-bold mt-1 truncate"></p>
                                 </div>
-                                <!-- PROGRESS UI -->
                                 <div id="uploadProgressContainer">
                                     <div id="uploadCube"><div id="uploadCubeFill"></div></div>
                                     <div id="uploadPercentText">0%</div>
@@ -183,7 +212,6 @@
                             </div>
                             <div id="imagePreviewContainer" class="hidden">
                                 <p class="text-[10px] text-slate-500 mb-1">Preview:</p>
-                                <!-- Preview will be injected here -->
                                 <div id="previewWrapper" class="w-full h-32 rounded-lg border overflow-hidden bg-slate-100 flex items-center justify-center"></div>
                             </div>
                         </div>
@@ -223,37 +251,66 @@
     </div>
 
     <script>
-        // PDF.js CONFIG
         pdfjsLib.GlobalWorkerOptions.workerSrc = 'https://cdnjs.cloudflare.com/ajax/libs/pdf.js/3.11.174/pdf.worker.min.js';
 
-        // INDEXED DB SETUP
-        const DB_NAME = 'Portfolio_Blob_DB_V3';
+        // ─── INDEXED DB ──────────────────────────────────────────────────────────────
+        const DB_NAME = 'Portfolio_Blob_DB_V4';
         const STORE_NAME = 'files';
         let db;
 
         function initDB() {
             return new Promise((resolve, reject) => {
                 const request = indexedDB.open(DB_NAME, 1);
-                request.onupgradeneeded = (e) => { const database = e.target.result; if (!database.objectStoreNames.contains(STORE_NAME)) database.createObjectStore(STORE_NAME, { keyPath: 'id' }); };
+                request.onupgradeneeded = (e) => {
+                    const database = e.target.result;
+                    if (!database.objectStoreNames.contains(STORE_NAME))
+                        database.createObjectStore(STORE_NAME, { keyPath: 'id' });
+                };
                 request.onsuccess = (e) => { db = e.target.result; resolve(db); };
-                request.onerror = (e) => reject('DB Error');
+                request.onerror = () => reject('DB Error');
             });
         }
 
-        function dbAdd(item) { return new Promise((resolve, reject) => { const tx = db.transaction(STORE_NAME, 'readwrite'); const store = tx.objectStore(STORE_NAME); store.add(item); tx.oncomplete = () => resolve(); tx.onerror = (e) => reject(e.target.error); }); }
-        function dbDelete(id) { return new Promise((resolve, reject) => { const tx = db.transaction(STORE_NAME, 'readwrite'); const store = tx.objectStore(STORE_NAME); store.delete(id); tx.oncomplete = () => resolve(); tx.onerror = (e) => reject(e.target.error); }); }
+        function dbAdd(item) {
+            return new Promise((resolve, reject) => {
+                const tx = db.transaction(STORE_NAME, 'readwrite');
+                tx.objectStore(STORE_NAME).add(item);
+                tx.oncomplete = () => resolve();
+                tx.onerror = (e) => reject(e.target.error);
+            });
+        }
+
+        function dbDelete(id) {
+            return new Promise((resolve, reject) => {
+                const tx = db.transaction(STORE_NAME, 'readwrite');
+                tx.objectStore(STORE_NAME).delete(id);
+                tx.oncomplete = () => resolve();
+                tx.onerror = (e) => reject(e.target.error);
+            });
+        }
+
         function dbGetAll() {
             return new Promise((resolve, reject) => {
-                const tx = db.transaction(STORE_NAME, 'readonly'); const store = tx.objectStore(STORE_NAME); const request = store.getAll();
+                const tx = db.transaction(STORE_NAME, 'readonly');
+                const request = tx.objectStore(STORE_NAME).getAll();
                 request.onsuccess = () => {
-                    const data = { projects: { graphic: [], programming: [], social: [] }, documents: { cv: [], motivation: [], diploma: [], recommendation: [] }, awards: { trophies: [], certificates: [], rewards: [] }, publications: { books: [], stories: [], magazines: [] } };
-                    request.result.forEach(item => { if(data[item.category] && data[item.category][item.subcategory]) data[item.category][item.subcategory].push(item); });
+                    const data = {
+                        projects:     { graphic: [], programming: [], social: [] },
+                        documents:    { cv: [], motivation: [], diploma: [], recommendation: [] },
+                        awards:       { trophies: [], certificates: [], rewards: [] },
+                        publications: { books: [], stories: [], magazines: [] }
+                    };
+                    request.result.forEach(item => {
+                        if (data[item.category] && data[item.category][item.subcategory])
+                            data[item.category][item.subcategory].push(item);
+                    });
                     resolve(data);
                 };
+                request.onerror = () => reject('Read error');
             });
         }
 
-        // STATE
+        // ─── STATE ───────────────────────────────────────────────────────────────────
         let appData = {};
         let currentCategory = 'projects';
         let currentSubCategory = 'programming';
@@ -262,73 +319,588 @@
         const ADMIN_PASSWORD = "elie";
         let viewerState = { zoom: 1, rotation: 0 };
 
-        window.onload = async () => { await initDB(); appData = await dbGetAll(); loadContent('projects', 'programming'); };
+        const blobCache = {};
+        function getBlobUrl(item) {
+            if (!item.file) return null;
+            if (!blobCache[item.id]) blobCache[item.id] = URL.createObjectURL(item.file);
+            return blobCache[item.id];
+        }
 
-        // VIEW LOGIC
-        function showCV() { document.getElementById('dashboard-view').classList.add('hidden'); document.getElementById('cv-view').classList.remove('hidden'); document.body.classList.add('viewing-cv'); }
-        function showDashboard() { document.getElementById('cv-view').classList.add('hidden'); document.getElementById('dashboard-view').classList.remove('hidden'); document.body.classList.remove('viewing-cv'); }
-        function toggleSidebar() { document.getElementById('sidebar').classList.toggle('collapsed'); document.getElementById('toggleIcon').classList.toggle('fa-chevron-left'); document.getElementById('toggleIcon').classList.toggle('fa-chevron-right'); }
+        // ─── INIT ────────────────────────────────────────────────────────────────────
+        window.onload = async () => {
+            await initDB();
+            appData = await dbGetAll();
+            loadContent('projects', 'programming');
+        };
+
+        // ─── VIEW LOGIC ──────────────────────────────────────────────────────────────
+        function showCV() {
+            document.getElementById('dashboard-view').classList.add('hidden');
+            document.getElementById('cv-view').classList.remove('hidden');
+            document.body.classList.add('viewing-cv');
+        }
+        function showDashboard() {
+            document.getElementById('cv-view').classList.add('hidden');
+            document.getElementById('dashboard-view').classList.remove('hidden');
+            document.body.classList.remove('viewing-cv');
+        }
+        function toggleSidebar() {
+            document.getElementById('sidebar').classList.toggle('collapsed');
+            document.getElementById('toggleIcon').classList.toggle('fa-chevron-left');
+            document.getElementById('toggleIcon').classList.toggle('fa-chevron-right');
+        }
         function toggleSubMenu(btn) { btn.closest('.nav-item').classList.toggle('open'); }
         function openAdminPanel() { document.getElementById('adminPanel').classList.add('admin-panel-open'); document.body.classList.add('panel-is-open'); }
         function closeAdminPanel() { document.getElementById('adminPanel').classList.remove('admin-panel-open'); document.body.classList.remove('panel-is-open'); }
-        
-        function toggleAdminMode() { if (isAdmin) { isAdmin = false; document.body.classList.remove('is-admin'); document.getElementById('adminBtn').innerHTML = '<i class="fas fa-lock mr-1"></i> Admin'; closeAdminPanel(); renderContent(appData[currentCategory][currentSubCategory], currentSubCategory); } else { document.getElementById('authModal').classList.remove('hidden'); } }
-        function verifyAdmin() { if (document.getElementById('adminPass').value === ADMIN_PASSWORD) { isAdmin = true; document.body.classList.add('is-admin'); document.getElementById('adminBtn').innerHTML = '<i class="fas fa-unlock mr-1"></i> Exit Admin'; closeAuthModal(); openAdminPanel(); if (pendingDeleteId !== null) { performDelete(pendingDeleteId); pendingDeleteId = null; } } else { alert("Incorrect Password"); } }
-        function closeAuthModal() { document.getElementById('authModal').classList.add('hidden'); document.getElementById('adminPass').value = ""; }
 
-        // RENDERING
-        function loadContent(cat, sub) { currentCategory = cat; currentSubCategory = sub; if (!appData[cat]) appData[cat] = {}; if (!appData[cat][sub]) appData[cat][sub] = []; renderContent(appData[cat][sub], sub); document.getElementById('adminPanelContext').innerText = "Upload to: " + sub.replace(/([A-Z])/g, ' $1'); }
+        function toggleAdminMode() {
+            if (isAdmin) {
+                isAdmin = false;
+                document.body.classList.remove('is-admin');
+                document.getElementById('adminBtn').innerHTML = '<i class="fas fa-lock mr-1"></i> Admin';
+                closeAdminPanel();
+                renderContent(appData[currentCategory][currentSubCategory], currentSubCategory);
+            } else {
+                document.getElementById('authModal').classList.remove('hidden');
+            }
+        }
+        function verifyAdmin() {
+            if (document.getElementById('adminPass').value === ADMIN_PASSWORD) {
+                isAdmin = true;
+                document.body.classList.add('is-admin');
+                document.getElementById('adminBtn').innerHTML = '<i class="fas fa-unlock mr-1"></i> Exit Admin';
+                closeAuthModal();
+                openAdminPanel();
+                if (pendingDeleteId !== null) { performDelete(pendingDeleteId); pendingDeleteId = null; }
+            } else { alert("Incorrect Password"); }
+        }
+        function closeAuthModal() {
+            document.getElementById('authModal').classList.add('hidden');
+            document.getElementById('adminPass').value = "";
+        }
 
+        // ─── CONTENT LOADING ─────────────────────────────────────────────────────────
+        function loadContent(cat, sub) {
+            currentCategory = cat;
+            currentSubCategory = sub;
+            if (!appData[cat]) appData[cat] = {};
+            if (!appData[cat][sub]) appData[cat][sub] = [];
+            renderContent(appData[cat][sub], sub);
+            document.getElementById('adminPanelContext').innerText = "Upload to: " + sub.replace(/([A-Z])/g, ' $1');
+        }
+
+        // ─── RENDER CONTENT ──────────────────────────────────────────────────────────
         function renderContent(items, title) {
             const panel = document.getElementById('content-panel');
-            let html = `<div class="flex justify-between items-center mb-6 border-b pb-4"><h2 class="text-xl font-bold text-slate-800 capitalize flex items-center gap-2"><span class="w-2 h-6 bg-blue-600 rounded-full"></span>${title.replace(/([A-Z])/g, ' $1')}</h2></div>`;
-            if (!items || items.length === 0) { html += `<div class="flex flex-col items-center justify-center h-64 text-slate-300 border-2 border-dashed rounded-xl"><i class="fas fa-folder-open text-5xl mb-3"></i><p class="font-semibold">No items</p></div>`; }
-            else {
-                const isVisual = currentCategory !== 'documents';
-                // 2. Layout Preservation
-                const gridClass = isVisual ? 'grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6' : 'space-y-4';
-                html += `<div class="${gridClass}">`;
-                items.forEach(item => {
-                    const thumb = renderThumbnail(item); // 3. Thumbnail Logic
-                    const wrapStart = isVisual 
-                        ? `<div class="group relative bg-white rounded-xl overflow-hidden shadow hover:shadow-lg transition-all border hover:border-blue-200">` 
-                        : `<div class="group relative bg-white rounded-lg shadow-sm border flex justify-between items-center p-4 hover:border-blue-200 transition-colors cursor-pointer">`;
-                    
-                    html += `
-                        ${wrapStart}
-                            <div class="h-48 bg-slate-100 overflow-hidden flex items-center justify-center cursor-pointer" onclick="openViewer(${item.id})">${thumb}</div>
-                            <div class="${isVisual ? 'p-4' : 'flex-1 flex items-center gap-3'}">
-                                ${!isVisual ? `<i class="fas ${item.type === 'pdf' ? 'fa-file-pdf text-red-500' : 'fa-file text-blue-500'} text-2xl w-12 h-12 flex items-center justify-center"></i>` : ''}
-                                <div class="${!isVisual ? 'flex-1' : ''}">
-                                    <h3 class="font-bold text-sm text-slate-800">${item.title}</h3>
-                                    <p class="text-xs text-slate-500 mt-1">${item.desc || ''}</p>
-                                </div>
-                            </div>
-                            <button onclick="event.stopPropagation(); deleteItem(${item.id})" class="admin-delete-controls absolute top-2 right-2 bg-red-500 text-white p-2 rounded-full text-[10px] opacity-0 group-hover:opacity-100 transition-opacity shadow-lg hover:bg-red-600"><i class="fas fa-trash"></i></button>
-                        </div>`;
-                });
+            let html = `<div class="flex justify-between items-center mb-6 border-b pb-4">
+                <h2 class="text-xl font-bold text-slate-800 capitalize flex items-center gap-2">
+                    <span class="w-2 h-6 bg-blue-600 rounded-full"></span>${title.replace(/([A-Z])/g, ' $1')}
+                </h2>
+            </div>`;
+
+            if (!items || items.length === 0) {
+                html += `<div class="flex flex-col items-center justify-center h-64 text-slate-300 border-2 border-dashed rounded-xl">
+                    <i class="fas fa-folder-open text-5xl mb-3"></i><p class="font-semibold">No items</p>
+                </div>`;
+            } else {
+                html += `<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">`;
+                items.forEach(item => { html += buildCard(item); });
                 html += `</div>`;
             }
             panel.innerHTML = html;
+
+            items.forEach(item => {
+                if (item.type === 'video')  wireVideoCard(item);
+                if (item.type === 'pdf')    wirePdfCardPreview(item);
+                if (item.type === 'image')  wireImageCard(item);
+                if (item.type === 'audio')  wireAudioCard(item);
+            });
         }
 
-        function renderThumbnail(item) {
-            // 3. Fixing Black Screen
-            if (item.type === 'video' && item.file) {
-                const blobUrl = URL.createObjectURL(item.file);
-                return `<div class="relative w-full h-full">
-                    <video src="${blobUrl}#t=0.5" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300"></video>
-                    <div class="absolute inset-0 flex items-center justify-center text-white text-4xl opacity-70 pointer-events-none"><i class="fas fa-play-circle"></i></div>
-                </div>`;
+        // ─── BUILD CARD ──────────────────────────────────────────────────────────────
+        function buildCard(item) {
+            const dotMenuId = `dotMenu_${item.id}`;
+
+            /*
+             * CLICK BEHAVIOR:
+             * - image  → click thumb → openViewer (full-screen, zoom+rotate, no scroll)
+             * - pdf    → click thumb → openViewer (full-screen, zoom+rotate, scrollable pages)
+             * - audio  → click thumb → openViewer (audio player modal, zoom/rotate hidden)
+             * - video  → click play overlay → toggleInlineVideo (inline only)
+             *            click expand icon  → openViewer (full-screen video player)
+             * - file   → no expand
+             */
+
+            let thumbInner = '';
+            let thumbClick = '';
+            let thumbCursor = '';
+
+            if (item.type === 'image') {
+                thumbClick = `onclick="openViewer(${item.id})"`;
+                thumbCursor = 'cursor:pointer;';
+                thumbInner = `
+                    <img id="thumb_${item.id}" src="" style="width:100%;height:100%;object-fit:cover;display:none;">
+                    <div id="thumbLoader_${item.id}" style="display:flex;align-items:center;justify-content:center;width:100%;height:100%;">
+                        <i class="fas fa-image text-3xl text-slate-300"></i>
+                    </div>`;
+
+            } else if (item.type === 'pdf') {
+                // Click anywhere on thumb → open full viewer (scrollable multi-page)
+                thumbClick = `onclick="openViewer(${item.id})"`;
+                thumbCursor = 'cursor:pointer;';
+                thumbInner = `
+                    <div id="pdfThumb_${item.id}" style="position:absolute;inset:0;overflow:hidden;background:#f8fafc;">
+                        <canvas id="pdfCanvas_${item.id}" style="position:absolute;top:0;left:0;width:100%;"></canvas>
+                        <div id="pdfLoader_${item.id}" style="position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:6px;">
+                            <i class="fas fa-file-pdf" style="font-size:2.5rem;color:#f87171;"></i>
+                            <span style="font-size:10px;color:#94a3b8;">Loading preview…</span>
+                        </div>
+                    </div>`;
+
+            } else if (item.type === 'audio') {
+                // Click anywhere on thumb → openViewer (audio modal)
+                thumbClick = `onclick="openViewer(${item.id})"`;
+                thumbCursor = 'cursor:pointer;';
+                thumbInner = `
+                    <audio id="inlineAudio_${item.id}" preload="none"></audio>
+                    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%;gap:12px;pointer-events:none;">
+                        <div class="play-btn-bw">
+                            <i class="fas fa-music" style="color:#111;font-size:16px;"></i>
+                        </div>
+                        <span style="font-size:10px;color:#64748b;font-weight:600;">Click to play</span>
+                        <div style="width:80%;height:3px;background:#e2e8f0;border-radius:99px;overflow:hidden;">
+                            <div id="audioBar_${item.id}" style="height:100%;width:0%;background:#334155;border-radius:99px;transition:width 0.3s linear;"></div>
+                        </div>
+                    </div>`;
+
+            } else if (item.type === 'video') {
+                // Video: play inline via overlay button; expand icon opens modal
+                thumbCursor = '';
+                thumbInner = `
+                    <video id="inlineVideo_${item.id}" style="width:100%;height:100%;object-fit:cover;display:block;" preload="metadata" playsinline></video>
+                    <div id="videoOverlay_${item.id}"
+                         style="position:absolute;inset:0;display:flex;align-items:center;justify-content:center;cursor:pointer;background:rgba(0,0,0,0.18);"
+                         onclick="event.stopPropagation();toggleInlineVideo(${item.id})">
+                        <div class="play-btn-bw">
+                            <i id="playIcon_${item.id}" class="fas fa-play" style="color:#111;font-size:15px;margin-left:3px;"></i>
+                        </div>
+                    </div>`;
+
+            } else {
+                const ext = (item.title || '').split('.').pop().toUpperCase().slice(0,4);
+                thumbInner = `
+                    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%;gap:8px;">
+                        <i class="fas fa-file-alt" style="font-size:2.5rem;color:#94a3b8;"></i>
+                        <span style="font-size:10px;font-weight:700;color:#64748b;background:#e2e8f0;padding:2px 8px;border-radius:4px;">${ext || 'FILE'}</span>
+                    </div>`;
             }
-            if (item.type === 'pdf') { if(item.thumb) return `<img src="${item.thumb}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">`; return `<i class="fas fa-file-pdf text-4xl text-red-400"></i>`; }
-            if (item.type === 'image' && item.thumb) return `<img src="${item.thumb}" class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-300">`;
-            return `<i class="fas fa-file text-4xl text-slate-300"></i>`;
+
+            // Dot menu — "open in new tab" for all, PiP only for video
+            const pipBtn = item.type === 'video'
+                ? `<button onclick="openInPiP(${item.id})"><i class="fas fa-compress-alt mr-2 text-blue-400"></i>Picture in Picture</button>` : '';
+
+            const dotMenu = `
+                <div class="dot-menu-wrap" id="dotWrap_${item.id}" onclick="event.stopPropagation()">
+                    <button onclick="toggleDotMenu(${item.id})"
+                        style="background:rgba(15,23,42,0.75);color:white;border:none;border-radius:6px;padding:5px 9px;cursor:pointer;font-size:14px;line-height:1;"
+                        title="More options">
+                        <i class="fas fa-ellipsis-v"></i>
+                    </button>
+                    <div class="dot-menu" id="${dotMenuId}" style="bottom:110%;top:auto;">
+                        ${pipBtn}
+                        <button onclick="downloadItem(${item.id})"><i class="fas fa-download mr-2 text-green-400"></i>Download</button>
+                        <button onclick="openInNewTab(${item.id})"><i class="fas fa-external-link-alt mr-2 text-yellow-400"></i>Open in New Tab</button>
+                    </div>
+                </div>`;
+
+            // Expand button only for video (image/pdf/audio expand via thumb click)
+            const expandBtn = item.type === 'video'
+                ? `<button onclick="event.stopPropagation();openViewer(${item.id})"
+                       style="background:rgba(15,23,42,0.75);color:white;border:none;border-radius:6px;padding:5px 9px;cursor:pointer;font-size:13px;line-height:1;"
+                       title="Expand">
+                       <i class="fas fa-expand"></i>
+                   </button>` : '';
+
+            const deleteBtn = `
+                <button onclick="event.stopPropagation();deleteItem(${item.id})"
+                    class="admin-delete-controls"
+                    style="background:#ef4444;color:white;border:none;border-radius:6px;padding:5px 9px;cursor:pointer;font-size:12px;line-height:1;">
+                    <i class="fas fa-trash"></i>
+                </button>`;
+
+            return `
+            <div class="group relative bg-white rounded-xl overflow-hidden shadow hover:shadow-lg transition-all border hover:border-blue-200">
+                <div ${thumbClick}
+                     style="height:180px;background:#f1f5f9;position:relative;overflow:hidden;display:flex;align-items:center;justify-content:center;${thumbCursor}">
+                    ${thumbInner}
+                    <div class="card-toolbar"
+                         style="position:absolute;bottom:8px;right:8px;display:flex;gap:5px;">
+                        ${expandBtn}
+                        ${dotMenu}
+                        ${deleteBtn}
+                    </div>
+                </div>
+                <div style="padding:14px 16px;">
+                    <h3 style="font-weight:700;font-size:13px;color:#1e293b;margin:0 0 4px;">${item.title}</h3>
+                    <p style="font-size:11px;color:#64748b;margin:0;">${item.desc || ''}</p>
+                </div>
+            </div>`;
         }
 
-        // SAVE LOGIC (Processing Sequence)
+        // ─── WIRE FUNCTIONS ───────────────────────────────────────────────────────────
+        function wireImageCard(item) {
+            const url = getBlobUrl(item);
+            if (!url) return;
+            const img = document.getElementById(`thumb_${item.id}`);
+            const loader = document.getElementById(`thumbLoader_${item.id}`);
+            if (!img) return;
+            img.onload = () => { img.style.display = 'block'; if (loader) loader.style.display = 'none'; };
+            img.src = url;
+        }
+
+        function wireVideoCard(item) {
+            const url = getBlobUrl(item);
+            if (!url) return;
+            const vid = document.getElementById(`inlineVideo_${item.id}`);
+            if (!vid) return;
+            vid.src = url + '#t=0.5';
+            vid.load();
+        }
+
+        function wirePdfCardPreview(item) {
+            if (!item.file) return;
+            const canvas = document.getElementById(`pdfCanvas_${item.id}`);
+            const loader = document.getElementById(`pdfLoader_${item.id}`);
+            const container = document.getElementById(`pdfThumb_${item.id}`);
+            if (!canvas || !container) return;
+            const url = getBlobUrl(item);
+            pdfjsLib.getDocument(url).promise.then(pdf => {
+                pdf.getPage(1).then(page => {
+                    const containerW = container.offsetWidth || 280;
+                    const unscaledVp = page.getViewport({ scale: 1 });
+                    const scale = containerW / unscaledVp.width;
+                    const viewport = page.getViewport({ scale });
+                    canvas.width  = viewport.width;
+                    canvas.height = viewport.height;
+                    canvas.style.width  = '100%';
+                    canvas.style.height = 'auto';
+                    page.render({ canvasContext: canvas.getContext('2d'), viewport }).promise.then(() => {
+                        if (loader) loader.style.display = 'none';
+                    });
+                });
+            }).catch(() => {
+                if (container) container.innerHTML = `
+                    <div style="display:flex;flex-direction:column;align-items:center;justify-content:center;width:100%;height:100%;gap:6px;">
+                        <i class="fas fa-file-pdf" style="font-size:2.5rem;color:#f87171;"></i>
+                        <span style="font-size:10px;color:#94a3b8;">PDF preview failed</span>
+                    </div>`;
+            });
+        }
+
+        function wireAudioCard(item) {
+            const url = getBlobUrl(item);
+            if (!url) return;
+            const audio = document.getElementById(`inlineAudio_${item.id}`);
+            if (!audio) return;
+            audio.src = url;
+        }
+
+        // ─── INLINE VIDEO TOGGLE ─────────────────────────────────────────────────────
+        function toggleInlineVideo(id) {
+            const vid = document.getElementById(`inlineVideo_${id}`);
+            const icon = document.getElementById(`playIcon_${id}`);
+            const overlay = document.getElementById(`videoOverlay_${id}`);
+            if (!vid) return;
+            if (vid.paused) {
+                vid.play();
+                if (icon) { icon.className = 'fas fa-pause'; icon.style.marginLeft = '0'; }
+                if (overlay) overlay.style.background = 'rgba(0,0,0,0)';
+            } else {
+                vid.pause();
+                if (icon) { icon.className = 'fas fa-play'; icon.style.marginLeft = '3px'; }
+                if (overlay) overlay.style.background = 'rgba(0,0,0,0.18)';
+            }
+            vid.onended = () => {
+                if (icon) { icon.className = 'fas fa-play'; icon.style.marginLeft = '3px'; }
+                if (overlay) overlay.style.background = 'rgba(0,0,0,0.18)';
+            };
+        }
+
+        // ─── DOT MENU ────────────────────────────────────────────────────────────────
+        function toggleDotMenu(id) {
+            document.querySelectorAll('.dot-menu.open').forEach(m => {
+                if (m.id !== `dotMenu_${id}`) m.classList.remove('open');
+            });
+            document.getElementById(`dotMenu_${id}`)?.classList.toggle('open');
+        }
+        document.addEventListener('click', () => {
+            document.querySelectorAll('.dot-menu.open').forEach(m => m.classList.remove('open'));
+        });
+
+        function getItem(id) {
+            for (const cat of Object.values(appData)) {
+                for (const sub of Object.values(cat)) {
+                    const found = sub.find(i => i.id === id);
+                    if (found) return found;
+                }
+            }
+            return null;
+        }
+
+        function downloadItem(id) {
+            const item = getItem(id);
+            if (!item || !item.file) return showToast("No file available", true);
+            const url = getBlobUrl(item);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = item.title || 'download';
+            a.click();
+        }
+
+        // FIX #4: Open in new tab without triggering download
+        // We create a temporary object URL and open it in a new tab via an anchor without `download` attr
+        function openInNewTab(id) {
+            const item = getItem(id);
+            if (!item || !item.file) return showToast("No file available", true);
+            const url = getBlobUrl(item);
+            // For PDFs we can use a data URI trick or just open the blob URL — no `download` attribute
+            const a = document.createElement('a');
+            a.href = url;
+            a.target = '_blank';
+            a.rel = 'noopener noreferrer';
+            // Explicitly do NOT set a.download — this prevents download behavior
+            document.body.appendChild(a);
+            a.click();
+            document.body.removeChild(a);
+        }
+
+        async function openInPiP(id) {
+            const item = getItem(id);
+            if (!item) return;
+            if (item.type === 'video') {
+                const vid = document.getElementById(`inlineVideo_${id}`);
+                if (vid && document.pictureInPictureEnabled) {
+                    try { await vid.requestPictureInPicture(); } catch(e) { showToast("PiP not supported", true); }
+                } else { showToast("PiP not available", true); }
+            } else {
+                showToast("PiP only available for videos", true);
+            }
+        }
+
+        // ─── FULL-SCREEN VIEWER ───────────────────────────────────────────────────────
+        function openViewer(id) {
+            const item = getItem(id);
+            if (!item) return showToast("Item not found", true);
+
+            const modal    = document.getElementById('viewerModal');
+            const content  = document.getElementById('viewerContent');
+            const controls = document.getElementById('viewerControls');
+            const mediaClose = document.getElementById('mediaCloseBtn');
+            const rotateBtn  = document.getElementById('rotateBtn');
+
+            viewerState = { zoom: 1, rotation: 0 };
+            content.innerHTML = '';
+
+            if (item.type === 'image') {
+                if (!item.file) return showToast("No file", true);
+                controls.style.display = 'flex';
+                rotateBtn.style.display = '';   // show rotate for images
+                mediaClose.style.display = 'none';
+                const img = document.createElement('img');
+                img.id = 'viewerImage';
+                img.src = getBlobUrl(item);
+                img.style.cssText = 'max-height:85vh;max-width:88vw;object-fit:contain;border-radius:8px;transition:transform 0.2s ease;';
+                content.appendChild(img);
+
+            } else if (item.type === 'pdf') {
+                if (!item.file) return showToast("No file", true);
+                // PDF: zoom+rotate supported, scrollable multi-page, no download on open
+                controls.style.display = 'flex';
+                rotateBtn.style.display = '';   // show rotate for pdf too
+                mediaClose.style.display = 'none';
+                const wrap = document.createElement('div');
+                wrap.id = 'viewerPdfWrapper';
+                wrap.style.cssText = 'width:88vw;max-width:900px;height:85vh;overflow-y:auto;background:#fff;border-radius:10px;transform-origin:center;transition:transform 0.2s ease;';
+                content.appendChild(wrap);
+                renderPdfInViewer(getBlobUrl(item), wrap);
+
+            } else if (item.type === 'audio') {
+                // Audio viewer: show waveform-style player, no zoom/rotate
+                controls.style.display = 'flex';
+                rotateBtn.style.display = 'none'; // hide rotate — not meaningful for audio
+                mediaClose.style.display = 'none';
+                // Hide zoom buttons too since they don't apply, but keep close button
+                // We replace controls with just close for audio
+                controls.style.display = 'none';
+                mediaClose.style.display = 'block';
+
+                const blobUrl = getBlobUrl(item);
+                const wrap = document.createElement('div');
+                wrap.style.cssText = `
+                    width:480px;max-width:92vw;
+                    background:#1e293b;
+                    border-radius:16px;
+                    padding:32px 28px;
+                    display:flex;flex-direction:column;align-items:center;gap:20px;
+                    box-shadow:0 20px 60px rgba(0,0,0,0.5);
+                `;
+
+                // Track info
+                const title = document.createElement('p');
+                title.style.cssText = 'color:#f1f5f9;font-size:15px;font-weight:700;margin:0;text-align:center;';
+                title.textContent = item.title;
+
+                // Artwork placeholder
+                const art = document.createElement('div');
+                art.style.cssText = 'width:100px;height:100px;border-radius:50%;background:linear-gradient(135deg,#334155,#475569);display:flex;align-items:center;justify-content:center;';
+                art.innerHTML = '<i class="fas fa-music" style="font-size:2.5rem;color:#94a3b8;"></i>';
+
+                // Audio element
+                const audio = document.createElement('audio');
+                audio.id = 'viewerAudio';
+                audio.src = blobUrl;
+                audio.preload = 'auto';
+
+                // Progress bar
+                const progressWrap = document.createElement('div');
+                progressWrap.style.cssText = 'width:100%;height:4px;background:#334155;border-radius:99px;overflow:hidden;cursor:pointer;';
+                const progressFill = document.createElement('div');
+                progressFill.id = 'viewerAudioBar';
+                progressFill.style.cssText = 'height:100%;width:0%;background:#e2e8f0;border-radius:99px;transition:width 0.2s linear;';
+                progressWrap.appendChild(progressFill);
+
+                // Click to seek
+                progressWrap.addEventListener('click', (e) => {
+                    const rect = progressWrap.getBoundingClientRect();
+                    const pct = (e.clientX - rect.left) / rect.width;
+                    audio.currentTime = pct * (audio.duration || 0);
+                });
+
+                // Time display
+                const timeEl = document.createElement('span');
+                timeEl.style.cssText = 'font-size:11px;color:#94a3b8;';
+                timeEl.textContent = '0:00 / 0:00';
+
+                audio.addEventListener('timeupdate', () => {
+                    if (!audio.duration) return;
+                    const pct = (audio.currentTime / audio.duration) * 100;
+                    progressFill.style.width = pct + '%';
+                    timeEl.textContent = `${fmtTime(audio.currentTime)} / ${fmtTime(audio.duration)}`;
+                });
+
+                // Controls row: rewind, play/pause, forward
+                const ctrlRow = document.createElement('div');
+                ctrlRow.style.cssText = 'display:flex;align-items:center;gap:18px;';
+
+                const rewindBtn = document.createElement('button');
+                rewindBtn.style.cssText = 'background:none;border:none;color:#94a3b8;font-size:18px;cursor:pointer;';
+                rewindBtn.innerHTML = '<i class="fas fa-backward"></i>';
+                rewindBtn.onclick = () => { audio.currentTime = Math.max(0, audio.currentTime - 10); };
+
+                const playPauseBtn = document.createElement('button');
+                playPauseBtn.style.cssText = 'background:none;border:none;cursor:pointer;';
+                playPauseBtn.innerHTML = `
+                    <div class="play-btn-bw" style="width:52px;height:52px;">
+                        <i id="viewerAudioIcon" class="fas fa-play" style="color:#111;font-size:18px;margin-left:3px;"></i>
+                    </div>`;
+                playPauseBtn.onclick = () => {
+                    const icon = document.getElementById('viewerAudioIcon');
+                    if (audio.paused) {
+                        audio.play();
+                        if (icon) { icon.className = 'fas fa-pause'; icon.style.marginLeft = '0'; }
+                    } else {
+                        audio.pause();
+                        if (icon) { icon.className = 'fas fa-play'; icon.style.marginLeft = '3px'; }
+                    }
+                };
+                audio.onended = () => {
+                    const icon = document.getElementById('viewerAudioIcon');
+                    if (icon) { icon.className = 'fas fa-play'; icon.style.marginLeft = '3px'; }
+                    progressFill.style.width = '0%';
+                };
+
+                const fwdBtn = document.createElement('button');
+                fwdBtn.style.cssText = 'background:none;border:none;color:#94a3b8;font-size:18px;cursor:pointer;';
+                fwdBtn.innerHTML = '<i class="fas fa-forward"></i>';
+                fwdBtn.onclick = () => { audio.currentTime = Math.min(audio.duration || 0, audio.currentTime + 10); };
+
+                ctrlRow.append(rewindBtn, playPauseBtn, fwdBtn);
+                wrap.append(art, title, progressWrap, timeEl, ctrlRow, audio);
+                content.appendChild(wrap);
+                audio.play().catch(() => {});
+
+            } else if (item.type === 'video') {
+                controls.style.display = 'none';
+                mediaClose.style.display = 'block';
+                const wrap = document.createElement('div');
+                wrap.style.cssText = 'width:90vw;max-width:960px;background:#000;border-radius:10px;overflow:hidden;';
+                const vid = document.createElement('video');
+                vid.controls = true;
+                vid.autoplay = true;
+                vid.style.cssText = 'width:100%;display:block;max-height:85vh;';
+                vid.src = getBlobUrl(item);
+                wrap.appendChild(vid);
+                content.appendChild(wrap);
+
+            } else {
+                controls.style.display = 'none';
+                mediaClose.style.display = 'block';
+                content.innerHTML = `<div style="color:white;text-align:center;"><i class="fas fa-file text-5xl mb-4" style="display:block;"></i><p>Preview not available</p></div>`;
+            }
+
+            modal.classList.add('active');
+        }
+
+        function fmtTime(s) {
+            const m = Math.floor(s / 60);
+            const sec = Math.floor(s % 60);
+            return `${m}:${sec.toString().padStart(2,'0')}`;
+        }
+
+        async function renderPdfInViewer(url, container) {
+            container.innerHTML = '<div style="padding:20px;color:#64748b;text-align:center;font-size:13px;">Loading PDF…</div>';
+            try {
+                const pdf = await pdfjsLib.getDocument(url).promise;
+                container.innerHTML = '';
+                for (let p = 1; p <= pdf.numPages; p++) {
+                    const page = await pdf.getPage(p);
+                    const viewport = page.getViewport({ scale: 1.6 });
+                    const canvas = document.createElement('canvas');
+                    canvas.width  = viewport.width;
+                    canvas.height = viewport.height;
+                    canvas.style.cssText = 'display:block;width:100%;margin-bottom:4px;';
+                    container.appendChild(canvas);
+                    page.render({ canvasContext: canvas.getContext('2d'), viewport });
+                }
+            } catch(e) {
+                container.innerHTML = '<div style="padding:20px;color:#ef4444;text-align:center;">Could not load PDF.</div>';
+            }
+        }
+
+        function closeViewer() {
+            document.getElementById('viewerModal').classList.remove('active');
+            document.querySelectorAll('#viewerContent video, #viewerContent audio').forEach(el => el.pause());
+        }
+
+        // Zoom / rotate — applies to image and PDF wrapper; not audio
+        function viewerAction(action) {
+            const img     = document.getElementById('viewerImage');
+            const pdfWrap = document.getElementById('viewerPdfWrapper');
+            const target  = img || pdfWrap;
+            if (!target) return;
+            if (action === 'zoomIn')  viewerState.zoom += 0.2;
+            if (action === 'zoomOut') viewerState.zoom = Math.max(0.2, viewerState.zoom - 0.2);
+            if (action === 'rotateL') viewerState.rotation -= 90;
+            target.style.transform = `scale(${viewerState.zoom}) rotate(${viewerState.rotation}deg)`;
+        }
+
+        document.getElementById('viewerModal').addEventListener('click', function(e) {
+            if (e.target === this) closeViewer();
+        });
+
+        // ─── SAVE LOGIC ───────────────────────────────────────────────────────────────
         async function saveItem() {
-            const title = document.getElementById('itemTitle').value;
+            const title = document.getElementById('itemTitle').value.trim();
             if (!title) return showToast("Title required", true);
 
             const btn = document.getElementById('saveBtn');
@@ -336,37 +908,40 @@
             btn.innerHTML = 'Processing...';
 
             const fileInput = document.getElementById('itemImage');
-            const newItem = { id: Date.now(), title, desc: document.getElementById('itemDesc').value, category: currentCategory, subcategory: currentSubCategory, type: 'text', file: null, thumb: null };
+            const newItem = {
+                id: Date.now(),
+                title,
+                desc: document.getElementById('itemDesc').value,
+                category: currentCategory,
+                subcategory: currentSubCategory,
+                type: 'text',
+                file: null,
+                thumb: null
+            };
 
-            // 4. Processing Sequence
             const progressContainer = document.getElementById('uploadProgressContainer');
-            const progressBar = document.getElementById('uploadCubeFill');
-            const progressText = document.getElementById('uploadPercentText');
-            
+            const progressBar       = document.getElementById('uploadCubeFill');
+            const progressText      = document.getElementById('uploadPercentText');
             progressContainer.style.display = 'block';
             progressBar.style.width = '0%';
             progressText.innerText = '0%';
 
-            // Run visual loop 1-100%
             await new Promise(resolve => {
-                let percent = 0;
-                const interval = setInterval(() => {
-                    percent++;
-                    progressBar.style.width = percent + '%';
-                    progressText.innerText = percent + '%';
-                    if (percent >= 100) {
-                        clearInterval(interval);
-                        resolve();
-                    }
-                }, 15); // Speed
+                let pct = 0;
+                const iv = setInterval(() => {
+                    pct++;
+                    progressBar.style.width = pct + '%';
+                    progressText.innerText = pct + '%';
+                    if (pct >= 100) { clearInterval(iv); resolve(); }
+                }, 15);
             });
 
-            // Proceed to save after 100%
             if (fileInput.files[0]) {
                 const file = fileInput.files[0];
-                if (file.type.includes('image')) newItem.type = 'image';
-                else if (file.type.includes('pdf')) newItem.type = 'pdf';
+                if      (file.type.includes('image')) newItem.type = 'image';
+                else if (file.type.includes('pdf'))   newItem.type = 'pdf';
                 else if (file.type.includes('video')) newItem.type = 'video';
+                else if (file.type.includes('audio') || /\.(mp3|wav|ogg|flac|aac|m4a)$/i.test(file.name)) newItem.type = 'audio';
                 else newItem.type = 'file';
 
                 const reader = new FileReader();
@@ -375,93 +950,143 @@
                         const blob = new Blob([e.target.result], { type: file.type });
                         newItem.file = blob;
 
-                        if (newItem.type === 'pdf') { const base64 = await blobToBase64(blob); newItem.thumb = await generatePDFThumbnail(base64); } 
-                        else if (newItem.type === 'image') { newItem.thumb = await createImageThumbnail(blob); }
+                        if (newItem.type === 'pdf') {
+                            const b64 = await blobToBase64(blob);
+                            newItem.thumb = await generatePDFThumbnail(b64);
+                        } else if (newItem.type === 'image') {
+                            newItem.thumb = await createImageThumbnail(blob);
+                        }
 
                         await dbAdd(newItem);
                         appData = await dbGetAll();
                         renderContent(appData[currentCategory][currentSubCategory], currentSubCategory);
                         showToast("Saved!");
                         clearForm();
-                    } catch (err) { console.error(err); showToast("Error processing file", true); }
-                    
-                    setTimeout(() => { progressContainer.style.display = 'none'; btn.disabled = false; btn.innerHTML = '<i class="fas fa-save"></i> Save Item'; }, 500);
+                    } catch (err) {
+                        console.error(err);
+                        showToast("Error processing file", true);
+                    }
+                    setTimeout(() => {
+                        progressContainer.style.display = 'none';
+                        btn.disabled = false;
+                        btn.innerHTML = '<i class="fas fa-save"></i> Save Item';
+                    }, 500);
                 };
                 reader.readAsArrayBuffer(file);
             } else {
-                try { await dbAdd(newItem); appData = await dbGetAll(); renderContent(appData[currentCategory][currentSubCategory], currentSubCategory); showToast("Saved!"); clearForm(); } catch (err) { showToast("Error", true); }
-                setTimeout(() => { progressContainer.style.display = 'none'; btn.disabled = false; btn.innerHTML = '<i class="fas fa-save"></i> Save Item'; }, 500);
+                try {
+                    await dbAdd(newItem);
+                    appData = await dbGetAll();
+                    renderContent(appData[currentCategory][currentSubCategory], currentSubCategory);
+                    showToast("Saved!");
+                    clearForm();
+                } catch (err) { showToast("Error", true); }
+                setTimeout(() => {
+                    progressContainer.style.display = 'none';
+                    btn.disabled = false;
+                    btn.innerHTML = '<i class="fas fa-save"></i> Save Item';
+                }, 500);
             }
         }
 
-        function blobToBase64(blob) { return new Promise((resolve) => { const reader = new FileReader(); reader.onload = () => resolve(reader.result); reader.readAsDataURL(blob); }); }
-        function createImageThumbnail(blob) { return new Promise((resolve) => { const img = new Image(); img.src = URL.createObjectURL(blob); img.onload = () => { const c = document.createElement('canvas'); const ctx = c.getContext('2d'); c.width=300; c.height=200; ctx.drawImage(img,0,0,300,200); resolve(c.toDataURL('image/jpeg',0.7)); }; }); }
-        function generatePDFThumbnail(base64) { return new Promise((resolve) => { pdfjsLib.getDocument(base64).promise.then(pdf => pdf.getPage(1).then(page => { const viewport = page.getViewport({scale:1.5}); const c = document.createElement('canvas'); const ctx = c.getContext('2d'); c.width=viewport.width; c.height=viewport.height; page.render({canvasContext:ctx, viewport}).promise.then(() => resolve(c.toDataURL())); })); }).catch(() => resolve(null)); }
-
-        function clearForm() { document.getElementById('itemTitle').value = ''; document.getElementById('itemDesc').value = ''; document.getElementById('itemImage').value = ''; document.getElementById('fileName').innerText = ''; document.getElementById('imagePreviewContainer').classList.add('hidden'); }
-
-        async function deleteItem(id) { if (isAdmin) { if (confirm("Delete permanently?")) await performDelete(id); } else { pendingDeleteId = id; document.getElementById('authModal').classList.remove('hidden'); } }
-        async function performDelete(id) { appData[currentCategory][currentSubCategory] = appData[currentCategory][currentSubCategory].filter(i => i.id !== id); renderContent(appData[currentCategory][currentSubCategory], currentSubCategory); showToast("Deleted"); try { await dbDelete(id); } catch (e) { console.error(e); } }
-
-        // FILE VIEWER (Zero Clutter)
-        function openViewer(id) {
-            const item = appData[currentCategory][currentSubCategory].find(i => i.id === id);
-            if (!item) return showToast("Item not found", true);
-            if (!item.file && !item.thumb) return showToast("No file preview", true);
-            
-            const modal = document.getElementById('viewerModal');
-            const content = document.getElementById('viewerContent');
-            viewerState = { zoom: 1, rotation: 0 };
-            document.querySelector('.viewer-controls').style.display = 'flex';
-
-            const blobUrl = URL.createObjectURL(item.file);
-
-            // 5. Content Only Logic
-            if (item.type === 'image') { content.innerHTML = `<img id="viewerImage" src="${blobUrl}" class="transition-transform duration-200">`; }
-            else if (item.type === 'pdf') { content.innerHTML = `<div id="viewerPdfWrapper" style="transform-origin: center; transition: transform 0.2s;" class="w-full h-full flex items-center justify-center"><iframe src="${blobUrl}" class="w-full h-full border-0"></iframe></div>`; }
-            else if (item.type === 'video') {
-                content.innerHTML = `<video id="viewerVideo" controls autoplay playsinline class="max-h-[90vh] max-w-[90vw] object-contain"><source src="${blobUrl}"></video>`;
-                document.querySelector('.viewer-controls').style.display = 'none';
-                return;
-            }
-            else { content.innerHTML = `<div class="text-white text-center"><i class="fas fa-file text-5xl mb-4"></i><p>Preview not available</p></div>`; return; }
-            
-            modal.classList.add('active');
+        function blobToBase64(blob) {
+            return new Promise(resolve => {
+                const r = new FileReader();
+                r.onload = () => resolve(r.result);
+                r.readAsDataURL(blob);
+            });
         }
-        
-        function closeViewer() { document.getElementById('viewerModal').classList.remove('active'); }
-        function viewerAction(action) { const img = document.getElementById('viewerImage'); const pdfWrap = document.getElementById('viewerPdfWrapper'); const target = img || pdfWrap; if (!target) return; if (action === 'zoomIn') viewerState.zoom += 0.2; if (action === 'zoomOut') viewerState.zoom = Math.max(0.2, viewerState.zoom - 0.2); if (action === 'rotateL') viewerState.rotation -= 90; target.style.transform = `scale(${viewerState.zoom}) rotate(${viewerState.rotation}deg)`; }
 
-        // Helpers
-        function showToast(msg, err = false) { const t = document.getElementById('toast'); t.innerText = msg; t.className = err ? 'show error' : 'show'; setTimeout(() => t.classList.remove('show'), 2000); }
-        
-        // 1. File Selection Logic (Real-Time Feedback)
+        function createImageThumbnail(blob) {
+            return new Promise(resolve => {
+                const img = new Image();
+                img.src = URL.createObjectURL(blob);
+                img.onload = () => {
+                    const c = document.createElement('canvas');
+                    c.width = 300; c.height = 200;
+                    c.getContext('2d').drawImage(img, 0, 0, 300, 200);
+                    resolve(c.toDataURL('image/jpeg', 0.7));
+                };
+            });
+        }
+
+        function generatePDFThumbnail(base64) {
+            return new Promise(resolve => {
+                pdfjsLib.getDocument(base64).promise.then(pdf => {
+                    pdf.getPage(1).then(page => {
+                        const vp = page.getViewport({ scale: 1.5 });
+                        const c  = document.createElement('canvas');
+                        c.width  = vp.width;
+                        c.height = vp.height;
+                        page.render({ canvasContext: c.getContext('2d'), viewport: vp }).promise.then(() => resolve(c.toDataURL()));
+                    });
+                }).catch(() => resolve(null));
+            });
+        }
+
+        function clearForm() {
+            document.getElementById('itemTitle').value = '';
+            document.getElementById('itemDesc').value  = '';
+            document.getElementById('itemImage').value = '';
+            document.getElementById('fileName').innerText = '';
+            document.getElementById('imagePreviewContainer').classList.add('hidden');
+        }
+
+        // ─── DELETE ───────────────────────────────────────────────────────────────────
+        async function deleteItem(id) {
+            if (isAdmin) {
+                if (confirm("Delete permanently?")) await performDelete(id);
+            } else {
+                pendingDeleteId = id;
+                document.getElementById('authModal').classList.remove('hidden');
+            }
+        }
+        async function performDelete(id) {
+            if (blobCache[id]) { URL.revokeObjectURL(blobCache[id]); delete blobCache[id]; }
+            appData[currentCategory][currentSubCategory] =
+                appData[currentCategory][currentSubCategory].filter(i => i.id !== id);
+            renderContent(appData[currentCategory][currentSubCategory], currentSubCategory);
+            showToast("Deleted");
+            try { await dbDelete(id); } catch(e) { console.error(e); }
+        }
+
+        // ─── TOAST ───────────────────────────────────────────────────────────────────
+        function showToast(msg, err = false) {
+            const t = document.getElementById('toast');
+            t.innerText = msg;
+            t.className = err ? 'show error' : 'show';
+            setTimeout(() => t.classList.remove('show'), 2000);
+        }
+
+        // ─── UPLOAD PREVIEW ──────────────────────────────────────────────────────────
         document.getElementById('itemImage').addEventListener('change', function(e) {
-            if (e.target.files[0]) {
-                const file = e.target.files[0];
-                document.getElementById('fileName').innerText = file.name;
-                const previewContainer = document.getElementById('imagePreviewContainer');
-                const previewWrapper = document.getElementById('previewWrapper');
-                previewContainer.classList.remove('hidden');
+            if (!e.target.files[0]) return;
+            const file = e.target.files[0];
+            document.getElementById('fileName').innerText = file.name;
+            const previewContainer = document.getElementById('imagePreviewContainer');
+            const previewWrapper   = document.getElementById('previewWrapper');
+            previewContainer.classList.remove('hidden');
+            previewWrapper.innerHTML = '';
 
-                // Clear previous
-                previewWrapper.innerHTML = '';
-
-                if (file.type.includes('image')) {
-                    const reader = new FileReader();
-                    reader.onload = (ev) => { const img = document.createElement('img'); img.src = ev.target.result; img.className = 'w-full h-full object-cover'; previewWrapper.appendChild(img); };
-                    reader.readAsDataURL(file);
-                } else if (file.type.includes('video')) {
-                    const url = URL.createObjectURL(file);
-                    const vid = document.createElement('video');
-                    vid.src = url + "#t=0.5"; // Seeking metadata
-                    vid.className = 'w-full h-full object-cover';
-                    vid.muted = true;
-                    vid.load();
-                    previewWrapper.appendChild(vid);
-                } else {
-                    previewWrapper.innerHTML = `<div class="text-slate-400 text-xs font-bold pt-10"><i class="fas fa-file text-2xl mb-2"></i><br>No Preview</div>`;
-                }
+            if (file.type.includes('image')) {
+                const reader = new FileReader();
+                reader.onload = ev => {
+                    const img = document.createElement('img');
+                    img.src = ev.target.result;
+                    img.className = 'w-full h-full object-cover';
+                    previewWrapper.appendChild(img);
+                };
+                reader.readAsDataURL(file);
+            } else if (file.type.includes('video')) {
+                const url = URL.createObjectURL(file);
+                const vid = document.createElement('video');
+                vid.src = url + '#t=0.5';
+                vid.className = 'w-full h-full object-cover';
+                vid.muted = true;
+                vid.load();
+                previewWrapper.appendChild(vid);
+            } else {
+                previewWrapper.innerHTML = `<div class="text-slate-400 text-xs font-bold pt-10 text-center"><i class="fas fa-file text-2xl mb-2 block"></i>No Preview</div>`;
             }
         });
     </script>
